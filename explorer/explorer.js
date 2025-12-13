@@ -1,21 +1,23 @@
-// =======================
-// レアNPC定義
-// =======================
+// ===================================
+// 探索画面ロジック（完全版）
+// ===================================
+
+// ---------- レアNPC定義 ----------
 const RARE_NPCS = [
   {
     id: "shizumi",
     name: "静海",
     baseRarity: 0.003,
     nightBoost: 2.5,
-    item: "管理者の鍵",
+    item: "涙海の霊水",
     lines: {
       first: [
-        "……ここに来るとはね。",
-        "君が辿り着くとは思わなかった。"
+        "……ここで何やってんだ、暗くなる前に帰れよ。",
+        "俺がここに居るのは他の奴らには言わないで貰えると助かる"
       ],
       repeat: [
-        "また君か。",
-        "世界に選ばれているらしい。"
+        "またお前か。",
+        "迷子になるなよ"
       ]
     }
   },
@@ -37,9 +39,8 @@ const RARE_NPCS = [
     }
   }
 ];
-// =======================
-// 遭遇履歴管理
-// =======================
+
+// ---------- 遭遇履歴 ----------
 const ENCOUNTER_KEY = "npc_encounters";
 
 function getEncounters() {
@@ -52,150 +53,95 @@ function saveEncounter(npcId) {
   localStorage.setItem(ENCOUNTER_KEY, JSON.stringify(data));
 }
 
-// 夜判定
+// ---------- 夜判定 ----------
 function isNightTime() {
-  const hour = new Date().getHours();
-  return hour >= 19 || hour <= 5;
+  const h = new Date().getHours();
+  return h >= 19 || h <= 5;
 }
 
-// 要素取得
+// ---------- DOM ----------
 const map = document.getElementById("map");
 const statusPanel = document.getElementById("status-panel");
-const exploreModalBg = document.getElementById("exploreModalBg");
-const exploreModalTitle = document.getElementById("exploreModalTitle");
-const exploreModalBody = document.getElementById("exploreModalBody");
-
-let currentChar = JSON.parse(localStorage.getItem("currentChar")) || { name:"未設定", recentActions:[] };
-const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
-
-const exploreBases = [];
-const numBases = 15;
-const radius = 200;
+const modalBg = document.getElementById("exploreModalBg");
+const modalTitle = document.getElementById("exploreModalTitle");
+const modalBody = document.getElementById("exploreModalBody");
 
 let selectedBase = null;
 
-// 拠点生成
-for(let i=0;i<numBases;i++){
-  const base = document.createElement("div");
-  base.classList.add("base");
-  base.dataset.id = `探索地${i}`;
-  base.dataset.hp = 100;
-  base.dataset.resource = (Math.random()*2000+500).toFixed(0);
-  base.dataset.enemies = Math.floor(Math.random()*50);
-  base.textContent = base.dataset.id;
+// ---------- 探索地生成 ----------
+const exploreBases = [];
+const NUM_BASES = 12;
+const RADIUS = 220;
 
-  const hpBar = document.createElement("div");
-  hpBar.classList.add("hp-bar");
-  const hpFill = document.createElement("div");
-  hpFill.classList.add("hp-fill");
-  hpBar.appendChild(hpFill);
-  base.appendChild(hpBar);
+for (let i = 0; i < NUM_BASES; i++) {
+  const base = document.createElement("div");
+  base.className = "base";
+  base.dataset.id = `探索地${i + 1}`;
+  base.dataset.hp = 100;
+  base.textContent = base.dataset.id;
 
   map.appendChild(base);
   exploreBases.push(base);
 
-  base.addEventListener("click", ()=>{
+  base.onclick = () => {
     selectedBase = base;
-    exploreModalBg.style.display="flex";
-    exploreModalTitle.textContent = base.dataset.id;
-    exploreModalBody.innerHTML = `<p>選択した探索地: ${base.dataset.id}</p>`;
+    modalBg.style.display = "flex";
+    modalTitle.textContent = base.dataset.id;
+    modalBody.innerHTML = "<p>探索方法を選択してください</p>";
+  };
+}
+
+// ---------- 配置 ----------
+function positionBases() {
+  const cx = map.offsetWidth / 2;
+  const cy = map.offsetHeight / 2;
+  exploreBases.forEach((b, i) => {
+    const angle = (i / NUM_BASES) * Math.PI * 2;
+    b.style.left = `${cx + RADIUS * Math.cos(angle) - 27}px`;
+    b.style.top = `${cy + RADIUS * Math.sin(angle) - 27}px`;
   });
 }
+positionBases();
+window.addEventListener("resize", positionBases);
 
-// モーダル閉じる
-function closeExploreModal(){ exploreModalBg.style.display="none"; }
-exploreModalBg.addEventListener("click",(e)=>{ if(e.target===exploreModalBg) closeExploreModal(); });
-
-// 拠点配置
-function positionExploreBases(){
-  const centerX = map.offsetWidth/2;
-  const centerY = map.offsetHeight/2;
-  exploreBases.forEach((base,i)=>{
-    const angle = (i/(numBases))*2*Math.PI;
-    const distortX = Math.sin(angle*3)*5;
-    const distortY = Math.cos(angle*5)*5;
-    base.style.left = `${centerX + radius*Math.cos(angle)+distortX-27.5}px`;
-    base.style.top = `${centerY + radius*Math.sin(angle)+distortY-27.5}px`;
-  });
-}
-positionExploreBases();
-window.addEventListener("resize", positionExploreBases);
-
-// ステータス更新
-function updateExploreBasesStatus(){
-  exploreBases.forEach(base=>{
-    let hp = Math.max(0, base.dataset.hp - Math.random()*2);
-    base.dataset.hp = hp.toFixed(0);
-    const hpFill = base.querySelector(".hp-fill");
-    hpFill.style.width = `${hp}%`;
-    hpFill.style.background = hp>60?"#00ff9d": hp>30?"#ffeb3b":"#ff4b4b";
-  });
-  updateExploreStatusPanel();
-}
-
-function updateExploreStatusPanel(){
-  statusPanel.innerHTML="<h3>探索地ステータス</h3>";
-  exploreBases.forEach(base=>{
-    const entry = document.createElement("div");
-    entry.classList.add("status-entry");
-    entry.innerHTML = `<strong>${base.dataset.id}</strong><br>💚HP: ${base.dataset.hp}%　🪨資源: ${base.dataset.resource}　👾敵数: ${base.dataset.enemies}`;
-    statusPanel.appendChild(entry);
-  });
-}
-
-// アクションログ追加
-function addExploreAction(action){
-  const timestamp = new Date().toLocaleTimeString();
-  const logEntry = `[${timestamp}] ${action}`;
-  currentChar.recentActions.unshift(logEntry);
-  if(currentChar.recentActions.length>50) currentChar.recentActions.pop();
-  localStorage.setItem("currentChar", JSON.stringify(currentChar));
-
-  exploreLog.unshift(logEntry);
-  if(exploreLog.length>50) exploreLog.pop();
-  localStorage.setItem("exploreLog", JSON.stringify(exploreLog));
-}
-
-// ★ ボタン処理はここで一度だけ登録 ★
-document.getElementById("searchBtn").onclick = () => {
-  if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で調査`);
-  closeExploreModal();
-};
-document.getElementById("gatherBtn").onclick = () => {
-  if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で採取`);
-  closeExploreModal();
-};
-document.getElementById("huntBtn").onclick = () => {
-  if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で狩猟`);
-  closeExploreModal();
-};
-
-// =======================
-// レア遭遇抽選
-// =======================
+// ---------- レア抽選 ----------
 function rollRareEncounter() {
   const encounters = getEncounters();
   const night = isNightTime();
 
   for (const npc of RARE_NPCS) {
-    let rarity = npc.baseRarity;
-    if (night) rarity *= npc.nightBoost;
+    let r = npc.baseRarity;
+    if (night) r *= npc.nightBoost;
 
-    if (Math.random() < rarity) {
+    if (Math.random() < r) {
       const count = encounters[npc.id] || 0;
       const lines = count === 0 ? npc.lines.first : npc.lines.repeat;
       const line = lines[Math.floor(Math.random() * lines.length)];
-
       saveEncounter(npc.id);
-
       return { npc, line };
     }
   }
   return null;
 }
 
+// ---------- 調査ボタン ----------
+document.getElementById("searchBtn").onclick = () => {
+  if (!selectedBase) return;
 
-// 初期更新
-updateExploreBasesStatus();
-setInterval(updateExploreBasesStatus,5000);
-;
+  const rare = rollRareEncounter();
+
+  if (rare) {
+    addResult(
+      "explore",
+      `🌌【レア遭遇】${selectedBase.dataset.id}<br>
+      👤 ${rare.npc.name}<br>
+      「${rare.line}」<br>
+      🎁 ${rare.npc.item}`
+    );
+  } else {
+    addResult("explore", `${selectedBase.dataset.id}で調査を実行`);
+  }
+
+  modalBg.style.display = "none";
+  window.location.href = "../result/index.html";
+};
