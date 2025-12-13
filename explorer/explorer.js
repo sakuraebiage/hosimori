@@ -1,3 +1,28 @@
+// レアNPC定義（管理者編集用）
+const RARE_NPCS = [
+  {
+    id: "shizumi",
+    name: "静海",
+    rarity: 0.003, // 0.3%
+    item: "管理者の鍵",
+    lines: [
+      "……ここに来るとはね。",
+      "君なら、これを持つ資格がある。",
+      "世界の奥で、また会おう。"
+    ]
+  },
+  {
+    id: "hagi",
+    name: "萩月",
+    rarity: 0.002,
+    item: "星脈の欠片",
+    lines: [
+      "あ、見つかっちゃった。",
+      "運がいいね、今日は。",
+      "内緒だよ？"
+    ]
+  }
+];
 // 要素取得
 const map = document.getElementById("map");
 const statusPanel = document.getElementById("status-panel");
