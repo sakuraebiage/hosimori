@@ -1,0 +1,15 @@
+/* panel.css */
+#status-panel {
+  width:280px;
+  background:#111;
+  border-left:1px solid #555;
+  padding:10px;
+  overflow-y:auto;
+  max-height:100%;
+}
+
+.status-entry {
+  border-bottom:1px solid #333;
+  padding:6px 0;
+  font-size:0.85em;
+}
