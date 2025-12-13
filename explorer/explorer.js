@@ -37,6 +37,27 @@ const RARE_NPCS = [
     }
   }
 ];
+// =======================
+// 遭遇履歴管理
+// =======================
+const ENCOUNTER_KEY = "npc_encounters";
+
+function getEncounters() {
+  return JSON.parse(localStorage.getItem(ENCOUNTER_KEY)) || {};
+}
+
+function saveEncounter(npcId) {
+  const data = getEncounters();
+  data[npcId] = (data[npcId] || 0) + 1;
+  localStorage.setItem(ENCOUNTER_KEY, JSON.stringify(data));
+}
+
+// 夜判定
+function isNightTime() {
+  const hour = new Date().getHours();
+  return hour >= 19 || hour <= 5;
+}
+
 // 要素取得
 const map = document.getElementById("map");
 const statusPanel = document.getElementById("status-panel");
