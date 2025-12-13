@@ -237,26 +237,25 @@ function addAction(text,type){
 function performExplore(kind){
   if(!selectedBase) return;
 
+  // ログ追加
   addAction(`${selectedBase.dataset.id}で${kind}探索`, "explore");
 
+  // 結果計算
   const res = Math.floor(Math.random()*100+50);
   const ene = Math.floor(Math.random()*10);
   selectedBase.dataset.resource = +selectedBase.dataset.resource + res;
   selectedBase.dataset.enemies = +selectedBase.dataset.enemies + ene;
 
-  let rare = "";
+  // レア遭遇フラグ（ログ側で表現させる）
   if(Math.random()<0.05){
-    rare = `<p style="color:#ff7bff">✨レア遭遇！未知の存在を感知…</p>`;
+    addAction(`✨レア遭遇：未知の存在を感知`, "explore");
   }
 
-  modalTitle.textContent = "探索結果";
-  modalBody.innerHTML = `
-    <p>${kind}を実施しました</p>
-    <p>資源 +${res}</p>
-    <p>敵 +${ene}</p>
-    ${rare}
-  `;
+  // ★★★ ここが重要 ★★★
+  closeModal();
+  location.href = "/hosimori/log/results.html#explore";
 }
+
 
 /* ===============================
    操作
