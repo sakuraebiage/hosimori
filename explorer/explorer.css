@@ -1,0 +1,46 @@
+/* explorer.css */
+#map {
+  position:relative;
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:600px;
+  background: radial-gradient(circle at center, #001011, #000);
+  overflow:hidden;
+}
+
+.base {
+  width:55px; height:55px;
+  border-radius:50%;
+  background:rgba(90,200,255,0.2);
+  border:2px solid #8ae1ff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:0.8em;
+  color:#fff;
+  cursor:pointer;
+  transition:all 0.3s ease;
+}
+
+.base:hover {
+  transform: scale(1.1);
+  border-color:#00ffd1;
+}
+
+.hp-bar {
+  width:40px; height:4px;
+  background:#222;
+  border:1px solid #444;
+  position:absolute;
+  bottom:-8px;
+  left:7px;
+  border-radius:2px;
+}
+.hp-fill {
+  height:100%;
+  border-radius:2px;
+  background:#00ff9d;
+  transition: width 0.3s ease, background 0.3s ease;
+}
