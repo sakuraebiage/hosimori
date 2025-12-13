@@ -1,1 +1,43 @@
+/* base.css */
+body {
+  margin:0;
+  font-family:"Consolas","Roboto Mono",monospace;
+  background:#000;
+  color:#e0e0e0;
+  display:flex;
+  flex-direction:column;
+}
+
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 20px;
+  background:#111;
+  border-bottom:1px solid #444;
+}
+
+header h1 { font-size:1.2em; color:#8ae1ff; }
+
+nav a { color:#8ae1ff; margin-left:12px; text-decoration:none; transition:0.3s; }
+nav a:hover { color:#fff; text-shadow:0 0 5px #00eaff; }
+
+button {
+  cursor:pointer;
+  padding:6px 10px;
+  margin:5px;
+  background:#111;
+  border:1px solid #8ae1ff;
+  color:#8ae1ff;
+}
+button:hover { background:#8ae1ff; color:#000; }
+
+input, select {
+  padding:5px;
+  margin:5px;
+  border-radius:3px;
+  border:1px solid #555;
+  background:#222;
+  color:#e0e0e0;
+}
 
