@@ -4,6 +4,9 @@ const statusPanel = document.getElementById("status-panel");
 const exploreModalBg = document.getElementById("exploreModalBg");
 const exploreModalTitle = document.getElementById("exploreModalTitle");
 const exploreModalBody = document.getElementById("exploreModalBody");
+const searchBtn = document.getElementById("searchBtn");
+const gatherBtn = document.getElementById("gatherBtn");
+const huntBtn = document.getElementById("huntBtn");
 
 let currentChar = JSON.parse(localStorage.getItem("currentChar")) || { name:"未設定", recentActions:[] };
 const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
@@ -11,7 +14,6 @@ const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
 const exploreBases = [];
 const numBases = 15;
 const radius = 200;
-
 let selectedBase = null;
 
 // 拠点生成
@@ -39,16 +41,17 @@ for(let i=0;i<numBases;i++){
     exploreModalBg.style.display="flex";
     exploreModalTitle.textContent = base.dataset.id;
     exploreModalBody.innerHTML = `<p>選択した探索地: ${base.dataset.id}</p>`;
-
-    document.getElementById("searchBtn").onclick = () => { addExploreAction(`${selectedBase.dataset.id}で調査`, "explore"); closeExploreModal(); };
-    document.getElementById("gatherBtn").onclick = () => { addExploreAction(`${selectedBase.dataset.id}で採取`, "explore"); closeExploreModal(); };
-    document.getElementById("huntBtn").onclick = () => { addExploreAction(`${selectedBase.dataset.id}で狩猟`, "explore"); closeExploreModal(); };
   });
 }
 
 // モーダル閉じる
 function closeExploreModal(){ exploreModalBg.style.display="none"; }
 exploreModalBg.addEventListener("click",(e)=>{ if(e.target===exploreModalBg) closeExploreModal(); });
+
+// ボタン処理はループ外で1回だけ
+searchBtn.onclick = () => { if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で調査`, "explore"); closeExploreModal(); };
+gatherBtn.onclick = () => { if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で採取`, "explore"); closeExploreModal(); };
+huntBtn.onclick = () => { if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で狩猟`, "explore"); closeExploreModal(); };
 
 // 拠点配置
 function positionExploreBases(){
@@ -101,5 +104,6 @@ function addExploreAction(action, type){
   }
 }
 
+// 初期更新
 updateExploreBasesStatus();
 setInterval(updateExploreBasesStatus,5000);
