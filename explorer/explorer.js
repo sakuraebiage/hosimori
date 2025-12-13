@@ -170,6 +170,31 @@ document.getElementById("huntBtn").onclick = () => {
   closeExploreModal();
 };
 
+// =======================
+// レア遭遇抽選
+// =======================
+function rollRareEncounter() {
+  const encounters = getEncounters();
+  const night = isNightTime();
+
+  for (const npc of RARE_NPCS) {
+    let rarity = npc.baseRarity;
+    if (night) rarity *= npc.nightBoost;
+
+    if (Math.random() < rarity) {
+      const count = encounters[npc.id] || 0;
+      const lines = count === 0 ? npc.lines.first : npc.lines.repeat;
+      const line = lines[Math.floor(Math.random() * lines.length)];
+
+      saveEncounter(npc.id);
+
+      return { npc, line };
+    }
+  }
+  return null;
+}
+
+
 // 初期更新
 updateExploreBasesStatus();
 setInterval(updateExploreBasesStatus,5000);
