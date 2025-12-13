@@ -4,9 +4,6 @@ const statusPanel = document.getElementById("status-panel");
 const exploreModalBg = document.getElementById("exploreModalBg");
 const exploreModalTitle = document.getElementById("exploreModalTitle");
 const exploreModalBody = document.getElementById("exploreModalBody");
-const searchBtn = document.getElementById("searchBtn");
-const gatherBtn = document.getElementById("gatherBtn");
-const huntBtn = document.getElementById("huntBtn");
 
 let currentChar = JSON.parse(localStorage.getItem("currentChar")) || { name:"未設定", recentActions:[] };
 const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
@@ -14,6 +11,7 @@ const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
 const exploreBases = [];
 const numBases = 15;
 const radius = 200;
+
 let selectedBase = null;
 
 // 拠点生成
@@ -47,11 +45,6 @@ for(let i=0;i<numBases;i++){
 // モーダル閉じる
 function closeExploreModal(){ exploreModalBg.style.display="none"; }
 exploreModalBg.addEventListener("click",(e)=>{ if(e.target===exploreModalBg) closeExploreModal(); });
-
-// ボタン処理はループ外で1回だけ
-searchBtn.onclick = () => { if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で調査`, "explore"); closeExploreModal(); };
-gatherBtn.onclick = () => { if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で採取`, "explore"); closeExploreModal(); };
-huntBtn.onclick = () => { if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で狩猟`, "explore"); closeExploreModal(); };
 
 // 拠点配置
 function positionExploreBases(){
@@ -91,19 +84,33 @@ function updateExploreStatusPanel(){
 }
 
 // アクションログ追加
-function addExploreAction(action, type){
+function addExploreAction(action){
   const timestamp = new Date().toLocaleTimeString();
   const logEntry = `[${timestamp}] ${action}`;
   currentChar.recentActions.unshift(logEntry);
   if(currentChar.recentActions.length>50) currentChar.recentActions.pop();
   localStorage.setItem("currentChar", JSON.stringify(currentChar));
 
-  if(type==="explore"){
-    exploreLog.unshift(logEntry); if(exploreLog.length>50) exploreLog.pop();
-    localStorage.setItem("exploreLog", JSON.stringify(exploreLog));
-  }
+  exploreLog.unshift(logEntry);
+  if(exploreLog.length>50) exploreLog.pop();
+  localStorage.setItem("exploreLog", JSON.stringify(exploreLog));
 }
+
+// ★ ボタン処理はここで一度だけ登録 ★
+document.getElementById("searchBtn").onclick = () => {
+  if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で調査`);
+  closeExploreModal();
+};
+document.getElementById("gatherBtn").onclick = () => {
+  if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で採取`);
+  closeExploreModal();
+};
+document.getElementById("huntBtn").onclick = () => {
+  if(selectedBase) addExploreAction(`${selectedBase.dataset.id}で狩猟`);
+  closeExploreModal();
+};
 
 // 初期更新
 updateExploreBasesStatus();
 setInterval(updateExploreBasesStatus,5000);
+;
