@@ -1,0 +1,33 @@
+/* explore-log.css */
+#explore-log-panel {
+  width:320px;
+  background:#111;
+  border-left:1px solid #555;
+  padding:10px;
+  overflow-y:auto;
+  max-height:100%;
+  font-size:0.85em;
+}
+
+.log-entry {
+  border-bottom:1px solid #333;
+  padding:4px 0;
+  line-height:1.3em;
+}
+
+.log-entry span.timestamp {
+  color:#7fe8ff;
+  font-size:0.75em;
+  margin-right:4px;
+}
+
+.log-entry span.event {
+  color:#ffcc00;
+  font-weight:bold;
+}
+
+.log-entry span.rare {
+  color:#ff66ff;
+  font-weight:bold;
+  text-shadow:0 0 5px #ff66ff;
+}
