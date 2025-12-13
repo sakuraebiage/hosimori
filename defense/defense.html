@@ -12,8 +12,6 @@ body {
   display:flex;
   flex-direction:column;
 }
-
-/* 共通ヘッダーの高さを確保 */
 #header-container { width:100%; }
 
 #announcement {
@@ -26,7 +24,6 @@ body {
   margin-top:5px;
   color:#7fe8ff;
 }
-.scroll-text { display:inline-block; }
 
 #main-container { display:flex; flex:1; }
 #map {
@@ -43,38 +40,43 @@ body {
   border-left:1px solid #555;
   padding:10px;
   overflow-y:auto;
-  max-height:100%;
 }
-.status-entry { border-bottom:1px solid #333; padding:6px 0; font-size:0.85em; }
+.status-entry {
+  border-bottom:1px solid #333;
+  padding:6px 0;
+  font-size:0.85em;
+}
 
 .base {
   position:absolute;
-  width:55px; height:55px;
+  width:55px;
+  height:55px;
   border-radius:50%;
   background:rgba(90,200,255,0.2);
   border:2px solid #8ae1ff;
-  display:flex; justify-content:center; align-items:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   font-size:0.8em;
-  color:#fff;
   cursor:pointer;
   transition:all 0.5s ease;
 }
+
 .hp-bar {
-  width:40px; height:4px;
+  width:40px;
+  height:4px;
   background:#222;
   border:1px solid #444;
   position:absolute;
   bottom:-8px;
   left:7px;
-  border-radius:2px;
 }
-.hp-fill { height:100%; border-radius:2px; background:#00ff9d; }
+.hp-fill { height:100%; background:#00ff9d; }
 
 .modal-bg {
   display:none;
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  inset:0;
   background:rgba(0,0,0,0.6);
   justify-content:center;
   align-items:center;
@@ -85,9 +87,9 @@ body {
   padding:20px;
   border:2px solid #8ae1ff;
   border-radius:8px;
-  text-align:center;
   max-height:80%;
   overflow-y:auto;
+  text-align:center;
 }
 .modal-content button {
   margin:5px;
@@ -98,28 +100,25 @@ body {
   cursor:pointer;
 }
 .modal-content button:hover {
-  background:#8ae1ff; color:#000;
+  background:#8ae1ff;
+  color:#000;
 }
 </style>
 </head>
 <body>
 
-<!-- 共通ヘッダー -->
 <div id="header-container"></div>
 <script src="../common/header-loader.js"></script>
 
-<!-- お知らせ -->
-<div id="announcement"><span id="announcementText" class="scroll-text"></span></div>
+<div id="announcement"><span id="announcementText"></span></div>
 
-<!-- メイン画面 -->
 <div id="main-container">
   <div id="map"></div>
   <div id="status-panel"></div>
 </div>
 
-<!-- モーダル -->
 <div class="modal-bg" id="modalBg">
-  <div class="modal-content" id="modalContent">
+  <div class="modal-content">
     <h3 id="modalTitle"></h3>
     <div id="modalBody"></div>
     <div>
@@ -132,8 +131,25 @@ body {
 </div>
 
 <script>
-// ---------------------------
-// 基本要素取得
+/* ===============================
+   初期データ（★修正核心）
+================================ */
+let currentChar = JSON.parse(localStorage.getItem("currentChar")) || {};
+if(!Array.isArray(currentChar.recentActions)){
+  currentChar.recentActions = [];
+}
+if(!currentChar.name){
+  currentChar.name = "未設定";
+}
+localStorage.setItem("currentChar", JSON.stringify(currentChar));
+
+const combatLog = JSON.parse(localStorage.getItem("combatLog")) || [];
+const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
+const rescueLog = JSON.parse(localStorage.getItem("rescueLog")) || [];
+
+/* ===============================
+   要素取得
+================================ */
 const map = document.getElementById("map");
 const statusPanel = document.getElementById("status-panel");
 const modalBg = document.getElementById("modalBg");
@@ -143,194 +159,129 @@ const combatBtn = document.getElementById("combatBtn");
 const exploreBtn = document.getElementById("exploreBtn");
 const rescueBtn = document.getElementById("rescueBtn");
 
-let currentChar = JSON.parse(localStorage.getItem("currentChar")) || { name:"未設定", recentActions:[] };
-
-// 種類別ログ
-const combatLog = JSON.parse(localStorage.getItem("combatLog")) || [];
-const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
-const rescueLog = JSON.parse(localStorage.getItem("rescueLog")) || [];
-
+let selectedBase = null;
 const bases = [];
 const numBases = 20;
 const radius = 250;
-let selectedBase = null;
 
-// ---------------------------
-// 拠点生成
+/* ===============================
+   拠点生成
+================================ */
 for(let i=0;i<numBases;i++){
   const base = document.createElement("div");
-  base.classList.add("base");
+  base.className = "base";
   base.dataset.id = i===0 ? "本部" : `拠点${i}`;
   base.dataset.hp = 100;
-  base.dataset.resource = (Math.random()*4000+1000).toFixed(0);
+  base.dataset.resource = Math.floor(Math.random()*4000+1000);
   base.dataset.enemies = Math.floor(Math.random()*300);
   base.textContent = base.dataset.id;
 
-  const hpBar = document.createElement("div");
-  hpBar.classList.add("hp-bar");
-  const hpFill = document.createElement("div");
-  hpFill.classList.add("hp-fill");
-  hpBar.appendChild(hpFill);
-  base.appendChild(hpBar);
+  const bar = document.createElement("div");
+  bar.className = "hp-bar";
+  const fill = document.createElement("div");
+  fill.className = "hp-fill";
+  bar.appendChild(fill);
+  base.appendChild(bar);
+
+  base.onclick = ()=>{
+    selectedBase = base;
+    modalTitle.textContent = base.dataset.id;
+    modalBody.innerHTML = `<p>${base.dataset.id}を選択しました</p>`;
+    modalBg.style.display = "flex";
+  };
 
   map.appendChild(base);
   bases.push(base);
-
-  base.addEventListener("click", ()=>{
-    selectedBase = base;
-    modalBg.style.display="flex";
-    modalTitle.textContent = base.dataset.id;
-    modalBody.innerHTML = `<p>選択した拠点: ${base.dataset.id}</p>`;
-  });
 }
 
-// ---------------------------
-// モーダル閉じる
-function closeModal(){ modalBg.style.display="none"; }
-modalBg.addEventListener("click",(e)=>{ if(e.target===modalBg) closeModal(); });
-
-// ---------------------------
-// 拠点配置
+/* ===============================
+   配置
+================================ */
 function positionBases(){
-  const centerX = map.offsetWidth/2;
-  const centerY = map.offsetHeight/2;
-  bases.forEach((base,i)=>{
+  const cx = map.offsetWidth/2;
+  const cy = map.offsetHeight/2;
+  bases.forEach((b,i)=>{
     if(i===0){
-      base.style.left = `${centerX-27.5}px`;
-      base.style.top = `${centerY-27.5}px`;
+      b.style.left = cx-27+"px";
+      b.style.top = cy-27+"px";
       return;
     }
-    const angle = ((i-1)/(numBases-1))*2*Math.PI;
-    const distortX = Math.sin(angle*3)*10;
-    const distortY = Math.cos(angle*5)*10;
-    base.style.left = `${centerX + radius*Math.cos(angle)+distortX-27.5}px`;
-    base.style.top = `${centerY + radius*Math.sin(angle)+distortY-27.5}px`;
+    const a = (i-1)/(numBases-1)*Math.PI*2;
+    b.style.left = cx + Math.cos(a)*radius -27+"px";
+    b.style.top = cy + Math.sin(a)*radius -27+"px";
   });
 }
 positionBases();
-window.addEventListener("resize", positionBases);
+window.onresize = positionBases;
 
-// ---------------------------
-// ステータス更新
-function updateBases(){
-  bases.forEach(base=>{
-    if(base.dataset.id==="本部") return;
-    let hp = Math.max(0, base.dataset.hp - Math.random()*5);
-    base.dataset.hp = hp.toFixed(0);
-    base.dataset.enemies = Math.max(0, base.dataset.enemies - Math.random()*5).toFixed(0);
-    base.dataset.resource = (parseInt(base.dataset.resource)+Math.random()*30-15).toFixed(0);
-    const hpFill = base.querySelector(".hp-fill");
-    hpFill.style.width = `${hp}%`;
-    hpFill.style.background = hp>60?"#00ff9d": hp>30?"#ffeb3b":"#ff4b4b";
-  });
-  updateStatusPanel();
-}
-
-function updateStatusPanel(){
-  statusPanel.innerHTML="<h3>拠点ステータス</h3>";
-  bases.forEach(base=>{
-    const entry = document.createElement("div");
-    entry.classList.add("status-entry");
-    entry.innerHTML = `<strong>${base.dataset.id}</strong><br>
-      💚HP: ${base.dataset.hp}%　🪨資源: ${base.dataset.resource}　👾敵数: ${base.dataset.enemies}`;
-    statusPanel.appendChild(entry);
-  });
-}
-
-// ---------------------------
-// アクションログ追加
-function addAction(action, type){
-  const timestamp = new Date().toLocaleTimeString();
-  const logEntry = `[${timestamp}] ${action}`;
-  currentChar.recentActions.unshift(logEntry);
+/* ===============================
+   ログ追加
+================================ */
+function addAction(text,type){
+  const t = `[${new Date().toLocaleTimeString()}] ${text}`;
+  currentChar.recentActions.unshift(t);
   if(currentChar.recentActions.length>50) currentChar.recentActions.pop();
   localStorage.setItem("currentChar", JSON.stringify(currentChar));
 
-  if(type==="combat"){
-    combatLog.unshift(logEntry); if(combatLog.length>50) combatLog.pop();
-    localStorage.setItem("combatLog", JSON.stringify(combatLog));
-  } else if(type==="explore"){
-    exploreLog.unshift(logEntry); if(exploreLog.length>50) exploreLog.pop();
-    localStorage.setItem("exploreLog", JSON.stringify(exploreLog));
-  } else if(type==="rescue"){
-    rescueLog.unshift(logEntry); if(rescueLog.length>50) rescueLog.pop();
-    localStorage.setItem("rescueLog", JSON.stringify(rescueLog));
+  const mapLog = {combat:combatLog, explore:exploreLog, rescue:rescueLog}[type];
+  if(mapLog){
+    mapLog.unshift(t);
+    if(mapLog.length>50) mapLog.pop();
+    localStorage.setItem(type+"Log", JSON.stringify(mapLog));
   }
 }
 
-// ---------------------------
-// 探索処理
-function openResultModal(title, html){
-  modalTitle.textContent = title;
-  modalBody.innerHTML = html;
-  modalBg.style.display = "flex";
-}
-
-function performExplore(type){
+/* ===============================
+   探索処理（★レア遭遇あり）
+================================ */
+function performExplore(kind){
   if(!selectedBase) return;
 
-  let actionText = `${selectedBase.dataset.id}で${type}行動`;
-  addAction(actionText, "explore");
+  addAction(`${selectedBase.dataset.id}で${kind}探索`, "explore");
 
-  // ランダム結果
-  const resources = Math.floor(Math.random()*100 + 50);
-  const enemies = Math.floor(Math.random()*10);
+  const res = Math.floor(Math.random()*100+50);
+  const ene = Math.floor(Math.random()*10);
+  selectedBase.dataset.resource = +selectedBase.dataset.resource + res;
+  selectedBase.dataset.enemies = +selectedBase.dataset.enemies + ene;
 
-  // 拠点データ更新
-  selectedBase.dataset.resource = (parseInt(selectedBase.dataset.resource) + resources).toFixed(0);
-  selectedBase.dataset.enemies = (parseInt(selectedBase.dataset.enemies) + enemies).toFixed(0);
+  let rare = "";
+  if(Math.random()<0.05){
+    rare = `<p style="color:#ff7bff">✨レア遭遇！未知の存在を感知…</p>`;
+  }
 
-  // 結果表示
-  const html = `
-    <p>${selectedBase.dataset.id}を${type}しました！</p>
-    <p>資源を${resources}獲得</p>
-    <p>敵を${enemies}確認</p>
+  modalTitle.textContent = "探索結果";
+  modalBody.innerHTML = `
+    <p>${kind}を実施しました</p>
+    <p>資源 +${res}</p>
+    <p>敵 +${ene}</p>
+    ${rare}
   `;
-  openResultModal("探索結果", html);
-
-  updateBases();
 }
 
-// ---------------------------
-// モーダルボタンの紐付け
+/* ===============================
+   操作
+================================ */
+function closeModal(){ modalBg.style.display="none"; }
+
 function handleAction(type){
-  if(!selectedBase) return;
-
   if(type==="explore"){
-    // 探索種類選択UI
-    const optionsHtml = `
-      <p>${selectedBase.dataset.id}でどの探索を行いますか？</p>
-      <button id="searchBtn">調査</button>
-      <button id="gatherBtn">採取</button>
-      <button id="huntBtn">狩猟</button>
+    modalBody.innerHTML = `
+      <p>探索方法を選択</p>
+      <button onclick="performExplore('調査')">調査</button>
+      <button onclick="performExplore('採取')">採取</button>
+      <button onclick="performExplore('狩猟')">狩猟</button>
     `;
-    modalBody.innerHTML = optionsHtml;
-
-    document.getElementById("searchBtn").onclick = ()=>performExplore("調査");
-    document.getElementById("gatherBtn").onclick = ()=>performExplore("採取");
-    document.getElementById("huntBtn").onclick = ()=>performExplore("狩猟");
-  } else {
-    let actionText = "";
-    switch(type){
-      case "combat": actionText = `${selectedBase.dataset.id}で戦闘行動`; break;
-      case "rescue": actionText = `${selectedBase.dataset.id}で救助行動`; break;
-    }
-    addAction(actionText, type);
-    closeModal();
-    window.location.href = `/hosimori/log/results.html#${type}`;
+    return;
   }
+  addAction(`${selectedBase.dataset.id}で${type}行動`, type);
+  closeModal();
+  location.href = `/hosimori/log/results.html#${type}`;
 }
 
 combatBtn.onclick = ()=>handleAction("combat");
 exploreBtn.onclick = ()=>handleAction("explore");
 rescueBtn.onclick = ()=>handleAction("rescue");
-
-// ---------------------------
-// 初期更新
-updateStatusPanel();
-updateBases();
-setInterval(updateBases,5000);
-
+modalBg.onclick = e=>{ if(e.target===modalBg) closeModal(); };
 </script>
 </body>
 </html>
