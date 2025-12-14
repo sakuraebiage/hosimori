@@ -4,105 +4,20 @@
 <meta charset="UTF-8">
 <title>星守戦線戦況 - 防衛</title>
 <style>
-body {
-  margin:0;
-  font-family:"Consolas","Roboto Mono",monospace;
-  background:#000;
-  color:#e0e0e0;
-  display:flex;
-  flex-direction:column;
-}
+body { margin:0; font-family:"Consolas","Roboto Mono",monospace; background:#000; color:#e0e0e0; display:flex; flex-direction:column; }
 #header-container { width:100%; }
-
-#announcement {
-  width:100%;
-  text-align:center;
-  font-size:1em;
-  white-space:nowrap;
-  overflow:hidden;
-  height:2em;
-  margin-top:5px;
-  color:#7fe8ff;
-}
-
+#announcement { width:100%; text-align:center; font-size:1em; white-space:nowrap; overflow:hidden; height:2em; margin-top:5px; color:#7fe8ff; }
 #main-container { display:flex; flex:1; }
-#map {
-  position:relative;
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:600px;
-}
-#status-panel {
-  width:280px;
-  background:#111;
-  border-left:1px solid #555;
-  padding:10px;
-  overflow-y:auto;
-}
-.status-entry {
-  border-bottom:1px solid #333;
-  padding:6px 0;
-  font-size:0.85em;
-}
-
-.base {
-  position:absolute;
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:rgba(90,200,255,0.2);
-  border:2px solid #8ae1ff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:0.8em;
-  cursor:pointer;
-  transition:all 0.5s ease;
-}
-
-.hp-bar {
-  width:40px;
-  height:4px;
-  background:#222;
-  border:1px solid #444;
-  position:absolute;
-  bottom:-8px;
-  left:7px;
-}
+#map { position:relative; flex:1; display:flex; justify-content:center; align-items:center; min-height:600px; }
+#status-panel { width:280px; background:#111; border-left:1px solid #555; padding:10px; overflow-y:auto; }
+.status-entry { border-bottom:1px solid #333; padding:6px 0; font-size:0.85em; }
+.base { position:absolute; width:55px; height:55px; border-radius:50%; background:rgba(90,200,255,0.2); border:2px solid #8ae1ff; display:flex; justify-content:center; align-items:center; font-size:0.8em; cursor:pointer; transition:all 0.5s ease; }
+.hp-bar { width:40px; height:4px; background:#222; border:1px solid #444; position:absolute; bottom:-8px; left:7px; }
 .hp-fill { height:100%; background:#00ff9d; }
-
-.modal-bg {
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  justify-content:center;
-  align-items:center;
-  z-index:100;
-}
-.modal-content {
-  background:#222;
-  padding:20px;
-  border:2px solid #8ae1ff;
-  border-radius:8px;
-  max-height:80%;
-  overflow-y:auto;
-  text-align:center;
-}
-.modal-content button {
-  margin:5px;
-  padding:8px 12px;
-  background:#111;
-  border:1px solid #8ae1ff;
-  color:#8ae1ff;
-  cursor:pointer;
-}
-.modal-content button:hover {
-  background:#8ae1ff;
-  color:#000;
-}
+.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:100; }
+.modal-content { background:#222; padding:20px; border:2px solid #8ae1ff; border-radius:8px; max-height:80%; overflow-y:auto; text-align:center; }
+.modal-content button { margin:5px; padding:8px 12px; background:#111; border:1px solid #8ae1ff; color:#8ae1ff; cursor:pointer; }
+.modal-content button:hover { background:#8ae1ff; color:#000; }
 </style>
 </head>
 <body>
@@ -126,30 +41,26 @@ body {
       <button id="exploreBtn">🧭 探索</button>
       <button id="rescueBtn">🩹 救助</button>
     </div>
-    <button onclick="closeModal()">閉じる</button>
+    <button id="closeBtn">閉じる</button>
   </div>
 </div>
 
 <script>
-/* ===============================
-   初期データ（★修正核心）
-================================ */
+// ===============================
+// 初期データ
+// ===============================
 let currentChar = JSON.parse(localStorage.getItem("currentChar")) || {};
-if(!Array.isArray(currentChar.recentActions)){
-  currentChar.recentActions = [];
-}
-if(!currentChar.name){
-  currentChar.name = "未設定";
-}
+if(!Array.isArray(currentChar.recentActions)) currentChar.recentActions = [];
+if(!currentChar.name) currentChar.name = "未設定";
 localStorage.setItem("currentChar", JSON.stringify(currentChar));
 
 const combatLog = JSON.parse(localStorage.getItem("combatLog")) || [];
 const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
 const rescueLog = JSON.parse(localStorage.getItem("rescueLog")) || [];
 
-/* ===============================
-   要素取得
-================================ */
+// ===============================
+// 要素取得
+// ===============================
 const map = document.getElementById("map");
 const statusPanel = document.getElementById("status-panel");
 const modalBg = document.getElementById("modalBg");
@@ -158,15 +69,16 @@ const modalBody = document.getElementById("modalBody");
 const combatBtn = document.getElementById("combatBtn");
 const exploreBtn = document.getElementById("exploreBtn");
 const rescueBtn = document.getElementById("rescueBtn");
+const closeBtn = document.getElementById("closeBtn");
 
 let selectedBase = null;
 const bases = [];
 const numBases = 20;
 const radius = 250;
 
-/* ===============================
-   拠点生成
-================================ */
+// ===============================
+// 拠点生成
+// ===============================
 for(let i=0;i<numBases;i++){
   const base = document.createElement("div");
   base.className = "base";
@@ -183,7 +95,7 @@ for(let i=0;i<numBases;i++){
   bar.appendChild(fill);
   base.appendChild(bar);
 
-  base.onclick = ()=>{
+  base.onclick = ()=> {
     selectedBase = base;
     modalTitle.textContent = base.dataset.id;
     modalBody.innerHTML = `<p>${base.dataset.id}を選択しました</p>`;
@@ -194,9 +106,9 @@ for(let i=0;i<numBases;i++){
   bases.push(base);
 }
 
-/* ===============================
-   配置
-================================ */
+// ===============================
+// 配置
+// ===============================
 function positionBases(){
   const cx = map.offsetWidth/2;
   const cy = map.offsetHeight/2;
@@ -214,57 +126,72 @@ function positionBases(){
 positionBases();
 window.onresize = positionBases;
 
-/* ===============================
-   探索処理（★レア遭遇あり）
-================================ */
+// ===============================
+// 共通ログ追加
+// ===============================
+function addAction(text){
+  const t = `[${new Date().toLocaleTimeString()}] ${text}`;
+  currentChar.recentActions.unshift(t);
+  if(currentChar.recentActions.length>50) currentChar.recentActions.pop();
+  localStorage.setItem("currentChar", JSON.stringify(currentChar));
+}
+
+// ===============================
+// モーダル操作
+// ===============================
+function closeModal(){ modalBg.style.display = "none"; }
+
+function handleAction(type){
+  if(!selectedBase) return;
+
+  if(type==="explore"){
+    modalBody.innerHTML = `
+      <p>探索方法を選択してください</p>
+      <button id="btnSurvey">調査</button>
+      <button id="btnGather">採取</button>
+      <button id="btnHunt">狩猟</button>
+    `;
+    document.getElementById("btnSurvey").onclick = ()=>performExplore("調査");
+    document.getElementById("btnGather").onclick = ()=>performExplore("採取");
+    document.getElementById("btnHunt").onclick = ()=>performExplore("狩猟");
+    return;
+  }
+
+  // 戦闘・救助
+  addAction(`${selectedBase.dataset.id}で${type}行動を実施`);
+  closeModal();
+  location.href = "../log/results.html#"+type;
+}
+
+// ===============================
+// 探索処理
+// ===============================
 function performExplore(kind){
   if(!selectedBase) return;
 
-  // ログ追加
-  addAction(`${selectedBase.dataset.id}で${kind}探索`, "explore");
-
-  // 結果計算
+  addAction(`${selectedBase.dataset.id}で${kind}探索`);
   const res = Math.floor(Math.random()*100+50);
   const ene = Math.floor(Math.random()*10);
   selectedBase.dataset.resource = +selectedBase.dataset.resource + res;
   selectedBase.dataset.enemies = +selectedBase.dataset.enemies + ene;
 
-  // レア遭遇フラグ（ログ側で表現させる）
   if(Math.random()<0.05){
-    addAction(`✨レア遭遇：未知の存在を感知`, "explore");
+    addAction(`✨レア遭遇：未知の存在を感知`);
   }
 
-  // ★★★ ここが重要 ★★★
   closeModal();
   location.href = "../log/results.html#explore";
 }
 
+// ===============================
+// ボタン紐付け
+// ===============================
+combatBtn.onclick = ()=>handleAction("combat");
+exploreBtn.onclick = ()=>handleAction("explore");
+rescueBtn.onclick = ()=>handleAction("rescue");
+closeBtn.onclick = closeModal;
+modalBg.onclick = e=>{ if(e.target===modalBg) closeModal(); };
 
-/* ===============================
-   操作
-================================ */
-function handleAction(type){
-  if(!selectedBase) return;
-
-  if(type === "explore"){
-    modalBody.innerHTML = `
-      <p>探索方法を選択してください</p>
-      <button onclick="performExplore('調査')">調査</button>
-      <button onclick="performExplore('採取')">採取</button>
-      <button onclick="performExplore('狩猟')">狩猟</button>
-    `;
-    return;
-  }
-
-  // 戦闘・救助
-  addResult(
-    type,
-    `${selectedBase.dataset.id}で${type}行動を実施`
-  );
-
-  closeModal();
-  location.href = "../log/log.html#"+type;
-}
 </script>
 <script src="../log/result.js"></script>
 </body>
