@@ -215,23 +215,6 @@ positionBases();
 window.onresize = positionBases;
 
 /* ===============================
-   ログ追加
-================================ */
-function addAction(text,type){
-  const t = `[${new Date().toLocaleTimeString()}] ${text}`;
-  currentChar.recentActions.unshift(t);
-  if(currentChar.recentActions.length>50) currentChar.recentActions.pop();
-  localStorage.setItem("currentChar", JSON.stringify(currentChar));
-
-  const mapLog = {combat:combatLog, explore:exploreLog, rescue:rescueLog}[type];
-  if(mapLog){
-    mapLog.unshift(t);
-    if(mapLog.length>50) mapLog.pop();
-    localStorage.setItem(type+"Log", JSON.stringify(mapLog));
-  }
-}
-
-/* ===============================
    探索処理（★レア遭遇あり）
 ================================ */
 function performExplore(kind){
