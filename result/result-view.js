@@ -1,27 +1,35 @@
-const container = document.getElementById("resultContainer");
-const allResults = getAllResults();
+// log/result-view.js
 
-function renderResults(){
-  container.innerHTML = "";
+// URLの #explore / #combat などを取得
+const type = location.hash.replace("#", "") || "explore";
 
-  Object.keys(allResults).forEach(type=>{
-    allResults[type].forEach(entry=>{
-      const div = document.createElement("div");
-      div.classList.add("result-entry");
+// タイトル
+const titleMap = {
+  combat: "⚔ 戦闘結果ログ",
+  explore: "🧭 探索結果ログ",
+  rescue: "🩹 救助結果ログ",
+  craft: "🛠 クラフト結果ログ"
+};
 
-      if(entry.result.includes("NPC")){
-        div.classList.add("result-rare");
-      } else {
-        div.classList.add(`result-${type}`);
-      }
+document.getElementById("log-title").textContent =
+  titleMap[type] || "行動結果ログ";
 
-      div.innerHTML = `
-        <h4>[${type.toUpperCase()}] ${entry.timestamp}</h4>
-        <div>${entry.result}</div>
-      `;
-      container.appendChild(div);
-    });
+// 結果取得
+const results = getResults(type);
+
+// 表示
+const list = document.getElementById("result-list");
+
+if (results.length === 0) {
+  list.innerHTML = "<p>まだ記録がありません。</p>";
+} else {
+  results.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "log-entry";
+    div.innerHTML = `
+      <div class="time">${r.timestamp}</div>
+      <div class="text">${r.result}</div>
+    `;
+    list.appendChild(div);
   });
 }
-
-renderResults();
