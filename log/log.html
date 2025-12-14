@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>行動ログ</title>
+<style>
+body{background:#000;color:#e0e0e0;font-family:Consolas}
+.tabs{display:flex;gap:8px;justify-content:center;margin:10px}
+.tabs button{border:1px solid #8ae1ff;background:#111;color:#8ae1ff;padding:6px 12px}
+.tabs button.active{background:#8ae1ff;color:#000}
+#logContainer{max-width:800px;margin:auto;padding:10px}
+.log-entry{border-bottom:1px solid #444;padding:6px 0}
+</style>
+</head>
+<body>
+
+<h2 style="text-align:center">行動結果ログ</h2>
+
+<div class="tabs">
+  <button data-type="explore">探索</button>
+  <button data-type="combat">戦闘</button>
+  <button data-type="rescue">救助</button>
+</div>
+
+<div id="logContainer"></div>
+
+<script src="result.js"></script>
+<script src="result-view.js"></script>
+</body>
+</html>
