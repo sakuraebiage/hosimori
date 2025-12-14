@@ -39,5 +39,11 @@ function getAllResults() {
   return JSON.parse(localStorage.getItem(RESULT_KEY)) || {};
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const mode = location.hash.replace("#", "") || "explore";
+  renderResults(mode);
+});
+
+
 // 初期化実行
 initResults();
