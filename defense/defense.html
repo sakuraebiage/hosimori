@@ -260,27 +260,29 @@ function performExplore(kind){
 /* ===============================
    操作
 ================================ */
-function closeModal(){ modalBg.style.display="none"; }
-
 function handleAction(type){
-  if(type==="explore"){
+  if(!selectedBase) return;
+
+  if(type === "explore"){
     modalBody.innerHTML = `
-      <p>探索方法を選択</p>
+      <p>探索方法を選択してください</p>
       <button onclick="performExplore('調査')">調査</button>
       <button onclick="performExplore('採取')">採取</button>
       <button onclick="performExplore('狩猟')">狩猟</button>
     `;
     return;
   }
-  addAction(`${selectedBase.dataset.id}で${type}行動`, type);
-  closeModal();
-  location.href = `/hosimori/log/results.html#${type}`;
-}
 
-combatBtn.onclick = ()=>handleAction("combat");
-exploreBtn.onclick = ()=>handleAction("explore");
-rescueBtn.onclick = ()=>handleAction("rescue");
-modalBg.onclick = e=>{ if(e.target===modalBg) closeModal(); };
+  // 戦闘・救助
+  addResult(
+    type,
+    `${selectedBase.dataset.id}で${type}行動を実施`
+  );
+
+  closeModal();
+  location.href = "../log/log.html#"+type;
+}
 </script>
+<script src="../log/result.js"></script>
 </body>
 </html>
