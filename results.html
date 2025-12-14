@@ -2,16 +2,23 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>行動結果ログ</title>
-<link rel="stylesheet" href="./log.css">
+<title>星守戦線戦況 - 結果</title>
+<link rel="stylesheet" href="log.css">
+<style>
+body { background:#000; color:#e0e0e0; font-family: monospace; margin:0; padding:20px;}
+h1 { text-align:center; color:#7fe8ff;}
+.result-entry { border-bottom:1px solid #333; padding:6px 0; }
+</style>
 </head>
 <body>
+<h1>行動結果</h1>
+<div>
+  <button onclick="renderResults('combat')">戦闘</button>
+  <button onclick="renderResults('explore')">探索</button>
+  <button onclick="renderResults('rescue')">救助</button>
+</div>
+<div id="resultsContainer"></div>
 
-<h2 id="log-title">行動結果</h2>
-<div id="result-list"></div>
-
-<script src="./result.js"></script>
-<script src="./result-view.js"></script>
+<script src="result.js"></script>
 </body>
 </html>
-
