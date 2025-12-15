@@ -1,0 +1,74 @@
+.inventory-ui {
+  display:flex;
+  height:100vh;
+  background:linear-gradient(180deg,#05080d,#020409);
+  color:#e6f6ff;
+  font-family:"Consolas","Roboto Mono",monospace;
+}
+
+/* 左カテゴリ */
+.category-panel {
+  width:220px;
+  background:rgba(10,20,35,0.8);
+  border-right:1px solid #1f4b6e;
+  padding:15px;
+}
+.category-panel h3 {
+  color:#7fe8ff;
+  letter-spacing:0.1em;
+  margin-bottom:10px;
+}
+.category-panel button {
+  width:100%;
+  margin:5px 0;
+  padding:8px;
+  background:transparent;
+  border:1px solid #1f4b6e;
+  color:#9bbcd1;
+  cursor:pointer;
+}
+.category-panel button:hover {
+  background:rgba(127,232,255,0.15);
+  color:#fff;
+}
+
+/* 右アイテム */
+.item-panel {
+  flex:1;
+  padding:20px;
+  overflow:auto;
+}
+.item-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:15px;
+}
+
+/* アイテムカード */
+.item-card {
+  background:rgba(20,30,45,0.6);
+  border:1px solid #2c5f85;
+  padding:12px;
+  border-radius:6px;
+  position:relative;
+  transition:0.3s;
+}
+.item-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  border:1px solid #7fe8ff;
+  opacity:0;
+  pointer-events:none;
+}
+.item-card:hover::before {
+  opacity:1;
+}
+.item-name {
+  font-size:0.9em;
+  color:#7fe8ff;
+}
+.item-count {
+  font-size:0.8em;
+  color:#9bbcd1;
+}
