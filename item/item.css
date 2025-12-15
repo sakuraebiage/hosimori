@@ -72,3 +72,22 @@
   font-size:0.8em;
   color:#9bbcd1;
 }
+.top-nav {
+  display: flex;
+  gap: 16px;
+  padding: 10px 16px;
+  background: #060a18;
+  border-bottom: 1px solid #1e2a55;
+}
+
+.top-nav a {
+  color: #8faaff;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.top-nav a.active {
+  color: #ffffff;
+  font-weight: bold;
+}
+
