@@ -1,3 +1,4 @@
+const INVENTORY_LIMIT = 50;
 const grid = document.getElementById("itemGrid");
 const tabInv = document.getElementById("tabInventory");
 const tabSto = document.getElementById("tabStorage");
