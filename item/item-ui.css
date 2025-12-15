@@ -1,0 +1,30 @@
+body {
+  background: #0a0f1e;
+  color: #e0e6ff;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.item-card {
+  background: linear-gradient(145deg, #121a33, #0b1225);
+  border: 1px solid #1e2a55;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 0 12px rgba(80,120,255,0.15);
+}
+
+.item-name {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.item-count {
+  color: #8faaff;
+  font-size: 0.9em;
+}
