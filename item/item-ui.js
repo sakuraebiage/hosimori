@@ -1,3 +1,13 @@
+// ===============================
+// アイテム管理データ
+// ===============================
+const INVENTORY_LIMIT = 50;
+
+let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+let storage   = JSON.parse(localStorage.getItem("storage")) || [];
+
+let currentList = "inventory"; // 表示中
+
 const INVENTORY_LIMIT = 50;
 const grid = document.getElementById("itemGrid");
 const tabInv = document.getElementById("tabInventory");
