@@ -1,27 +1,8 @@
 [
   {
-    "id": "cons_0001",
+    "id": "heal_capsule",
     "name": "回復カプセル",
-    "type": "consumable",
-    "rarity": "R",
-    "stack": 99,
-    "icon": "heal_capsule.png",
-
-    "effect": {
-      "hp": 50,
-      "sp": 10
-    },
-
-    "tags": ["回復", "医療", "即時"],
-    "description": "使用するとHPを回復する標準医療カプセル。",
-
-    "lore": "星守戦線初期に量産された簡易回復装置。",
-
-    "obtain": {
-      "drop": ["outpost_alpha", "ruins_low"],
-      "craft": false,
-      "shop": ["med_vendor"]
-    }
+    "count": 5,
+    "desc": "使用するとHPを回復する簡易医療品"
   }
 ]
-
