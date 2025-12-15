@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<body>
+<button onclick="generate()">生成</button>
+<pre id="out"></pre>
+
+<script>
+function generate(){
+  const list = [];
+  for(let i=1;i<=600;i++){
+    list.push({
+      id: "test_"+String(i).padStart(3,"0"),
+      name: `試作素材-${i}`,
+      type: "material",
+      rarity: Math.ceil(Math.random()*5),
+      stack: 99,
+      desc: `試験用に生成された素材No.${i}`,
+      count: 1
+    });
+  }
+  document.getElementById("out").textContent =
+    JSON.stringify(list, null, 2);
+}
+</script>
+</body>
+</html>
