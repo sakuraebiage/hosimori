@@ -99,6 +99,24 @@ function gainItem(item){
   } else {
     storage.push(item);
   }
+   const grid = document.getElementById("itemGrid");
+
+function renderItems(list){
+  grid.innerHTML = "";
+  list.forEach(it=>{
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.innerHTML = `
+      <div class="item-name">${it.name}</div>
+      <div class="item-count">×${it.count}</div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// 初期表示
+renderItems(inventory);
+
   saveItems();
 }
 
