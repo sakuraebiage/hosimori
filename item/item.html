@@ -14,6 +14,15 @@
   <a href="../encyclopedia/index.html">📖 図鑑</a>
 </nav>
 
+ <div class="item-controls">
+  <button onclick="currentList='inventory'; renderItems(inventory)">🎒 インベントリ</button>
+  <button onclick="currentList='storage'; renderItems(storage)">🏢 倉庫</button>
+  <button onclick="testAdd600Items()">🧪 600個テスト</button>
+</div>
+
+<div id="itemGrid"></div>
+<script src="item-ui.js"></script>
+ 
 <div class="item-tabs">
   <button id="tabInventory" class="active">インベントリ</button>
   <button id="tabStorage">倉庫</button>
