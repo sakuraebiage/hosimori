@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>アイテム</title>
-  <link rel="stylesheet" href="item-ui.css">
+<meta charset="UTF-8">
+<title>アイテム管理</title>
+<link rel="stylesheet" href="item-ui.css">
 </head>
-  <nav class="top-nav">
+<body>
+
+<nav class="top-nav">
   <a href="../defense/defense.html">🛡 防衛</a>
   <a href="../log/results.html">📜 行動ログ</a>
-  <a href="../items/items.html" class="active">🎒 アイテム</a>
+  <a href="items.html" class="active">🎒 アイテム</a>
   <a href="../encyclopedia/index.html">📖 図鑑</a>
 </nav>
 
-<body>
+<div class="item-tabs">
+  <button id="tabInventory" class="active">インベントリ</button>
+  <button id="tabStorage">倉庫</button>
+</div>
 
-  <h1>アイテム一覧</h1>
+<div id="itemGrid" class="item-grid"></div>
 
-  <!-- ★ JSが探しに行く場所 -->
-  <div id="itemGrid" class="item-grid"></div>
+<!-- 詳細モーダル -->
+<div id="itemModal" class="modal-bg">
+  <div class="modal">
+    <h3 id="modalName"></h3>
+    <p id="modalDesc"></p>
+    <button id="toDexBtn">図鑑を見る</button>
+    <button onclick="closeModal()">閉じる</button>
+  </div>
+</div>
 
-  <!-- ★ ここでJSを読み込む -->
-  <script src="item-ui.js"></script>
+<script src="item-ui.js"></script>
 </body>
 </html>
