@@ -1,28 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>アイテム</title>
-<link rel="stylesheet" href="item.css">
+  <meta charset="UTF-8">
+  <title>アイテム</title>
+  <link rel="stylesheet" href="item-ui.css">
 </head>
 <body>
 
-<h1>アイテム</h1>
+  <h1>アイテム一覧</h1>
 
-<div id="tabs">
-  <button data-type="consumable">消耗品</button>
-  <button data-type="material">素材</button>
-  <button data-type="warehouse">倉庫</button>
-</div>
+  <!-- ★ JSが探しに行く場所 -->
+  <div id="itemGrid" class="item-grid"></div>
 
-<div id="item-list"></div>
-
-<div id="item-detail" hidden>
-  <h3 id="detail-name"></h3>
-  <p id="detail-desc"></p>
-</div>
-
-<script src="item-data.js"></script>
-<script src="item-view.js"></script>
+  <!-- ★ ここでJSを読み込む -->
+  <script src="item-ui.js"></script>
 </body>
 </html>
