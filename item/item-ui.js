@@ -76,5 +76,31 @@ function openModal(item){
 function closeModal(){
   modalBg.style.display = "none";
 }
+function gainItem(item){
+  // インベントリに同種があるか
+  const inv = inventory.find(i=>i.id===item.id);
+  if(inv){
+    inv.count += item.count;
+    saveItems();
+    return;
+  }
+
+  // 空きあり
+  if(inventory.length < INVENTORY_LIMIT){
+    inventory.push(item);
+    saveItems();
+    return;
+  }
+
+  // 満杯 → 倉庫
+  const sto = storage.find(i=>i.id===item.id);
+  if(sto){
+    sto.count += item.count;
+  } else {
+    storage.push(item);
+  }
+  saveItems();
+}
+
 
 loadItems();
