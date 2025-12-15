@@ -1,9 +1,8 @@
 [
   {
-    "id": "mat_test_001",
-    "name": "テスト鉱石",
-    "rarity": 1,
-    "tags": ["鉱石", "テスト"]
+    "id": "star_iron",
+    "name": "星鉄の欠片",
+    "count": 120,
+    "desc": "高密度金属素材"
   }
 ]
-
