@@ -22,6 +22,8 @@ body { margin:0; font-family:"Consolas","Roboto Mono",monospace; background:#000
 </head>
 <body>
 
+<script src="../items/item-ui.js"></script> 
+
 <div id="header-container"></div>
 <script src="../common/header-loader.js"></script>
 
@@ -191,14 +193,6 @@ exploreBtn.onclick = ()=>handleAction("explore");
 rescueBtn.onclick = ()=>handleAction("rescue");
 closeBtn.onclick = closeModal;
 modalBg.onclick = e=>{ if(e.target===modalBg) closeModal(); };
-
-gainItem({
-  id: "mat_iron",
-  name: "星鉄の欠片",
-  count: Math.floor(Math.random()*3+1)
-});
-<script src="../items/item-ui.js"></script>
-
 
 </script>
 <script src="../log/result.js"></script>
