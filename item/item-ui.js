@@ -1,70 +1,69 @@
-body {
-  margin: 0;
-  background: #050814;
-  color: #dbe6ff;
-  font-family: "Consolas","Roboto Mono",monospace;
+const grid = document.getElementById("itemGrid");
+const tabInv = document.getElementById("tabInventory");
+const tabSto = document.getElementById("tabStorage");
+
+const modalBg = document.getElementById("itemModal");
+const modalName = document.getElementById("modalName");
+const modalDesc = document.getElementById("modalDesc");
+const toDexBtn = document.getElementById("toDexBtn");
+
+let inventory = [];
+let storage = [];
+let currentList = "inventory";
+
+/* -----------------------
+   データ読み込み
+----------------------- */
+async function loadItems() {
+  inventory = await fetch("../data/items/consumables.json").then(r=>r.json());
+  storage   = await fetch("../data/items/materials.json").then(r=>r.json());
+  renderItems(inventory);
 }
 
-.top-nav {
-  display: flex;
-  gap: 16px;
-  padding: 10px 16px;
-  background: #0a0f2a;
-  border-bottom: 1px solid #1e2a55;
+function renderItems(list) {
+  grid.innerHTML = "";
+  list.forEach(it=>{
+    const div = document.createElement("div");
+    div.className = "item-card";
+    div.innerHTML = `
+      <div class="item-name">${it.name}</div>
+      <div class="item-count">×${it.count}</div>
+    `;
+    div.onclick = ()=>openModal(it);
+    grid.appendChild(div);
+  });
 }
 
-.top-nav a {
-  color: #8faaff;
-  text-decoration: none;
-}
-.top-nav a.active { color: #fff; }
+/* -----------------------
+   タブ切り替え
+----------------------- */
+tabInv.onclick = ()=>{
+  currentList="inventory";
+  tabInv.classList.add("active");
+  tabSto.classList.remove("active");
+  renderItems(inventory);
+};
 
-.item-tabs {
-  display: flex;
-  gap: 8px;
-  padding: 10px 16px;
+tabSto.onclick = ()=>{
+  currentList="storage";
+  tabSto.classList.add("active");
+  tabInv.classList.remove("active");
+  renderItems(storage);
+};
+
+/* -----------------------
+   モーダル
+----------------------- */
+function openModal(item){
+  modalName.textContent = item.name;
+  modalDesc.textContent = item.desc || "詳細データなし";
+  toDexBtn.onclick = ()=>{
+    location.href = `../encyclopedia/index.html?item=${encodeURIComponent(item.id)}`;
+  };
+  modalBg.style.display = "flex";
+}
+function closeModal(){
+  modalBg.style.display = "none";
 }
 
-.item-tabs button {
-  background: #0b1225;
-  border: 1px solid #1e2a55;
-  color: #8faaff;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-.item-tabs button.active {
-  background: #1e2a55;
-  color: #fff;
-}
-
-.item-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
-  gap: 12px;
-  padding: 16px;
-}
-
-.item-card {
-  background: linear-gradient(145deg,#0b1225,#060a18);
-  border: 1px solid #1e2a55;
-  padding: 10px;
-  cursor: pointer;
-}
-.item-name { font-size: 0.9em; }
-.item-count { font-size: 0.8em; color: #9fbaff; }
-
-/* モーダル */
-.modal-bg {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
-.modal {
-  background: #0b1225;
-  border: 1px solid #8faaff;
-  padding: 16px;
-  width: 280px;
-}
+loadItems();
