@@ -192,6 +192,14 @@ rescueBtn.onclick = ()=>handleAction("rescue");
 closeBtn.onclick = closeModal;
 modalBg.onclick = e=>{ if(e.target===modalBg) closeModal(); };
 
+gainItem({
+  id: "mat_iron",
+  name: "星鉄の欠片",
+  count: Math.floor(Math.random()*3+1)
+});
+<script src="../items/item-ui.js"></script>
+
+
 </script>
 <script src="../log/result.js"></script>
 </body>
