@@ -4,90 +4,64 @@
 <meta charset="UTF-8">
 <title>戦闘設定</title>
 
-<!-- Tailwind -->
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
 <style>
-
-/* 背景 */
 body {
   background: radial-gradient(circle at center, #0a0f2c, #000);
   color: #e0e6ff;
   font-family: "Consolas", monospace;
 }
 
-/* レイアウト */
-.main {
-  display: flex;
-  gap: 30px;
-  padding: 20px;
-}
+.main { display:flex; gap:20px; padding:20px; }
 
-/* 左（立ち絵） */
-.left {
-  width: 300px;
-}
-
+.left { width:260px; }
 .portrait {
-  width: 100%;
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(100,150,255,0.4);
-  transition: 0.2s;
+  width:100%;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(100,150,255,0.5);
 }
 
-.portrait:hover {
-  transform: scale(1.02);
-}
-
-/* 右 */
 .right {
-  flex: 1;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(100,150,255,0.2);
+  flex:1;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  border-radius:12px;
+  padding:20px;
 }
 
-/* タイトル */
-.title {
-  color: #8ae1ff;
-  margin-bottom: 10px;
-}
+.title { color:#8ae1ff; margin-top:10px; }
 
-/* ステータス */
 .stats {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 10px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
 }
 
 .stat {
-  background: rgba(0,0,0,0.3);
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(100,150,255,0.2);
+  background:rgba(0,0,0,0.3);
+  padding:8px;
+  border-radius:6px;
 }
 
-/* スキル */
-.skills {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.skills, .equip { display:flex; flex-direction:column; gap:6px; }
+
+.skill-box {
+  background:rgba(0,0,0,0.3);
+  padding:8px;
+  border-radius:6px;
 }
 
-select {
-  background: #111;
-  border: 1px solid #3aa;
-  color: #8ae1ff;
-  padding: 8px;
-  border-radius: 6px;
-}
+.skill-effect { font-size:12px; color:#9fd; }
 
-button {
-  margin-top: 15px;
+input, textarea, select {
+  width:100%;
+  background:#111;
+  border:1px solid #3aa;
+  color:#8ae1ff;
+  border-radius:6px;
+  padding:4px;
 }
-
 </style>
 </head>
 
@@ -95,127 +69,229 @@ button {
 
 <div class="main">
 
-  <!-- 左：立ち絵 -->
-  <div class="left">
-    <img id="portrait" class="portrait">
-  </div>
+<!-- 左 -->
+<div class="left">
+  <img id="portrait" class="portrait">
+</div>
 
-  <!-- 右 -->
-  <div class="right">
+<!-- 右 -->
+<div class="right">
 
-    <h2 class="title">ステータス</h2>
-    <div id="stats" class="stats"></div>
+<h2 class="title">ステータス</h2>
+<div id="stats" class="stats"></div>
 
-    <h2 class="title mt-6">スキル設定</h2>
-    <div id="skills" class="skills"></div>
+<div class="flex gap-6">
 
-    <button onclick="save()" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500">
-      💾 保存
-    </button>
+<!-- スキル設定 -->
+<div class="flex-1">
+<h2 class="title">スキル設定</h2>
+<div id="skills" class="skills"></div>
+</div>
 
-  </div>
+<!-- 所持スキル -->
+<div class="w-64">
+<h2 class="title">所持スキル</h2>
+<div id="skillList"></div>
+</div>
 
+</div>
+
+<h2 class="title">装備</h2>
+<div id="equipment" class="equip"></div>
+
+<h2 class="title">スキル編集</h2>
+<div id="skillEditor"></div>
+
+<button onclick="save()" class="mt-4 px-4 py-2 bg-blue-600 rounded">
+💾 保存
+</button>
+
+</div>
 </div>
 
 <script>
 
-// =====================
-// 初期データ（なければ作る）
-// =====================
+// ===== 初期データ =====
 let player = JSON.parse(localStorage.getItem("playerData"));
 
 if(!player){
-  player = {
-    base:{ physical:10, magic:8, vitality:12, endurance:10, agility:7, spirit:9, luck:5 },
-    bonus:{ physical:0, magic:0, vitality:0, endurance:0, agility:0, spirit:0, luck:0 },
-    skillsOwned:[
-      {id:"s1", name:"星裂斬"},
-      {id:"s2", name:"蒼流波"},
-      {id:"s3", name:"月影突"}
-    ],
-    skillsEquipped:[],
-    portrait:"https://via.placeholder.com/300x400"
-  };
+player = {
+  base:{ physical:10, magic:8, vitality:12, endurance:10, agility:7, spirit:9, luck:5 },
+  bonus:{ physical:0, magic:0, vitality:0, endurance:0, agility:0, spirit:0, luck:0 },
+
+  skillsOwned:[
+    {id:"s1", name:"星裂斬", customName:"", voice:"斬る！", effect:"物理120%", desc:"単体攻撃"},
+    {id:"s2", name:"蒼流波", customName:"", voice:"流れろ！", effect:"魔法100%", desc:"範囲攻撃"}
+  ],
+
+  skillsEquipped:[],
+
+  itemsOwned:[
+    {id:"w1", name:"星剣", type:"weapon", stats:{physical:5}},
+    {id:"a1", name:"月鎧", type:"armor", stats:{endurance:4}}
+  ],
+
+  equipment:{ weapon:null, armor:null, accessory:null },
+
+  portrait:"https://via.placeholder.com/300x400"
+};
 }
 
-// =====================
-// スキル枠計算
-// =====================
+// ===== スロット =====
 function getSlots(){
   const total = Object.values(player.base).reduce((a,b)=>a+b,0);
-
-  if(total >= 100) return 16;
-  if(total >= 80) return 14;
-  if(total >= 60) return 12;
-
+  if(total>=100) return 16;
+  if(total>=80) return 14;
+  if(total>=60) return 12;
   return 10;
 }
 
-// =====================
-// UI描画
-// =====================
-function render(){
-
-  // 立ち絵
-  document.getElementById("portrait").src = player.portrait;
-
-  // ステータス
-  const statsDiv = document.getElementById("stats");
-  statsDiv.innerHTML = "";
-
-  for(let key in player.base){
-    const div = document.createElement("div");
-    div.className = "stat";
-    div.innerHTML = `
-      <strong>${key}</strong><br>
-      ${player.base[key]} + ${player.bonus[key]}
-    `;
-    statsDiv.appendChild(div);
+// ===== ステータス =====
+function renderStats(){
+  const div = document.getElementById("stats");
+  div.innerHTML="";
+  for(let k in player.base){
+    div.innerHTML += `<div class="stat">${k}: ${player.base[k]} + ${player.bonus[k]}</div>`;
   }
+}
 
-  // スキル
-  const skillDiv = document.getElementById("skills");
-  skillDiv.innerHTML = "";
+// ===== スキル設定 =====
+function renderSkills(){
+  const div = document.getElementById("skills");
+  div.innerHTML="";
 
-  const slots = getSlots();
+  for(let i=0;i<getSlots();i++){
+    const wrap = document.createElement("div");
 
-  for(let i=0;i<slots;i++){
+    const sel = document.createElement("select");
 
-    const select = document.createElement("select");
-
-    const empty = document.createElement("option");
-    empty.value="";
-    empty.textContent="未設定";
-    select.appendChild(empty);
+    sel.innerHTML = `<option value="">未設定</option>`;
 
     player.skillsOwned.forEach(s=>{
-      const opt = document.createElement("option");
-      opt.value=s.id;
-      opt.textContent=s.name;
-      select.appendChild(opt);
+      sel.innerHTML += `<option value="${s.id}">${s.customName||s.name}</option>`;
     });
 
+    const eff = document.createElement("div");
+    eff.className="skill-effect";
+
     if(player.skillsEquipped[i]){
-      select.value = player.skillsEquipped[i];
+      sel.value=player.skillsEquipped[i];
+      updateEffect(player.skillsEquipped[i],eff);
     }
 
-    select.onchange = (e)=>{
-      player.skillsEquipped[i] = e.target.value;
+    sel.onchange=(e)=>{
+      player.skillsEquipped[i]=e.target.value;
+      updateEffect(e.target.value,eff);
     };
 
-    skillDiv.appendChild(select);
+    wrap.appendChild(sel);
+    wrap.appendChild(eff);
+
+    div.appendChild(wrap);
   }
 }
 
-// =====================
-// 保存
-// =====================
-function save(){
-  localStorage.setItem("playerData", JSON.stringify(player));
-  alert("保存した！");
+// ===== 効果表示 =====
+function updateEffect(id,el){
+  const s = player.skillsOwned.find(s=>s.id===id);
+  if(!s){ el.textContent=""; return; }
+  el.textContent = `${s.effect} / ${s.desc}`;
 }
 
-// 初回描画
+// ===== スキル一覧 =====
+function renderSkillList(){
+  const div = document.getElementById("skillList");
+  div.innerHTML="";
+
+  player.skillsOwned.forEach(s=>{
+    div.innerHTML += `
+      <div class="skill-box">
+        <strong>${s.customName||s.name}</strong><br>
+        ${s.effect}<br>
+        <small>${s.desc}</small>
+      </div>`;
+  });
+}
+
+// ===== 装備 =====
+function renderEquipment(){
+  const div = document.getElementById("equipment");
+  div.innerHTML="";
+
+  ["weapon","armor","accessory"].forEach(type=>{
+    const sel = document.createElement("select");
+
+    sel.innerHTML = `<option value="">未装備</option>`;
+
+    player.itemsOwned.filter(i=>i.type===type).forEach(i=>{
+      sel.innerHTML += `<option value="${i.id}">${i.name}</option>`;
+    });
+
+    sel.onchange=(e)=>equip(type,e.target.value);
+
+    div.appendChild(sel);
+  });
+}
+
+// ===== 装備処理 =====
+function equip(type,id){
+
+  player.equipment[type]=id;
+
+  player.bonus = {physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0};
+
+  Object.values(player.equipment).forEach(id=>{
+    const item = player.itemsOwned.find(i=>i.id===id);
+    if(!item)return;
+    for(let k in item.stats){
+      player.bonus[k]+=item.stats[k];
+    }
+  });
+
+  render();
+}
+
+// ===== スキル編集 =====
+function renderSkillEditor(){
+  const div = document.getElementById("skillEditor");
+  div.innerHTML="";
+
+  player.skillsOwned.forEach(s=>{
+    div.innerHTML += `
+      <div class="skill-box">
+        <strong>${s.name}</strong>
+        <input value="${s.customName||""}" placeholder="名前変更"
+          onchange="updateName('${s.id}',this.value)">
+        <textarea onchange="updateVoice('${s.id}',this.value)">${s.voice||""}</textarea>
+      </div>`;
+  });
+}
+
+function updateName(id,val){
+  player.skillsOwned.find(s=>s.id===id).customName=val;
+  render();
+}
+
+function updateVoice(id,val){
+  player.skillsOwned.find(s=>s.id===id).voice=val;
+}
+
+// ===== 保存 =====
+function save(){
+  localStorage.setItem("playerData",JSON.stringify(player));
+  alert("保存！");
+}
+
+// ===== 初期描画 =====
+function render(){
+  document.getElementById("portrait").src = player.portrait;
+  renderStats();
+  renderSkills();
+  renderSkillList();
+  renderEquipment();
+  renderSkillEditor();
+}
+
 render();
 
 </script>
