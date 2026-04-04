@@ -2,199 +2,331 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>星守戦線戦況 - 防衛</title>
+<title>戦闘設定</title>
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 <style>
-body { margin:0; font-family:"Consolas","Roboto Mono",monospace; background:#000; color:#e0e0e0; display:flex; flex-direction:column; }
-#header-container { width:100%; }
-#announcement { width:100%; text-align:center; font-size:1em; white-space:nowrap; overflow:hidden; height:2em; margin-top:5px; color:#7fe8ff; }
-#main-container { display:flex; flex:1; }
-#map { position:relative; flex:1; display:flex; justify-content:center; align-items:center; min-height:600px; }
-#status-panel { width:280px; background:#111; border-left:1px solid #555; padding:10px; overflow-y:auto; }
-.status-entry { border-bottom:1px solid #333; padding:6px 0; font-size:0.85em; }
-.base { position:absolute; width:55px; height:55px; border-radius:50%; background:rgba(90,200,255,0.2); border:2px solid #8ae1ff; display:flex; justify-content:center; align-items:center; font-size:0.8em; cursor:pointer; transition:all 0.5s ease; }
-.hp-bar { width:40px; height:4px; background:#222; border:1px solid #444; position:absolute; bottom:-8px; left:7px; }
-.hp-fill { height:100%; background:#00ff9d; }
-.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:100; }
-.modal-content { background:#222; padding:20px; border:2px solid #8ae1ff; border-radius:8px; max-height:80%; overflow-y:auto; text-align:center; }
-.modal-content button { margin:5px; padding:8px 12px; background:#111; border:1px solid #8ae1ff; color:#8ae1ff; cursor:pointer; }
-.modal-content button:hover { background:#8ae1ff; color:#000; }
+body {
+  background: radial-gradient(circle at center, #0a0f2c, #000);
+  color: #e0e6ff;
+  font-family: "Consolas", monospace;
+}
+
+.main { display:flex; gap:20px; padding:20px; }
+
+.left { width:260px; }
+.portrait {
+  width:100%;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(100,150,255,0.5);
+}
+
+.right {
+  flex:1;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  border-radius:12px;
+  padding:20px;
+}
+
+.title { color:#8ae1ff; margin-top:10px; }
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.stat {
+  background:rgba(0,0,0,0.3);
+  padding:8px;
+  border-radius:6px;
+}
+
+.skill-box {
+  background:rgba(0,0,0,0.3);
+  padding:8px;
+  border-radius:6px;
+}
+
+.skill-effect { font-size:12px; color:#9fd; }
+
+input, textarea {
+  width:100%;
+  background:#111;
+  border:1px solid #3aa;
+  color:#8ae1ff;
+  border-radius:6px;
+  padding:4px;
+}
+
+/* 検索UI */
+.search-box { position:relative; }
+
+.dropdown {
+  position:absolute;
+  background:#111;
+  border:1px solid #3aa;
+  width:100%;
+  max-height:150px;
+  overflow-y:auto;
+  z-index:100;
+}
+
+.dropdown div {
+  padding:5px;
+  cursor:pointer;
+}
+.dropdown div:hover {
+  background:rgba(100,150,255,0.3);
+}
 </style>
 </head>
+
 <body>
 
-<script src="../items/item-ui.js"></script> 
+<div class="main">
 
-<div id="header-container"></div>
-<script src="../common/header-loader.js"></script>
-
-<div id="announcement"><span id="announcementText"></span></div>
-
-<div id="main-container">
-  <div id="map"></div>
-  <div id="status-panel"></div>
+<div class="left">
+  <img id="portrait" class="portrait">
 </div>
 
-<div class="modal-bg" id="modalBg">
-  <div class="modal-content">
-    <h3 id="modalTitle"></h3>
-    <div id="modalBody"></div>
-    <div>
-      <button id="combatBtn">⚔ 戦闘</button>
-      <button id="exploreBtn">🧭 探索</button>
-      <button id="rescueBtn">🩹 救助</button>
-    </div>
-    <button id="closeBtn">閉じる</button>
-  </div>
+<div class="right">
+
+<h2 class="title">ステータス</h2>
+<div id="stats" class="stats"></div>
+
+<div class="flex gap-6">
+
+<div class="flex-1">
+<h2 class="title">スキル設定</h2>
+<div id="skills"></div>
+</div>
+
+<div class="w-64">
+<h2 class="title">所持スキル</h2>
+<div id="skillList"></div>
+</div>
+
+</div>
+
+<h2 class="title">装備</h2>
+<div id="equipment"></div>
+
+<h2 class="title">スキル編集</h2>
+<div id="skillEditor"></div>
+
+<button onclick="save()" class="mt-4 px-4 py-2 bg-blue-600 rounded">
+💾 保存
+</button>
+
+</div>
 </div>
 
 <script>
-// ===============================
-// 初期データ
-// ===============================
-let currentChar = JSON.parse(localStorage.getItem("currentChar")) || {};
-if(!Array.isArray(currentChar.recentActions)) currentChar.recentActions = [];
-if(!currentChar.name) currentChar.name = "未設定";
-localStorage.setItem("currentChar", JSON.stringify(currentChar));
 
-const combatLog = JSON.parse(localStorage.getItem("combatLog")) || [];
-const exploreLog = JSON.parse(localStorage.getItem("exploreLog")) || [];
-const rescueLog = JSON.parse(localStorage.getItem("rescueLog")) || [];
+// ===== 初期データ =====
+let player = JSON.parse(localStorage.getItem("playerData"));
 
-// ===============================
-// 要素取得
-// ===============================
-const map = document.getElementById("map");
-const statusPanel = document.getElementById("status-panel");
-const modalBg = document.getElementById("modalBg");
-const modalTitle = document.getElementById("modalTitle");
-const modalBody = document.getElementById("modalBody");
-const combatBtn = document.getElementById("combatBtn");
-const exploreBtn = document.getElementById("exploreBtn");
-const rescueBtn = document.getElementById("rescueBtn");
-const closeBtn = document.getElementById("closeBtn");
+if(!player){
+player = {
+  base:{ physical:10, magic:8, vitality:12, endurance:10, agility:7, spirit:9, luck:5 },
+  bonus:{ physical:0, magic:0, vitality:0, endurance:0, agility:0, spirit:0, luck:0 },
 
-let selectedBase = null;
-const bases = [];
-const numBases = 20;
-const radius = 250;
+  skillsOwned:[
+    {id:"s1", name:"星裂斬", customName:"", voice:"斬る！", effect:"物理120%", desc:"単体攻撃"},
+    {id:"s2", name:"蒼流波", customName:"", voice:"流れろ！", effect:"魔法100%", desc:"範囲攻撃"},
+    {id:"s3", name:"月影突", customName:"", voice:"影よ走れ", effect:"物理90%", desc:"高速攻撃"}
+  ],
 
-// ===============================
-// 拠点生成
-// ===============================
-for(let i=0;i<numBases;i++){
-  const base = document.createElement("div");
-  base.className = "base";
-  base.dataset.id = i===0 ? "本部" : `拠点${i}`;
-  base.dataset.hp = 100;
-  base.dataset.resource = Math.floor(Math.random()*4000+1000);
-  base.dataset.enemies = Math.floor(Math.random()*300);
-  base.textContent = base.dataset.id;
+  skillsEquipped:[],
 
-  const bar = document.createElement("div");
-  bar.className = "hp-bar";
-  const fill = document.createElement("div");
-  fill.className = "hp-fill";
-  bar.appendChild(fill);
-  base.appendChild(bar);
+  itemsOwned:[
+    {id:"w1", name:"星剣", type:"weapon", stats:{physical:5}},
+    {id:"a1", name:"月鎧", type:"armor", stats:{endurance:4}}
+  ],
 
-  base.onclick = ()=> {
-    selectedBase = base;
-    modalTitle.textContent = base.dataset.id;
-    modalBody.innerHTML = `<p>${base.dataset.id}を選択しました</p>`;
-    modalBg.style.display = "flex";
-  };
+  equipment:{ weapon:null, armor:null, accessory:null },
 
-  map.appendChild(base);
-  bases.push(base);
+  portrait:"https://via.placeholder.com/300x400"
+};
 }
 
-// ===============================
-// 配置
-// ===============================
-function positionBases(){
-  const cx = map.offsetWidth/2;
-  const cy = map.offsetHeight/2;
-  bases.forEach((b,i)=>{
-    if(i===0){
-      b.style.left = cx-27+"px";
-      b.style.top = cy-27+"px";
-      return;
+// ===== スロット =====
+function getSlots(){
+  const total = Object.values(player.base).reduce((a,b)=>a+b,0);
+  if(total>=100) return 16;
+  if(total>=80) return 14;
+  if(total>=60) return 12;
+  return 10;
+}
+
+// ===== ステータス =====
+function renderStats(){
+  const div = document.getElementById("stats");
+  div.innerHTML="";
+  for(let k in player.base){
+    div.innerHTML += `<div class="stat">${k}: ${player.base[k]} + ${player.bonus[k]}</div>`;
+  }
+}
+
+// ===== 検索付きスキルUI =====
+function renderSkills(){
+  const div = document.getElementById("skills");
+  div.innerHTML="";
+
+  for(let i=0;i<getSlots();i++){
+
+    const wrap = document.createElement("div");
+
+    const box = document.createElement("div");
+    box.className="search-box";
+
+    const input = document.createElement("input");
+    input.placeholder="検索";
+
+    const dropdown = document.createElement("div");
+    dropdown.className="dropdown";
+
+    const effect = document.createElement("div");
+    effect.className="skill-effect";
+
+    // 初期表示
+    if(player.skillsEquipped[i]){
+      const s = player.skillsOwned.find(s=>s.id===player.skillsEquipped[i]);
+      input.value = s?.customName || s?.name;
+      updateEffect(s?.id, effect);
     }
-    const a = (i-1)/(numBases-1)*Math.PI*2;
-    b.style.left = cx + Math.cos(a)*radius -27+"px";
-    b.style.top = cy + Math.sin(a)*radius -27+"px";
+
+    input.oninput=()=>{
+      dropdown.innerHTML="";
+      const word = input.value.toLowerCase();
+
+      player.skillsOwned
+        .filter(s => (s.name + (s.customName||"")).toLowerCase().includes(word))
+        .forEach(s=>{
+          const item = document.createElement("div");
+          item.textContent = s.customName || s.name;
+
+          item.onclick=()=>{
+            player.skillsEquipped[i]=s.id;
+            input.value=s.customName || s.name;
+            dropdown.innerHTML="";
+            updateEffect(s.id,effect);
+          };
+
+          dropdown.appendChild(item);
+        });
+    };
+
+    box.appendChild(input);
+    box.appendChild(dropdown);
+
+    wrap.appendChild(box);
+    wrap.appendChild(effect);
+
+    div.appendChild(wrap);
+  }
+}
+
+// ===== 効果 =====
+function updateEffect(id,el){
+  const s = player.skillsOwned.find(s=>s.id===id);
+  if(!s){ el.textContent=""; return; }
+  el.textContent = `${s.effect} / ${s.desc}`;
+}
+
+// ===== 所持一覧 =====
+function renderSkillList(){
+  const div = document.getElementById("skillList");
+  div.innerHTML="";
+  player.skillsOwned.forEach(s=>{
+    div.innerHTML += `
+      <div class="skill-box">
+        <strong>${s.customName||s.name}</strong><br>
+        ${s.effect}<br>
+        <small>${s.desc}</small>
+      </div>`;
   });
 }
-positionBases();
-window.onresize = positionBases;
 
-// ===============================
-// 共通ログ追加
-// ===============================
-function addAction(text){
-  const t = `[${new Date().toLocaleTimeString()}] ${text}`;
-  currentChar.recentActions.unshift(t);
-  if(currentChar.recentActions.length>50) currentChar.recentActions.pop();
-  localStorage.setItem("currentChar", JSON.stringify(currentChar));
+// ===== 装備 =====
+function renderEquipment(){
+  const div = document.getElementById("equipment");
+  div.innerHTML="";
+
+  ["weapon","armor","accessory"].forEach(type=>{
+    const sel = document.createElement("select");
+    sel.innerHTML = `<option value="">未装備</option>`;
+
+    player.itemsOwned.filter(i=>i.type===type).forEach(i=>{
+      sel.innerHTML += `<option value="${i.id}">${i.name}</option>`;
+    });
+
+    sel.onchange=(e)=>equip(type,e.target.value);
+
+    div.appendChild(sel);
+  });
 }
 
-// ===============================
-// モーダル操作
-// ===============================
-function closeModal(){ modalBg.style.display = "none"; }
+function equip(type,id){
+  player.equipment[type]=id;
+  player.bonus={physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0};
 
-function handleAction(type){
-  if(!selectedBase) return;
+  Object.values(player.equipment).forEach(id=>{
+    const item = player.itemsOwned.find(i=>i.id===id);
+    if(!item)return;
+    for(let k in item.stats){
+      player.bonus[k]+=item.stats[k];
+    }
+  });
 
-  if(type==="explore"){
-    modalBody.innerHTML = `
-      <p>探索方法を選択してください</p>
-      <button id="btnSurvey">調査</button>
-      <button id="btnGather">採取</button>
-      <button id="btnHunt">狩猟</button>
-    `;
-    document.getElementById("btnSurvey").onclick = ()=>performExplore("調査");
-    document.getElementById("btnGather").onclick = ()=>performExplore("採取");
-    document.getElementById("btnHunt").onclick = ()=>performExplore("狩猟");
-    return;
-  }
-
-  // 戦闘・救助
-  addAction(`${selectedBase.dataset.id}で${type}行動を実施`);
-  closeModal();
-  location.href = "../log/results.html#"+type;
+  render();
 }
 
-// ===============================
-// 探索処理
-// ===============================
-function performExplore(kind){
-  if(!selectedBase) return;
-
-  addAction(`${selectedBase.dataset.id}で${kind}探索`);
-  const res = Math.floor(Math.random()*100+50);
-  const ene = Math.floor(Math.random()*10);
-  selectedBase.dataset.resource = +selectedBase.dataset.resource + res;
-  selectedBase.dataset.enemies = +selectedBase.dataset.enemies + ene;
-
-  if(Math.random()<0.05){
-    addAction(`✨レア遭遇：未知の存在を感知`);
-  }
-
-  closeModal();
-  location.href = "../log/log.html#explore";
+// ===== 編集 =====
+function renderSkillEditor(){
+  const div = document.getElementById("skillEditor");
+  div.innerHTML="";
+  player.skillsOwned.forEach(s=>{
+    div.innerHTML += `
+      <div class="skill-box">
+        <strong>${s.name}</strong>
+        <input value="${s.customName||""}" onchange="updateName('${s.id}',this.value)">
+        <textarea onchange="updateVoice('${s.id}',this.value)">${s.voice||""}</textarea>
+      </div>`;
+  });
 }
 
-// ===============================
-// ボタン紐付け
-// ===============================
-combatBtn.onclick = ()=>handleAction("combat");
-exploreBtn.onclick = ()=>handleAction("explore");
-rescueBtn.onclick = ()=>handleAction("rescue");
-closeBtn.onclick = closeModal;
-modalBg.onclick = e=>{ if(e.target===modalBg) closeModal(); };
+function updateName(id,val){
+  player.skillsOwned.find(s=>s.id===id).customName=val;
+  render();
+}
+
+function updateVoice(id,val){
+  player.skillsOwned.find(s=>s.id===id).voice=val;
+}
+
+// ===== 保存 =====
+function save(){
+  localStorage.setItem("playerData",JSON.stringify(player));
+  alert("保存！");
+}
+
+// ===== 初期描画 =====
+function render(){
+  document.getElementById("portrait").src=player.portrait;
+  renderStats();
+  renderSkills();
+  renderSkillList();
+  renderEquipment();
+  renderSkillEditor();
+}
+
+render();
 
 </script>
-<script src="../log/result.js"></script>
+
 </body>
 </html>
