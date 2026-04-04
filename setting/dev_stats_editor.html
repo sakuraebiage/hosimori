@@ -1,188 +1,222 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ステータス編集</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>戦闘設定</title>
+
+<!-- Tailwind -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<style>
+
+/* 背景 */
+body {
+  background: radial-gradient(circle at center, #0a0f2c, #000);
+  color: #e0e6ff;
+  font-family: "Consolas", monospace;
+}
+
+/* レイアウト */
+.main {
+  display: flex;
+  gap: 30px;
+  padding: 20px;
+}
+
+/* 左（立ち絵） */
+.left {
+  width: 300px;
+}
+
+.portrait {
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(100,150,255,0.4);
+  transition: 0.2s;
+}
+
+.portrait:hover {
+  transform: scale(1.02);
+}
+
+/* 右 */
+.right {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(100,150,255,0.2);
+}
+
+/* タイトル */
+.title {
+  color: #8ae1ff;
+  margin-bottom: 10px;
+}
+
+/* ステータス */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+}
+
+.stat {
+  background: rgba(0,0,0,0.3);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(100,150,255,0.2);
+}
+
+/* スキル */
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+select {
+  background: #111;
+  border: 1px solid #3aa;
+  color: #8ae1ff;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+button {
+  margin-top: 15px;
+}
+
+</style>
 </head>
 
-<body class="bg-gray-900 text-gray-100 min-h-screen p-6">
+<body>
 
-<h1 class="text-2xl font-bold mb-6">🧩 ステータス編集（開発ツール）</h1>
+<div class="main">
 
-<form class="space-y-4">
-
-  <!-- 名前 -->
-  <div>
-    <label>キャラクター名</label>
-    <input id="charName" class="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded">
+  <!-- 左：立ち絵 -->
+  <div class="left">
+    <img id="portrait" class="portrait">
   </div>
 
-  <!-- ステータス -->
-  <div class="grid grid-cols-2 gap-4">
+  <!-- 右 -->
+  <div class="right">
 
-    <div><label>体力（vitality）</label><input type="number" id="vit" class="w-full px-3 py-2 bg-gray-800 border"></div>
-    <div><label>耐久（endurance）</label><input type="number" id="end" class="w-full px-3 py-2 bg-gray-800 border"></div>
+    <h2 class="title">ステータス</h2>
+    <div id="stats" class="stats"></div>
 
-    <div><label>物理（physical）</label><input type="number" id="phy" class="w-full px-3 py-2 bg-gray-800 border"></div>
-    <div><label>魔法（magic）</label><input type="number" id="mag" class="w-full px-3 py-2 bg-gray-800 border"></div>
+    <h2 class="title mt-6">スキル設定</h2>
+    <div id="skills" class="skills"></div>
 
-    <div><label>敏捷（agility）</label><input type="number" id="agi" class="w-full px-3 py-2 bg-gray-800 border"></div>
-    <div><label>精神（spirit）</label><input type="number" id="spi" class="w-full px-3 py-2 bg-gray-800 border"></div>
-
-    <div><label>幸運（luck）</label><input type="number" id="luk" class="w-full px-3 py-2 bg-gray-800 border"></div>
+    <button onclick="save()" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500">
+      💾 保存
+    </button>
 
   </div>
 
-  <!-- スキル -->
-  <div>
-    <label>スキル（カンマ区切り）</label>
-    <textarea id="skills" class="w-full px-3 py-2 bg-gray-800 border"></textarea>
-  </div>
-
-  <!-- セリフ -->
-  <div>
-    <label>戦闘セリフ（改行区切り）</label>
-    <textarea id="lines" class="w-full px-3 py-2 bg-gray-800 border"></textarea>
-  </div>
-
-  <button type="button" id="saveBtn"
-    class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500">
-    💾 保存
-  </button>
-
-</form>
-
-<hr class="my-6 border-gray-700">
-
-<h2 class="text-xl mb-4">📊 プレビュー</h2>
-
-<div id="preview" class="bg-gray-800 p-4 rounded"></div>
+</div>
 
 <script>
 
-// =========================
-// スキル変換
-// =========================
-function parseSkills(text) {
-  return text.split(",").map(name => ({
-    id: "skill_" + Math.random(),
-    name: name.trim(),
-    customName: "",
-    voice: "（セリフ未設定）",
-    power: 100,
-    type: "physical"
-  })).filter(s => s.name !== "");
-}
+// =====================
+// 初期データ（なければ作る）
+// =====================
+let player = JSON.parse(localStorage.getItem("playerData"));
 
-// =========================
-// 合計ステータス
-// =========================
-function getTotalStats(player) {
-  const total = {};
-  for (let key in player.base) {
-    total[key] = player.base[key] + player.bonus[key];
-  }
-  return total;
-}
-
-// =========================
-// 派生ステータス
-// =========================
-function calcDerived(player) {
-  const s = getTotalStats(player);
-
-  return {
-    HP: s.vitality * 10 + s.endurance * 5,
-    MP: s.magic * 5 + s.spirit * 5,
-    SP: s.physical * 5 + s.agility * 5,
-    回復力: s.endurance * 2 + s.spirit,
-    速度: s.agility * 2,
-    クリ率: (s.luck * 0.5).toFixed(1) + "%"
+if(!player){
+  player = {
+    base:{ physical:10, magic:8, vitality:12, endurance:10, agility:7, spirit:9, luck:5 },
+    bonus:{ physical:0, magic:0, vitality:0, endurance:0, agility:0, spirit:0, luck:0 },
+    skillsOwned:[
+      {id:"s1", name:"星裂斬"},
+      {id:"s2", name:"蒼流波"},
+      {id:"s3", name:"月影突"}
+    ],
+    skillsEquipped:[],
+    portrait:"https://via.placeholder.com/300x400"
   };
 }
 
-// =========================
-// 表示
-// =========================
-function render(player) {
+// =====================
+// スキル枠計算
+// =====================
+function getSlots(){
+  const total = Object.values(player.base).reduce((a,b)=>a+b,0);
 
-  const stats = getTotalStats(player);
-  const derived = calcDerived(player);
+  if(total >= 100) return 16;
+  if(total >= 80) return 14;
+  if(total >= 60) return 12;
 
-  let html = `<h3 class="text-lg mb-2">${player.name}</h3>`;
+  return 10;
+}
 
-  html += "<div class='grid grid-cols-2 gap-2'>";
-  for (let key in stats) {
-    html += `
-      <div>
-        ${key} : ${player.base[key]} + ${player.bonus[key]}
-      </div>
+// =====================
+// UI描画
+// =====================
+function render(){
+
+  // 立ち絵
+  document.getElementById("portrait").src = player.portrait;
+
+  // ステータス
+  const statsDiv = document.getElementById("stats");
+  statsDiv.innerHTML = "";
+
+  for(let key in player.base){
+    const div = document.createElement("div");
+    div.className = "stat";
+    div.innerHTML = `
+      <strong>${key}</strong><br>
+      ${player.base[key]} + ${player.bonus[key]}
     `;
-  }
-  html += "</div>";
-
-  html += "<hr class='my-3 border-gray-600'>";
-
-  for (let key in derived) {
-    html += `<div>${key} : ${derived[key]}</div>`;
+    statsDiv.appendChild(div);
   }
 
-  html += "<hr class='my-3 border-gray-600'>";
+  // スキル
+  const skillDiv = document.getElementById("skills");
+  skillDiv.innerHTML = "";
 
-  html += "<div>スキル:</div>";
-  player.skills.forEach(s => {
-    html += `<div>・${s.name}「${s.voice}」</div>`;
-  });
+  const slots = getSlots();
 
-  document.getElementById("preview").innerHTML = html;
+  for(let i=0;i<slots;i++){
+
+    const select = document.createElement("select");
+
+    const empty = document.createElement("option");
+    empty.value="";
+    empty.textContent="未設定";
+    select.appendChild(empty);
+
+    player.skillsOwned.forEach(s=>{
+      const opt = document.createElement("option");
+      opt.value=s.id;
+      opt.textContent=s.name;
+      select.appendChild(opt);
+    });
+
+    if(player.skillsEquipped[i]){
+      select.value = player.skillsEquipped[i];
+    }
+
+    select.onchange = (e)=>{
+      player.skillsEquipped[i] = e.target.value;
+    };
+
+    skillDiv.appendChild(select);
+  }
 }
 
-// =========================
+// =====================
 // 保存
-// =========================
-document.getElementById("saveBtn").addEventListener("click", () => {
-
-  const player = {
-    name: document.getElementById("charName").value,
-
-    base: {
-      vitality: Number(vit.value),
-      endurance: Number(end.value),
-      physical: Number(phy.value),
-      magic: Number(mag.value),
-      agility: Number(agi.value),
-      spirit: Number(spi.value),
-      luck: Number(luk.value)
-    },
-
-    bonus: {
-      vitality: 0,
-      endurance: 0,
-      physical: 0,
-      magic: 0,
-      agility: 0,
-      spirit: 0,
-      luck: 0
-    },
-
-    equipment: {
-      weapon: null,
-      armor: null,
-      accessory: null
-    },
-
-    skills: parseSkills(skills.value),
-
-    lines: lines.value.split("\n").filter(v => v !== "")
-  };
-
+// =====================
+function save(){
   localStorage.setItem("playerData", JSON.stringify(player));
+  alert("保存した！");
+}
 
-  render(player);
-
-  alert("保存＆プレビュー更新！");
-});
+// 初回描画
+render();
 
 </script>
 
