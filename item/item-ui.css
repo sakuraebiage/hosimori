@@ -1,70 +1,26 @@
 body {
-  margin: 0;
-  background: #050814;
-  color: #dbe6ff;
-  font-family: "Consolas","Roboto Mono",monospace;
+  background: radial-gradient(circle at center, #0a0f2c, #000);
+  color: #e0e6ff;
+  font-family: "Consolas", monospace;
 }
 
-.top-nav {
-  display: flex;
-  gap: 16px;
-  padding: 10px 16px;
-  background: #0a0f2a;
-  border-bottom: 1px solid #1e2a55;
+.panel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(100, 150, 255, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(100,150,255,0.2);
 }
 
-.top-nav a {
-  color: #8faaff;
-  text-decoration: none;
-}
-.top-nav a.active { color: #fff; }
-
-.item-tabs {
-  display: flex;
-  gap: 8px;
-  padding: 10px 16px;
-}
-
-.item-tabs button {
-  background: #0b1225;
-  border: 1px solid #1e2a55;
-  color: #8faaff;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-.item-tabs button.active {
-  background: #1e2a55;
-  color: #fff;
-}
-
-.item-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
-  gap: 12px;
-  padding: 16px;
-}
-
-.item-card {
-  background: linear-gradient(145deg,#0b1225,#060a18);
-  border: 1px solid #1e2a55;
+.item {
   padding: 10px;
-  cursor: pointer;
+  margin: 5px;
+  border: 1px solid rgba(120,180,255,0.2);
+  transition: 0.2s;
 }
-.item-name { font-size: 0.9em; }
-.item-count { font-size: 0.8em; color: #9fbaff; }
 
-/* モーダル */
-.modal-bg {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
-.modal {
-  background: #0b1225;
-  border: 1px solid #8faaff;
-  padding: 16px;
-  width: 280px;
+.item:hover {
+  background: rgba(120,180,255,0.1);
+  box-shadow: 0 0 10px rgba(120,180,255,0.5);
 }
