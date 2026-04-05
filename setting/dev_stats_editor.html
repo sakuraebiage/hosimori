@@ -16,8 +16,9 @@ body {
   margin:8px;
   border-radius:6px;
 }
-select,button {
-  margin-top:4px;
+.small {
+  font-size:12px;
+  color:#9fd;
 }
 </style>
 </head>
@@ -44,9 +45,9 @@ select,button {
 // スキル
 // =====================
 const skillMaster = [
-  {id:"s1", name:"星裂斬", power:1.2, desc:"物理攻撃"},
-  {id:"s2", name:"蒼流波", power:1.0, desc:"魔法攻撃"},
-  {id:"s3", name:"月影突", power:0.9, desc:"高会心"}
+  {id:"s1", name:"星裂斬", power:1.2, target:"単体", cost:{sp:5,mp:0}, desc:"物理攻撃"},
+  {id:"s2", name:"蒼流波", power:1.0, target:"全体", cost:{sp:0,mp:8}, desc:"魔法攻撃"},
+  {id:"s3", name:"月影突", power:0.9, target:"単体", cost:{sp:3,mp:2}, desc:"高会心"}
 ];
 
 // =====================
@@ -78,7 +79,7 @@ if(!player){
 }
 
 // =====================
-// ステータス合計
+// 装備込みステ
 // =====================
 function getTotalStats(){
 
@@ -97,20 +98,48 @@ function getTotalStats(){
 }
 
 // =====================
-// ステータス表示
+// 戦闘ステータス
+// =====================
+function getBattleStats(){
+
+  const t = getTotalStats();
+
+  return {
+    atk: t.physical * 2,
+    matk: t.magic * 2,
+    hp: t.vitality * 10,
+    def: t.endurance * 2,
+    spd: t.agility * 1.5,
+    mp: t.spirit * 5,
+    luck: t.luck
+  };
+}
+
+// =====================
+// 装備スキル取得
+// =====================
+function getEquippedSkills(){
+  return player.skillsEquipped
+    .map(id => skillMaster.find(s=>s.id===id))
+    .filter(s => s);
+}
+
+// =====================
+// ステ表示
 // =====================
 function renderStats(){
 
   const total = getTotalStats();
-
   const div = document.getElementById("stats");
-  div.innerHTML = `残りポイント: ${player.points}`;
+
+  div.innerHTML = `<div>残りポイント: ${player.points}</div>`;
 
   for(let k in player.base){
     div.innerHTML += `
       <div class="box">
         ${k}: ${player.base[k]} (+${total[k]-player.base[k]})
-        <button onclick="addStat('${k}')">+</button>
+        <br>
+        <button onclick="addStat('${k}')">＋</button>
       </div>
     `;
   }
@@ -146,12 +175,19 @@ function renderSkills(){
 
     div.innerHTML += `
       <div class="box">
-        スロット${i+1}
+        スロット${i+1}<br>
+
         <select onchange="selectSkill(${i}, this.value)">
           ${options}
         </select>
-        <div style="font-size:12px;color:#9fd;">
-          ${skill ? skill.desc : "説明なし"}
+
+        <div class="small">
+          ${skill ? `
+            ${skill.desc}<br>
+            威力: ${skill.power}倍<br>
+            対象: ${skill.target}<br>
+            SP:${skill.cost.sp} / MP:${skill.cost.mp}
+          ` : "未設定"}
         </div>
       </div>
     `;
@@ -178,14 +214,25 @@ function renderSkillList(){
   }
 
   player.skillsOwned.forEach(s=>{
-    div.innerHTML += `<div class="box">${s.name}</div>`;
+
+    const m = skillMaster.find(x=>x.id===s.id);
+
+    div.innerHTML += `
+      <div class="box">
+        <strong>${s.name}</strong><br>
+        ${m.desc}<br>
+        威力: ${m.power}倍<br>
+        SP:${m.cost.sp} / MP:${m.cost.mp}
+      </div>
+    `;
   });
 }
 
 // =====================
-// スキル取得（テスト用）
+// スキル取得（テスト）
 // =====================
 function learnSkill(id){
+
   const skill = skillMaster.find(s=>s.id===id);
   if(!skill) return;
 
@@ -211,12 +258,12 @@ function renderEquipment(){
     equipmentMaster
       .filter(e=>e.type===type)
       .forEach(e=>{
-        options += `<option value="${e.id}">${e.name}</option>`;
+        options += `<option value="${e.id}" ${player.equipment[type]===e.id?"selected":""}>${e.name}</option>`;
       });
 
     div.innerHTML += `
       <div class="box">
-        ${type}
+        ${type}<br>
         <select onchange="equip('${type}', this.value)">
           ${options}
         </select>
@@ -229,6 +276,16 @@ function equip(type,id){
   player.equipment[type]=id;
   save();
   render();
+}
+
+// =====================
+// デバッグ（超重要）
+// =====================
+function debugBattle(){
+
+  console.log("=== 戦闘データ ===");
+  console.log("戦闘ステ:", getBattleStats());
+  console.log("装備スキル:", getEquippedSkills());
 }
 
 // =====================
@@ -246,6 +303,7 @@ function render(){
   renderSkills();
   renderSkillList();
   renderEquipment();
+  debugBattle(); // ←ここ重要
 }
 
 render();
