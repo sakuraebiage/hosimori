@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>訓練</title>
 
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<style>
+body {
+  background:#0a0f2c;
+  color:#e0e6ff;
+}
+.skill-box {
+  background:#111;
+  padding:10px;
+  margin:5px;
+  border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ヘッダーここに入れる -->
+
+<h1 class="text-xl mb-4">💪 訓練（スキル取得）</h1>
+
+<p>スキルポイント: <span id="sp"></span></p>
+
+<div id="skillList"></div>
+
+<script src="../system/stats.js"></script>
+<script src="../system/skills.js"></script>
+<script src="../data/player.js"></script>
+
+<script>
+
+function renderTraining(){
+
+  document.getElementById("sp").textContent = player.skillPoints;
+
+  const div = document.getElementById("skillList");
+  div.innerHTML="";
+
+  skillMaster.forEach(s=>{
+
+    const owned = player.skillsOwned.some(x=>x.id===s.id);
+    const ok = checkRequirement(s);
+
+    let btn = "";
+
+    if(owned){
+      btn = "取得済み";
+    }else if(ok){
+      btn = `<button onclick="learnSkill('${s.id}')">取得</button>`;
+    }else{
+      btn = `<button onclick="learnSkill('${s.id}')">SP${s.cost}</button>`;
+    }
+
+    div.innerHTML += `
+      <div class="skill-box">
+        <strong>${s.name}</strong><br>
+        ${s.desc}<br>
+        ${btn}
+      </div>
+    `;
+  });
+}
+
+renderTraining();
+
+</script>
+  <script src="../system/stats.js"></script>
+  <script src="../system/skills.js"></script>
+  <script src="../system/battle.js"></script>
+  <script src="../data/player.js"></script>
+
+</body>
+</html>
+</body>
+</html>
