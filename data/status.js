@@ -1,3 +1,0 @@
-getGrowth()
-getMainBuild()
-calcDerivedStats()
