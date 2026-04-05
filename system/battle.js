@@ -1,1 +1,2 @@
-
+loadPlayer()
+savePlayer()
