@@ -5,240 +5,153 @@
 <title>戦闘設定</title>
 
 <style>
-body {
+body{
   background:#0a0f2c;
-  color:#e0e6ff;
+  color:#fff;
   font-family:monospace;
+  padding:20px;
 }
 
 /* 共通 */
-.box {
-  background:#111;
-  padding:8px;
-  margin:6px;
-  border-radius:6px;
+.box{
+  border:2px solid #ccc;
+  padding:10px;
 }
 
-/* ステータス2列 */
-.stats-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-
-/* スキル欄 */
-.skill-slot {
+/* 上段 */
+.top{
   display:flex;
-  align-items:center;
+  gap:20px;
+}
+
+/* ステータス */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,150px);
   gap:10px;
 }
 
-/* 検索 */
-input {
-  background:#222;
-  color:#fff;
-  border:1px solid #555;
-  padding:4px;
+/* 総合 */
+.total{
+  flex:1;
+  height:180px;
 }
 
-.small {
-  font-size:11px;
-  color:#9fd;
+/* 装備 */
+.equip{
+  margin-top:20px;
+}
+
+/* スキル */
+.skills{
+  margin-top:20px;
+}
+
+.skill-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.skill-row{
+  display:flex;
+  gap:10px;
+}
+
+.skill-list{
+  margin-top:20px;
+  height:150px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>⚔ 戦闘設定</h1>
-
 <h2>ステータス</h2>
-<div id="stats"></div>
 
-<h2>スキル設定</h2>
-<input id="search" placeholder="スキル検索" oninput="renderSkills()">
-<div id="skills"></div>
+<div class="top">
 
+  <!-- ステータス -->
+  <div class="stats" id="stats"></div>
+
+  <!-- 総合 -->
+  <div class="box total" id="totalStats">
+    総合ステータス（装備込み）
+  </div>
+
+</div>
+
+<!-- 装備 -->
 <h2>装備</h2>
-<div id="equipment"></div>
+<div id="equipment" class="equip"></div>
+
+<!-- スキル -->
+<h2>スキルスロット</h2>
+<div id="skills" class="skills"></div>
+
+<!-- スキル一覧 -->
+<h2>スキル一覧</h2>
+<input id="search" placeholder="検索" oninput="renderSkills()">
+<div id="skillList" class="box skill-list"></div>
 
 <script>
 
 // =====================
-// スキル
+// ダミー
 // =====================
-const skillMaster = [
-  {id:"s1", name:"星裂斬", power:1.2, target:"単体", cost:{sp:5,mp:0}, desc:"物理攻撃"},
-  {id:"s2", name:"蒼流波", power:1.0, target:"全体", cost:{sp:0,mp:8}, desc:"魔法攻撃"},
-  {id:"s3", name:"月影突", power:0.9, target:"単体", cost:{sp:3,mp:2}, desc:"高会心"}
-];
+const statsList = ["physical","magic","vitality","endurance","agility","spirit"];
 
-// =====================
-// 装備
-// =====================
-const equipmentMaster = [
-  {id:"w1", name:"鉄の剣", type:"weapon", bonus:{ physical:5 }},
-  {id:"a1", name:"革の鎧", type:"armor", bonus:{ endurance:5 }},
-  {id:"r1", name:"幸運の指輪", type:"accessory", bonus:{ luck:5 }}
-];
-
-// =====================
-// プレイヤー
-// =====================
-let player = JSON.parse(localStorage.getItem("playerData")) || {
-  base:{ physical:5, magic:5, vitality:5, endurance:5, agility:5, spirit:5, luck:5 },
-  points:10,
-  skillsEquipped:[],
-  equipment:{}
+let player = {
+  base:{ physical:5, magic:5, vitality:5, endurance:5, agility:5, spirit:5 },
+  equipment:{},
+  skillsEquipped:[]
 };
 
 // =====================
-// ステータス説明
-// =====================
-const statDesc = {
-  physical:"物理攻撃/SP増加",
-  magic:"魔法攻撃/MP増加",
-  vitality:"HP/回復量",
-  endurance:"防御/耐久",
-  agility:"速度/SP効率",
-  spirit:"MP/状態異常耐性",
-  luck:"レアドロ率"
-};
-
-// =====================
-// ステ計算
-// =====================
-function getTotalStats(){
-  const total = {...player.base};
-
-  Object.values(player.equipment).forEach(id=>{
-    const eq = equipmentMaster.find(e=>e.id===id);
-    if(!eq) return;
-    for(let k in eq.bonus){
-      total[k] += eq.bonus[k];
-    }
-  });
-
-  return total;
-}
-
-// =====================
-// ステ表示（2列）
+// ステータス
 // =====================
 function renderStats(){
 
-  const total = getTotalStats();
   const div = document.getElementById("stats");
+  div.innerHTML="";
 
-  div.innerHTML = `<div>残りポイント: ${player.points}</div>`;
-  div.innerHTML += `<div class="stats-grid">`;
-
-  for(let k in player.base){
+  statsList.forEach(k=>{
 
     div.innerHTML += `
       <div class="box">
-        <strong>${k}</strong><br>
-        ${player.base[k]} → ${total[k]}<br>
-        <span class="small">${statDesc[k]}</span><br>
-        <button onclick="addStat('${k}')">＋</button>
+        ${k}<br>
+        <input type="number" value="${player.base[k]}">
+        <div style="font-size:11px;">説明</div>
       </div>
     `;
-  }
+  });
 
-  div.innerHTML += `</div>`;
-}
-
-function addStat(k){
-  if(player.points<=0)return;
-  player.base[k]++;
-  player.points--;
-  save(); render();
 }
 
 // =====================
-// スキル検索＋リスト
+// スキルスロット
 // =====================
 function renderSkills(){
 
-  const word = document.getElementById("search").value;
   const div = document.getElementById("skills");
-
   div.innerHTML="";
 
-  const list = skillMaster.filter(s=>s.name.includes(word));
-
-  list.forEach(s=>{
+  for(let i=0;i<10;i++){
 
     div.innerHTML += `
-      <div class="box skill-slot">
-        <button onclick="setSkill('${s.id}')">セット</button>
-
-        <div>
-          <strong>${s.name}</strong><br>
-          <span class="small">
-            威力:${s.power} / ${s.target} / SP${s.cost.sp}
-          </span>
-        </div>
+      <div class="skill-row">
+        <div class="box" style="flex:1;">スキル</div>
+        <div class="box" style="flex:1;">効果</div>
       </div>
     `;
-  });
+  }
 }
 
 // =====================
-// スキルセット
+// 初期
 // =====================
-function setSkill(id){
-  if(player.skillsEquipped.length>=5)return;
-  player.skillsEquipped.push(id);
-  save(); render();
-}
-
-// =====================
-// 装備
-// =====================
-function renderEquipment(){
-
-  const div = document.getElementById("equipment");
-  div.innerHTML="";
-
-  ["weapon","armor","accessory"].forEach(type=>{
-
-    let options = `<option value="">なし</option>`;
-
-    equipmentMaster
-      .filter(e=>e.type===type)
-      .forEach(e=>{
-        options += `<option value="${e.id}">${e.name}</option>`;
-      });
-
-    div.innerHTML += `
-      <div class="box">
-        ${type}
-        <select onchange="equip('${type}',this.value)">
-          ${options}
-        </select>
-      </div>
-    `;
-  });
-}
-
-function equip(type,id){
-  player.equipment[type]=id;
-  save(); render();
-}
-
-// =====================
-function save(){
-  localStorage.setItem("playerData", JSON.stringify(player));
-}
-
-function render(){
-  renderStats();
-  renderSkills();
-  renderEquipment();
-}
-
-render();
+renderStats();
+renderSkills();
 
 </script>
 
