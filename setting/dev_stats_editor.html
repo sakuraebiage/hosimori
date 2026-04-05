@@ -10,14 +10,39 @@ body {
   color:#e0e6ff;
   font-family:monospace;
 }
+
+/* 共通 */
 .box {
   background:#111;
-  padding:10px;
-  margin:8px;
+  padding:8px;
+  margin:6px;
   border-radius:6px;
 }
+
+/* ステータス2列 */
+.stats-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+/* スキル欄 */
+.skill-slot {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* 検索 */
+input {
+  background:#222;
+  color:#fff;
+  border:1px solid #555;
+  padding:4px;
+}
+
 .small {
-  font-size:12px;
+  font-size:11px;
   color:#9fd;
 }
 </style>
@@ -31,10 +56,8 @@ body {
 <div id="stats"></div>
 
 <h2>スキル設定</h2>
+<input id="search" placeholder="スキル検索" oninput="renderSkills()">
 <div id="skills"></div>
-
-<h2>所持スキル</h2>
-<div id="skillList"></div>
 
 <h2>装備</h2>
 <div id="equipment"></div>
@@ -55,42 +78,44 @@ const skillMaster = [
 // =====================
 const equipmentMaster = [
   {id:"w1", name:"鉄の剣", type:"weapon", bonus:{ physical:5 }},
-  {id:"w2", name:"魔導杖", type:"weapon", bonus:{ magic:5 }},
   {id:"a1", name:"革の鎧", type:"armor", bonus:{ endurance:5 }},
-  {id:"a2", name:"ローブ", type:"armor", bonus:{ spirit:5 }},
-  {id:"r1", name:"幸運の指輪", type:"accessory", bonus:{ luck:5 }},
-  {id:"r2", name:"疾風の靴", type:"accessory", bonus:{ agility:5 }}
+  {id:"r1", name:"幸運の指輪", type:"accessory", bonus:{ luck:5 }}
 ];
 
 // =====================
 // プレイヤー
 // =====================
-let player = JSON.parse(localStorage.getItem("playerData"));
-
-if(!player){
-  player = {
-    base:{ physical:5, magic:5, vitality:5, endurance:5, agility:5, spirit:5, luck:5 },
-    points:10,
-    skillsOwned:[],
-    skillsEquipped:[],
-    equipment:{ weapon:null, armor:null, accessory:null }
-  };
-  save();
-}
+let player = JSON.parse(localStorage.getItem("playerData")) || {
+  base:{ physical:5, magic:5, vitality:5, endurance:5, agility:5, spirit:5, luck:5 },
+  points:10,
+  skillsEquipped:[],
+  equipment:{}
+};
 
 // =====================
-// 装備込みステ
+// ステータス説明
+// =====================
+const statDesc = {
+  physical:"物理攻撃/SP増加",
+  magic:"魔法攻撃/MP増加",
+  vitality:"HP/回復量",
+  endurance:"防御/耐久",
+  agility:"速度/SP効率",
+  spirit:"MP/状態異常耐性",
+  luck:"レアドロ率"
+};
+
+// =====================
+// ステ計算
 // =====================
 function getTotalStats(){
-
   const total = {...player.base};
 
   Object.values(player.equipment).forEach(id=>{
     const eq = equipmentMaster.find(e=>e.id===id);
     if(!eq) return;
-
     for(let k in eq.bonus){
-      total[k] = (total[k]||0) + eq.bonus[k];
+      total[k] += eq.bonus[k];
     }
   });
 
@@ -98,34 +123,7 @@ function getTotalStats(){
 }
 
 // =====================
-// 戦闘ステータス
-// =====================
-function getBattleStats(){
-
-  const t = getTotalStats();
-
-  return {
-    atk: t.physical * 2,
-    matk: t.magic * 2,
-    hp: t.vitality * 10,
-    def: t.endurance * 2,
-    spd: t.agility * 1.5,
-    mp: t.spirit * 5,
-    luck: t.luck
-  };
-}
-
-// =====================
-// 装備スキル取得
-// =====================
-function getEquippedSkills(){
-  return player.skillsEquipped
-    .map(id => skillMaster.find(s=>s.id===id))
-    .filter(s => s);
-}
-
-// =====================
-// ステ表示
+// ステ表示（2列）
 // =====================
 function renderStats(){
 
@@ -133,114 +131,66 @@ function renderStats(){
   const div = document.getElementById("stats");
 
   div.innerHTML = `<div>残りポイント: ${player.points}</div>`;
+  div.innerHTML += `<div class="stats-grid">`;
 
   for(let k in player.base){
+
     div.innerHTML += `
       <div class="box">
-        ${k}: ${player.base[k]} (+${total[k]-player.base[k]})
-        <br>
+        <strong>${k}</strong><br>
+        ${player.base[k]} → ${total[k]}<br>
+        <span class="small">${statDesc[k]}</span><br>
         <button onclick="addStat('${k}')">＋</button>
       </div>
     `;
   }
+
+  div.innerHTML += `</div>`;
 }
 
 function addStat(k){
-  if(player.points<=0) return;
+  if(player.points<=0)return;
   player.base[k]++;
   player.points--;
-  save();
-  render();
+  save(); render();
 }
 
 // =====================
-// スキル設定
+// スキル検索＋リスト
 // =====================
 function renderSkills(){
 
+  const word = document.getElementById("search").value;
   const div = document.getElementById("skills");
+
   div.innerHTML="";
 
-  for(let i=0;i<5;i++){
+  const list = skillMaster.filter(s=>s.name.includes(word));
 
-    const current = player.skillsEquipped[i];
-
-    let options = `<option value="">未設定</option>`;
-
-    player.skillsOwned.forEach(s=>{
-      options += `<option value="${s.id}" ${current===s.id?"selected":""}>${s.name}</option>`;
-    });
-
-    const skill = skillMaster.find(s=>s.id===current);
+  list.forEach(s=>{
 
     div.innerHTML += `
-      <div class="box">
-        スロット${i+1}<br>
+      <div class="box skill-slot">
+        <button onclick="setSkill('${s.id}')">セット</button>
 
-        <select onchange="selectSkill(${i}, this.value)">
-          ${options}
-        </select>
-
-        <div class="small">
-          ${skill ? `
-            ${skill.desc}<br>
-            威力: ${skill.power}倍<br>
-            対象: ${skill.target}<br>
-            SP:${skill.cost.sp} / MP:${skill.cost.mp}
-          ` : "未設定"}
+        <div>
+          <strong>${s.name}</strong><br>
+          <span class="small">
+            威力:${s.power} / ${s.target} / SP${s.cost.sp}
+          </span>
         </div>
-      </div>
-    `;
-  }
-}
-
-function selectSkill(i,id){
-  player.skillsEquipped[i]=id;
-  save();
-  render();
-}
-
-// =====================
-// スキル一覧
-// =====================
-function renderSkillList(){
-
-  const div = document.getElementById("skillList");
-  div.innerHTML="";
-
-  if(player.skillsOwned.length===0){
-    div.innerHTML="スキルなし";
-    return;
-  }
-
-  player.skillsOwned.forEach(s=>{
-
-    const m = skillMaster.find(x=>x.id===s.id);
-
-    div.innerHTML += `
-      <div class="box">
-        <strong>${s.name}</strong><br>
-        ${m.desc}<br>
-        威力: ${m.power}倍<br>
-        SP:${m.cost.sp} / MP:${m.cost.mp}
       </div>
     `;
   });
 }
 
 // =====================
-// スキル取得（テスト）
+// スキルセット
 // =====================
-function learnSkill(id){
-
-  const skill = skillMaster.find(s=>s.id===id);
-  if(!skill) return;
-
-  if(player.skillsOwned.some(s=>s.id===id)) return;
-
-  player.skillsOwned.push(skill);
-  save();
-  render();
+function setSkill(id){
+  if(player.skillsEquipped.length>=5)return;
+  player.skillsEquipped.push(id);
+  save(); render();
 }
 
 // =====================
@@ -258,13 +208,13 @@ function renderEquipment(){
     equipmentMaster
       .filter(e=>e.type===type)
       .forEach(e=>{
-        options += `<option value="${e.id}" ${player.equipment[type]===e.id?"selected":""}>${e.name}</option>`;
+        options += `<option value="${e.id}">${e.name}</option>`;
       });
 
     div.innerHTML += `
       <div class="box">
-        ${type}<br>
-        <select onchange="equip('${type}', this.value)">
+        ${type}
+        <select onchange="equip('${type}',this.value)">
           ${options}
         </select>
       </div>
@@ -274,36 +224,18 @@ function renderEquipment(){
 
 function equip(type,id){
   player.equipment[type]=id;
-  save();
-  render();
+  save(); render();
 }
 
-// =====================
-// デバッグ（超重要）
-// =====================
-function debugBattle(){
-
-  console.log("=== 戦闘データ ===");
-  console.log("戦闘ステ:", getBattleStats());
-  console.log("装備スキル:", getEquippedSkills());
-}
-
-// =====================
-// 保存
 // =====================
 function save(){
   localStorage.setItem("playerData", JSON.stringify(player));
 }
 
-// =====================
-// 初期描画
-// =====================
 function render(){
   renderStats();
   renderSkills();
-  renderSkillList();
   renderEquipment();
-  debugBattle(); // ←ここ重要
 }
 
 render();
