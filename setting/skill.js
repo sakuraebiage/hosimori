@@ -1,3 +1,0 @@
-skillMaster
-learnSkill()
-checkRequirement()
