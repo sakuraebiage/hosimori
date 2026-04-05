@@ -12,38 +12,21 @@ body {
   color: #e0e6ff;
   font-family: "Consolas", monospace;
 }
-
 .main { display:flex; gap:20px; padding:20px; }
-
 .left { width:260px; }
 .portrait {
   width:100%;
   border-radius:12px;
   box-shadow:0 0 20px rgba(100,150,255,0.5);
 }
-
 .right {
   flex:1;
   background:rgba(255,255,255,0.05);
   border-radius:12px;
   padding:20px;
 }
-
-.title { color:#8ae1ff; margin-top:10px; }
-
-.stat {
-  background:#111;
-  padding:6px;
-  margin:4px;
-  border-radius:6px;
-}
-
-.skill-box {
-  background:#111;
-  padding:6px;
-  margin:4px;
-  border-radius:6px;
-}
+.stat { background:#111; padding:6px; margin:4px; border-radius:6px; }
+.skill-box { background:#111; padding:6px; margin:4px; border-radius:6px; }
 </style>
 </head>
 
@@ -57,95 +40,96 @@ body {
 
 <div class="right">
 
-<h2 class="title">ステータス</h2>
+<h2>ステータス（残りポイント: <span id="point"></span>）</h2>
 <div id="stats"></div>
 
-<h2 class="title">スキル設定</h2>
+<h2>スキル設定</h2>
 <div id="skills"></div>
 
-<h2 class="title">所持スキル</h2>
+<h2>所持スキル</h2>
 <div id="skillList"></div>
 
-<button onclick="save()" class="mt-4 px-4 py-2 bg-blue-600 rounded">
-保存
-</button>
+<button onclick="save()">保存</button>
 
 </div>
 </div>
 
 <script>
 
-// =====================
-// スキルマスター
-// =====================
+// ===== スキルマスター =====
 const skillMaster = [
-  {id:"s1", name:"星裂斬", effect:"物理120%", desc:"単体攻撃"},
-  {id:"s2", name:"蒼流波", effect:"魔法100%", desc:"範囲攻撃"},
-  {id:"s3", name:"月影突", effect:"物理90%", desc:"高速攻撃"}
+  {id:"s1", name:"星裂斬"},
+  {id:"s2", name:"蒼流波"},
+  {id:"s3", name:"月影突"}
 ];
 
-// =====================
-// プレイヤー
-// =====================
+// ===== プレイヤー =====
 let player = JSON.parse(localStorage.getItem("playerData"));
 
 if(!player){
   player = {
-    base:{
-      physical:10,
-      magic:8,
-      vitality:12,
-      endurance:10,
-      agility:7,
-      spirit:9,
-      luck:5
-    },
+    base:{ physical:5, magic:5, vitality:5, endurance:5, agility:5, spirit:5, luck:5 },
+    points:20,
     skillsOwned:[],
-    skillsEquipped:[],
-    portrait:"https://via.placeholder.com/300x400"
+    skillsEquipped:[]
   };
-
   save();
 }
 
-// =====================
-// ステータス表示（編集可能）
-// =====================
+// ===== スロット計算 =====
+function getSlots(){
+  const total = Object.values(player.base).reduce((a,b)=>a+b,0);
+
+  if(total>=100) return 16;
+  if(total>=80) return 12;
+  if(total>=60) return 8;
+
+  return 5;
+}
+
+// ===== ステータスUI =====
 function renderStats(){
+  document.getElementById("point").textContent = player.points;
+
   const div = document.getElementById("stats");
   div.innerHTML="";
 
   for(let k in player.base){
 
     const wrap = document.createElement("div");
-    wrap.className = "stat";
+    wrap.className="stat";
 
     wrap.innerHTML = `
-      <label>${k}</label>
-      <input type="number" value="${player.base[k]}" 
-        onchange="updateStat('${k}', this.value)">
+      ${k}: ${player.base[k]}
+      <button onclick="addStat('${k}')">+</button>
     `;
 
     div.appendChild(wrap);
   }
 }
 
-// =====================
-// ステ更新
-// =====================
-function updateStat(key, value){
-  player.base[key] = Number(value);
+// ===== ステ振り =====
+function addStat(key){
+  if(player.points<=0) return;
+
+  player.base[key]++;
+  player.points--;
+
   save();
+  render();
 }
 
-// =====================
-// スキル設定
-// =====================
+// ===== スキルUI =====
 function renderSkills(){
   const div = document.getElementById("skills");
   div.innerHTML="";
 
-  for(let i=0;i<5;i++){
+  const slots = getSlots();
+
+  for(let i=0;i<slots;i++){
+
+    const wrap = document.createElement("div");
+    wrap.className="stat";
 
     const sel = document.createElement("select");
     sel.innerHTML = `<option value="">未設定</option>`;
@@ -161,19 +145,20 @@ function renderSkills(){
       save();
     };
 
-    div.appendChild(sel);
+    wrap.innerHTML = `スロット${i+1}`;
+    wrap.appendChild(sel);
+
+    div.appendChild(wrap);
   }
 }
 
-// =====================
-// スキル一覧
-// =====================
+// ===== スキル一覧 =====
 function renderSkillList(){
   const div = document.getElementById("skillList");
   div.innerHTML="";
 
   if(player.skillsOwned.length===0){
-    div.innerHTML="スキルなし（訓練で取得）";
+    div.innerHTML="スキルなし";
     return;
   }
 
@@ -182,11 +167,8 @@ function renderSkillList(){
   });
 }
 
-// =====================
-// スキル取得
-// =====================
+// ===== スキル取得 =====
 function learnSkill(id){
-
   const skill = skillMaster.find(s=>s.id===id);
   if(!skill) return;
 
@@ -197,18 +179,13 @@ function learnSkill(id){
   render();
 }
 
-// =====================
-// 保存
-// =====================
+// ===== 保存 =====
 function save(){
   localStorage.setItem("playerData", JSON.stringify(player));
 }
 
-// =====================
-// 初期描画
-// =====================
+// ===== 初期描画 =====
 function render(){
-  document.getElementById("portrait").src = player.portrait;
   renderStats();
   renderSkills();
   renderSkillList();
