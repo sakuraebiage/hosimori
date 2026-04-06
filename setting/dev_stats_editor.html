@@ -104,7 +104,7 @@ select{
 
 <script>
 
-// ===== スキル内蔵（🔥絶対動く） =====
+// ===== スキル =====
 const skillMaster = [
   {id:"s1",name:"星裂斬",power:1.2,cost:{sp:5,mp:0},type:"物理"},
   {id:"s2",name:"蒼流波",power:1.0,cost:{sp:0,mp:8},type:"魔法"},
@@ -121,14 +121,22 @@ const baseDefault = {
   endurance:5, agility:5, spirit:5, luck:5
 };
 
-// ===== プレイヤー =====
-let player = JSON.parse(localStorage.getItem("playerData")) || {
-  base:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
-  trainingBonus:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
-  points:30,
-  skillsEquipped:[],
-  equipment:{weapon:"",armor:""}
+// ===== プレイヤー（🔥完全安全化） =====
+let player = JSON.parse(localStorage.getItem("playerData")) || {};
+
+player.base = player.base || {
+  physical:0,magic:0,vitality:0,
+  endurance:0,agility:0,spirit:0,luck:0
 };
+
+player.trainingBonus = player.trainingBonus || {
+  physical:0,magic:0,vitality:0,
+  endurance:0,agility:0,spirit:0,luck:0
+};
+
+player.points = player.points ?? 30;
+player.skillsEquipped = player.skillsEquipped || [];
+player.equipment = player.equipment || {weapon:"",armor:""};
 
 // ===== 装備 =====
 const equipmentMaster = [
