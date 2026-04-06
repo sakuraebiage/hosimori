@@ -102,7 +102,6 @@ select{
 // ===== プレイヤー =====
 let player = JSON.parse(localStorage.getItem("playerData")) || {
   level:1,
-  admin:false,
   base:{physical:5,magic:5,vitality:5,endurance:5,agility:5,spirit:5,luck:5},
   trainingBonus:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
   points:10,
@@ -110,22 +109,32 @@ let player = JSON.parse(localStorage.getItem("playerData")) || {
   equipment:{}
 };
 
+// ===== スキル保存 =====
+function getPlayerSkills(){
+  return JSON.parse(localStorage.getItem("playerSkills")) || [];
+}
+function savePlayerSkills(list){
+  localStorage.setItem("playerSkills", JSON.stringify(list));
+}
+
 // ===== スキル =====
 const skillMaster = [
   {id:"s1",name:"星裂斬",power:1.2,cost:{sp:5,mp:0},target:"敵単体",type:"物理",isCraft:false},
-  {id:"s2",name:"蒼流波",power:1.0,cost:{sp:0,mp:8},target:"敵全体",type:"魔法",isCraft:false},
-  {id:"s3",name:"月影突",power:0.9,cost:{sp:3,mp:2},target:"敵単体",type:"物理",isCraft:false}
+  {id:"s2",name:"蒼流波",power:1.0,cost:{sp:0,mp:8},target:"敵全体",type:"魔法",isCraft:false}
 ];
 
-// ===== 自動生成 =====
-function generateSkill(seed){
+const craftedSkills = [
+  {id:"c1",name:"終焉断罪",power:2.5,cost:{sp:20,mp:10},target:"敵全体",type:"物理",isCraft:true}
+];
 
-  const t = getTotalStats();
-  const main = t.physical > t.magic ? "物理" : "魔法";
+// ===== スキル生成 =====
+function generateSkill(){
+  const t=getTotalStats();
+  const main = t.physical>t.magic?"物理":"魔法";
 
   return {
-    id:"gen_"+seed,
-    name:`${main}技${seed}`,
+    id:"p_"+Date.now(),
+    name: main==="物理"?"重撃":"魔弾",
     power:Number((1+Math.max(t.physical,t.magic)*0.01).toFixed(2)),
     cost:{sp: main==="物理"?5:0, mp: main==="魔法"?5:0},
     target:"敵単体",
@@ -134,56 +143,28 @@ function generateSkill(seed){
   };
 }
 
-function getGeneratedSkills(){
-  let data = JSON.parse(localStorage.getItem("genSkills"));
-
-  if(!data){
-    data=[];
-    for(let i=0;i<30;i++){
-      data.push(generateSkill(i));
-    }
-    localStorage.setItem("genSkills",JSON.stringify(data));
-  }
-
-  return data;
-}
-
-// ===== クラフト =====
-const craftedSkills = [
-  {id:"c1",name:"終焉断罪",power:2.5,cost:{sp:20,mp:10},target:"敵全体",type:"物理",isCraft:true}
-];
-
 // ===== 統合 =====
 function getAllSkills(){
-  return [...skillMaster, ...getGeneratedSkills(), ...craftedSkills];
+  return [...skillMaster, ...getPlayerSkills(), ...craftedSkills];
 }
 
 // ===== 改名 =====
-function getSkillNames(){
-  return JSON.parse(localStorage.getItem("skillNames")) || {};
-}
-
 function getDisplayName(skill){
-  const names = getSkillNames();
+  const names = JSON.parse(localStorage.getItem("skillNames"))||{};
   return names[skill.id] || skill.name;
 }
 
 function renameSkill(id){
-
-  const skill = getAllSkills().find(s=>s.id===id);
-
+  const skill=getAllSkills().find(s=>s.id===id);
   if(!skill || !skill.isCraft){
-    alert("改名不可");
-    return;
+    alert("改名不可"); return;
   }
+  const name=prompt("新しい名前");
+  if(!name)return;
 
-  const name = prompt("新しい名前");
-  if(!name) return;
-
-  const data = getSkillNames();
-  data[id] = name;
-
-  localStorage.setItem("skillNames", JSON.stringify(data));
+  const data=JSON.parse(localStorage.getItem("skillNames"))||{};
+  data[id]=name;
+  localStorage.setItem("skillNames",JSON.stringify(data));
 
   render();
 }
@@ -191,174 +172,27 @@ function renameSkill(id){
 // ===== ステ =====
 function getTotalStats(){
   const t={...player.base};
-
   for(let k in player.trainingBonus){
     t[k]+=player.trainingBonus[k];
   }
-
-  Object.values(player.equipment).forEach(id=>{
-    const eq=equipmentMaster.find(e=>e.id===id);
-    if(eq){
-      for(let k in eq.bonus) t[k]+=eq.bonus[k];
-    }
-  });
-
   return t;
 }
 
-function getMainAtk(){
-  const t=getTotalStats();
-  return Math.max(t.physical,t.magic);
-}
-
-function getCritRate(){
-  const t=getTotalStats();
-  return Math.min(80,Math.floor(getMainAtk()*0.3+t.luck*0.5));
-}
-
-function getCritDmg(){
-  return (1.5+getMainAtk()*0.01+getCritRate()*0.01).toFixed(2);
-}
-
-// ===== ステ操作 =====
-function changeStat(k,val){
-  val=Number(val);
-  const diff=val-player.base[k];
-
-  if(!player.admin && diff>player.points){
-    alert("ポイント不足"); render(); return;
-  }
-
-  player.base[k]=val;
-  if(!player.admin) player.points-=diff;
-
-  save(); render();
-}
-
-function addStat(k){
-  if(!player.admin && player.points<=0)return;
-  player.base[k]++;
-  if(!player.admin) player.points--;
-  save(); render();
-}
-
-function minusStat(k){
-  if(player.base[k]<=0)return;
-  player.base[k]--;
-  if(!player.admin) player.points++;
-  save(); render();
-}
-
+// ===== 訓練 =====
 function train(k){
   player.trainingBonus[k]++;
-  save(); render();
-}
 
-function resetStats(){
-  if(!confirm("リセットする？"))return;
-
-  const sum=Object.values(player.base).reduce((a,b)=>a+b,0);
-  player.points+=sum;
-
-  for(let k in player.base) player.base[k]=0;
+  if(Math.random()<0.3){
+    const list=getPlayerSkills();
+    list.push(generateSkill());
+    savePlayerSkills(list);
+    alert("新スキル習得！");
+  }
 
   save(); render();
 }
 
 // ===== 表示 =====
-function renderStats(){
-
-  const t=getTotalStats();
-  const div=document.getElementById("stats");
-
-  div.innerHTML=`
-    <div class="box">
-      Lv:${player.level || 1}<br>
-      残:${player.points}
-      <button onclick="resetStats()">リセット</button>
-    </div>
-  `;
-
-  for(let k in player.base){
-
-    div.innerHTML+=`
-      <div class="box">
-        ${k}<br>
-        <input type="number" value="${player.base[k]}"
-          onchange="changeStat('${k}',this.value)">
-        → ${t[k]}<br>
-
-        <button onclick="addStat('${k}')">＋</button>
-        <button onclick="minusStat('${k}')">－</button>
-        <button onclick="train('${k}')">訓練</button>
-      </div>
-    `;
-  }
-}
-
-// ===== 総合 =====
-function renderTotal(){
-
-  const t=getTotalStats();
-
-  document.getElementById("totalStats").innerHTML=`
-    HP:${t.vitality*10}<br>
-    SP:${t.physical*2}<br>
-    MP:${t.spirit*5}<br><br>
-
-    物理攻撃:${t.physical*2}<br>
-    魔法攻撃:${t.magic*2}<br>
-    会心率:${getCritRate()}% (${getCritDmg()}倍)<br><br>
-
-    防御:${t.endurance*2}<br>
-    速度:${(t.agility*1.5).toFixed(1)}<br><br>
-
-    回復量:${Math.floor(t.spirit*1.2)}<br>
-    被回復量:${Math.floor(t.vitality*1.1)}<br><br>
-
-    知識:100<br>
-    幸運:${t.luck}
-  `;
-}
-
-// ===== 装備 =====
-const equipmentMaster = [
-  {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
-  {id:"a1",name:"革の鎧",type:"armor",bonus:{endurance:5}}
-];
-
-function renderEquipment(){
-
-  const div=document.getElementById("equipment");
-  div.innerHTML="";
-
-  ["weapon","armor"].forEach(type=>{
-
-    let options="<option value=''>なし</option>";
-
-    equipmentMaster
-      .filter(e=>e.type===type)
-      .forEach(e=>{
-        options+=`<option value="${e.id}">${e.name}</option>`;
-      });
-
-    div.innerHTML+=`
-      <div class="box">
-        ${type}<br>
-        <select onchange="equip('${type}',this.value)">
-          ${options}
-        </select>
-      </div>
-    `;
-  });
-}
-
-function equip(type,id){
-  player.equipment[type]=id;
-  save(); render();
-}
-
-// ===== スキル =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
@@ -372,44 +206,27 @@ function renderSkills(){
     let options=`<option value="">未設定</option>`;
 
     getAllSkills().forEach(s=>{
-      options+=`
-        <option value="${s.id}" ${current===s.id?"selected":""}>
-          ${getDisplayName(s)}
-        </option>
-      `;
+      options+=`<option value="${s.id}" ${current===s.id?"selected":""}>${getDisplayName(s)}</option>`;
     });
 
     div.innerHTML+=`
       <div class="skill-row">
-
         <select onchange="setSkill(${i},this.value)">
           ${options}
         </select>
 
         <div class="box" style="flex:1;font-size:12px;">
           ${
-            skill?`
-              ${getDisplayName(skill)}｜
-              威力:${skill.power}｜
-              SP:${skill.cost.sp}
-              MP:${skill.cost.mp}
-              ｜${skill.target}
-              ｜${skill.type}
-            `:"未設定"
+            skill
+            ? `${getDisplayName(skill)}｜威力:${skill.power}`
+            : "未設定"
           }
         </div>
-
       </div>
     `;
   }
 }
 
-function setSkill(i,id){
-  player.skillsEquipped[i]=id;
-  save(); render();
-}
-
-// ===== 一覧 =====
 function renderSkillList(){
 
   const word=document.getElementById("skillSearch").value||"";
@@ -425,18 +242,12 @@ function renderSkillList(){
         <div class="skill-item">
 
           <strong>${getDisplayName(s)}</strong>
-          <span style="font-size:11px;">
-            ｜威力:${s.power}
-            ｜SP:${s.cost.sp}
-            MP:${s.cost.mp}
-            ｜${s.target}
-            ｜${s.type}
-          </span>
+          ｜威力:${s.power}
 
           ${
             s.isCraft
             ? `<button onclick="renameSkill('${s.id}')">✏</button>`
-            : `<span>🔒</span>`
+            : `🔒`
           }
 
         </div>
@@ -444,11 +255,8 @@ function renderSkillList(){
     });
 }
 
-function addSkill(id){
-  if(player.skillsEquipped.length>=16){
-    alert("上限"); return;
-  }
-  player.skillsEquipped.push(id);
+function setSkill(i,id){
+  player.skillsEquipped[i]=id;
   save(); render();
 }
 
@@ -459,9 +267,6 @@ function save(){
 
 // ===== 初期 =====
 function render(){
-  renderStats();
-  renderTotal();
-  renderEquipment();
   renderSkills();
   renderSkillList();
 }
