@@ -115,7 +115,7 @@ select{
 <input id="skillSearch" placeholder="検索" oninput="renderSkillList()">
 <div id="skillList" class="skill-list"></div>
 
-<!-- 🔥 スキル読み込み（最優先） -->
+<!-- スキル読み込み -->
 <script src="/hosimori/js/skills.js"></script>
 
 <script>
@@ -143,23 +143,27 @@ const equipmentMaster = [
   {id:"a2",name:"ローブ",type:"armor",bonus:{spirit:5}}
 ];
 
-// ===== ステ計算 =====
+// ===== ステ計算（🔥完全修正） =====
 function getTotalStats(){
+
   const t={};
+
   for(let k in baseDefault){
-    t[k] = baseDefault[k] + player.base[k];
+    const base = Number(player.base[k] || 0);
+    const train = Number(player.trainingBonus[k] || 0);
+
+    t[k] = baseDefault[k] + base + train;
   }
-  for(let k in player.trainingBonus){
-    t[k]+=player.trainingBonus[k];
-  }
+
   Object.values(player.equipment).forEach(id=>{
     const eq=equipmentMaster.find(e=>e.id===id);
     if(eq){
       for(let k in eq.bonus){
-        t[k]+=eq.bonus[k];
+        t[k] += eq.bonus[k];
       }
     }
   });
+
   return t;
 }
 
@@ -180,11 +184,12 @@ function getCritDamage(){
   return (1.3 + main*0.005 + crit*0.003).toFixed(2);
 }
 
-// ===== スロット =====
+// ===== スロット（🔥最低保証付き） =====
 function getSkillSlots(){
   const t=getTotalStats();
-  const total = Object.values(t).reduce((a,b)=>a+b,0);
-  return Math.min(16, 5 + Math.floor(total/20));
+  const total = Object.values(t).reduce((a,b)=>a+(Number(b)||0),0);
+
+  return Math.max(3, Math.min(16, 5 + Math.floor(total/20)));
 }
 
 // ===== 入力 =====
@@ -219,7 +224,7 @@ function train(k){
   save(); render();
 }
 
-// ===== 表示 =====
+// ===== ステ表示 =====
 function renderStats(){
   const t=getTotalStats();
   const div=document.getElementById("stats");
@@ -294,7 +299,7 @@ function equip(type,id){
   save(); render();
 }
 
-// ===== スキル =====
+// ===== スキル（🔥完全復活） =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
@@ -326,7 +331,10 @@ function renderSkills(){
                ｜ 威力:${skill.power}
                ｜ HIT:${skill.hits}
                ｜ 属性:${skill.element}
-               ｜ ★${skill.rarity}`
+               ｜ ★${skill.rarity}
+               ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}
+               ｜ 対象:${skill.range}
+               ｜ 種別:${skill.type}`
             : "未設定"
           }
         </div>
@@ -358,9 +366,19 @@ function renderSkillList(){
           ｜ HIT:${s.hits}
           ｜ 属性:${s.element}
           ｜ ★${s.rarity}
+          ｜ 対象:${s.range}
+          ｜ 種別:${s.type}
         </div>
       `;
     });
+}
+
+// ===== 立ち絵 =====
+function renderPortrait(){
+  const img = localStorage.getItem("profileImage");
+  if(img){
+    document.getElementById("portrait").src = img;
+  }
 }
 
 // ===== 保存 =====
