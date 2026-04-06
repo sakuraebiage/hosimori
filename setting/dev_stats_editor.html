@@ -160,7 +160,7 @@ function getTotalStats(){
   return t;
 }
 
-// ===== 会心 =====
+// ===== 会心（調整済み） =====
 function getMainAtk(){
   const t=getTotalStats();
   return Math.max(t.physical,t.magic);
@@ -172,7 +172,9 @@ function getCritRate(){
 }
 
 function getCritDamage(){
-  return (1.5 + getMainAtk()*0.01 + getCritRate()*0.01).toFixed(2);
+  const main = getMainAtk();
+  const crit = getCritRate();
+  return (1.3 + main*0.005 + crit*0.003).toFixed(2);
 }
 
 // ===== スロット =====
@@ -301,14 +303,14 @@ function renderPortrait(){
 const skillMaster = [
   {id:"s1",name:"星裂斬",cost:{sp:5,mp:0},target:"敵単体",type:"物理"},
   {id:"s2",name:"蒼流波",cost:{sp:0,mp:8},target:"敵全体",type:"魔法"},
-  {id:"s3",name:"月影突",cost:{sp:3,mp:2},target:"敵2体",type:"物理"}
+  {id:"s3",name:"月影突",cost:{sp:3,mp:2},target:"敵単体",type:"物理"}
 ];
 
 function getAllSkills(){
   return skillMaster;
 }
 
-// ===== スロット表示 =====
+// ===== スロット =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
@@ -328,12 +330,22 @@ function renderSkills(){
 
     div.innerHTML+=`
       <div class="skill-row">
+
         <select onchange="setSkill(${i},this.value)">
           ${options}
         </select>
+
         <div class="box" style="flex:1;">
-          ${skill ? `${skill.name} ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}` : "未設定"}
+          ${
+            skill
+            ? `${skill.name}
+               ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}
+               ｜ 対象:${skill.target}
+               ｜ 種別:${skill.type}`
+            : "未設定"
+          }
         </div>
+
       </div>
     `;
   }
@@ -355,7 +367,10 @@ function renderSkillList(){
     .forEach(s=>{
       div.innerHTML+=`
         <div class="skill-item">
-          ${s.name} ｜ SP:${s.cost.sp} MP:${s.cost.mp}
+          ${s.name}
+          ｜ SP:${s.cost.sp} MP:${s.cost.mp}
+          ｜ 対象:${s.target}
+          ｜ 種別:${s.type}
         </div>
       `;
     });
