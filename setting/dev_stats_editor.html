@@ -115,6 +115,10 @@ select{
 <input id="skillSearch" placeholder="検索" oninput="renderSkillList()">
 <div id="skillList" class="skill-list"></div>
 
+<!-- 🔥 ① スキルJS先に読み込む -->
+<script src="/hosimori/js/skills.js"></script>
+
+<!-- 🔥 ② メインJS -->
 <script>
 
 // ===== 初期ステ =====
@@ -160,7 +164,7 @@ function getTotalStats(){
   return t;
 }
 
-// ===== 会心（調整済み） =====
+// ===== 会心 =====
 function getMainAtk(){
   const t=getTotalStats();
   return Math.max(t.physical,t.magic);
@@ -300,9 +304,6 @@ function renderPortrait(){
 }
 
 // ===== スキル =====
-getAllSkills()
-
-// ===== スロット =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
@@ -322,7 +323,6 @@ function renderSkills(){
 
     div.innerHTML+=`
       <div class="skill-row">
-
         <select onchange="setSkill(${i},this.value)">
           ${options}
         </select>
@@ -331,13 +331,16 @@ function renderSkills(){
           ${
             skill
             ? `${skill.name}
+               ｜ 威力:${skill.power}
+               ｜ HIT:${skill.hits}
+               ｜ 属性:${skill.element}
+               ｜ ★${skill.rarity}
                ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}
-               ｜ 対象:${skill.target}
+               ｜ 対象:${skill.range}
                ｜ 種別:${skill.type}`
             : "未設定"
           }
         </div>
-
       </div>
     `;
   }
@@ -360,8 +363,12 @@ function renderSkillList(){
       div.innerHTML+=`
         <div class="skill-item">
           ${s.name}
+          ｜ 威力:${s.power}
+          ｜ HIT:${s.hits}
+          ｜ 属性:${s.element}
+          ｜ ★${s.rarity}
           ｜ SP:${s.cost.sp} MP:${s.cost.mp}
-          ｜ 対象:${s.target}
+          ｜ 対象:${s.range}
           ｜ 種別:${s.type}
         </div>
       `;
@@ -383,10 +390,9 @@ function render(){
   renderPortrait();
 }
 
-render();
-<script src="/hosimori/system/skills.js"></script>
+window.onload = render;
+
 </script>
 
 </body>
-
 </html>
