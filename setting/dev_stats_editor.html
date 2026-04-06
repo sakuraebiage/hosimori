@@ -357,7 +357,7 @@ function renderSkillList(){
   const div=document.getElementById("skillList");
   div.innerHTML="";
 
-  getAllSkills()
+  
     .filter(s=>s.name.includes(word))
     .forEach(s=>{
       div.innerHTML+=`
