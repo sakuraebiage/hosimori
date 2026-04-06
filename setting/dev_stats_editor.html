@@ -193,6 +193,32 @@ function train(k){
 }
 
 // ===== 表示 =====
+function renderStats(){
+
+  const t=getTotalStats();
+  const div=document.getElementById("stats");
+
+  div.innerHTML="";
+
+  for(let k in player.base){
+    div.innerHTML+=`
+      <div class="box">
+        ${k}<br>
+        ${player.base[k]} → ${t[k]}<br>
+        <button onclick="train('${k}')">訓練</button>
+      </div>
+    `;
+  }
+}
+
+function renderTotal(){
+  const t=getTotalStats();
+  document.getElementById("totalStats").innerHTML=`
+    HP:${t.vitality*10}<br>
+    攻撃:${Math.max(t.physical,t.magic)}
+  `;
+}
+
 function renderSkills(){
 
   const div=document.getElementById("skills");
@@ -216,11 +242,7 @@ function renderSkills(){
         </select>
 
         <div class="box" style="flex:1;font-size:12px;">
-          ${
-            skill
-            ? `${getDisplayName(skill)}｜威力:${skill.power}`
-            : "未設定"
-          }
+          ${skill ? `${getDisplayName(skill)}｜威力:${skill.power}` : "未設定"}
         </div>
       </div>
     `;
@@ -237,19 +259,9 @@ function renderSkillList(){
   getAllSkills()
     .filter(s=>getDisplayName(s).includes(word))
     .forEach(s=>{
-
       div.innerHTML+=`
         <div class="skill-item">
-
-          <strong>${getDisplayName(s)}</strong>
-          ｜威力:${s.power}
-
-          ${
-            s.isCraft
-            ? `<button onclick="renameSkill('${s.id}')">✏</button>`
-            : `🔒`
-          }
-
+          ${getDisplayName(s)}｜威力:${s.power}
         </div>
       `;
     });
@@ -267,6 +279,8 @@ function save(){
 
 // ===== 初期 =====
 function render(){
+  renderStats();
+  renderTotal();
   renderSkills();
   renderSkillList();
 }
