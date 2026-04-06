@@ -116,7 +116,7 @@ select{
 <div id="skillList" class="skill-list"></div>
 
 <!-- 🔥 ① スキルJS先に読み込む -->
-<script src="/hosimori/system/skills.js"></script>
+<script src="/hosimori/js/skills.js"></script>
 
 <!-- 🔥 ② メインJS -->
 <script>
@@ -357,7 +357,7 @@ function renderSkillList(){
   const div=document.getElementById("skillList");
   div.innerHTML="";
 
-  
+  getAllSkills()
     .filter(s=>s.name.includes(word))
     .forEach(s=>{
       div.innerHTML+=`
