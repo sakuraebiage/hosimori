@@ -148,12 +148,19 @@ const equipmentMaster = [
 // ===== ステ計算 =====
 function getTotalStats(){
 
-  function getTotalStats(){
+  const t={};
 
+  // 初期ステ + 振り分け
+  for(let k in baseDefault){
+    t[k] = baseDefault[k] + player.base[k];
+  }
+
+  // 訓練
   for(let k in player.trainingBonus){
     t[k]+=player.trainingBonus[k];
   }
 
+  // 装備
   Object.values(player.equipment).forEach(id=>{
     const eq=equipmentMaster.find(e=>e.id===id);
     if(eq){
@@ -161,6 +168,10 @@ function getTotalStats(){
         t[k]+=eq.bonus[k];
       }
     }
+  });
+
+  return t;
+}
   });
 
   return t;
