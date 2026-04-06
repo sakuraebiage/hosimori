@@ -120,15 +120,6 @@ select{
 <script>
 
 // ===== プレイヤー =====
-const baseDefault = {
-  physical:5,
-  magic:5,
-  vitality:5,
-  endurance:5,
-  agility:5,
-  spirit:5,
-  luck:5
-};
 let player = JSON.parse(localStorage.getItem("playerData")) || {
   base:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
   trainingBonus:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
@@ -148,19 +139,12 @@ const equipmentMaster = [
 // ===== ステ計算 =====
 function getTotalStats(){
 
-  const t={};
+  const t={...player.base};
 
-  // 初期ステ + 振り分け
-  for(let k in baseDefault){
-    t[k] = baseDefault[k] + player.base[k];
-  }
-
-  // 訓練
   for(let k in player.trainingBonus){
     t[k]+=player.trainingBonus[k];
   }
 
-  // 装備
   Object.values(player.equipment).forEach(id=>{
     const eq=equipmentMaster.find(e=>e.id===id);
     if(eq){
@@ -168,10 +152,6 @@ function getTotalStats(){
         t[k]+=eq.bonus[k];
       }
     }
-  });
-
-  return t;
-}
   });
 
   return t;
