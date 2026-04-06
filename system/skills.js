@@ -1,86 +1,56 @@
-// =====================
-// スキル生成パーツ
-// =====================
-const elements = ["炎","氷","雷","風","光","闇"];
-const types = ["斬","波","突","撃","連撃"];
-const targets = ["単体","全体"];
-const styles = ["改","極","零","滅"];
+// ===== スキル生成（固定） =====
+function getGeneratedSkills(){
 
-// =====================
-// 手作りスキル（固定）
-// =====================
-const manualSkills = [
-  {
-    id:"s0",
-    name:"星裂斬",
-    power:1.2,
-    target:"単体",
-    cost:{ sp:5, mp:0 },
-    desc:"物理攻撃"
-  }
-];
+  let saved = localStorage.getItem("generatedSkills");
+  if(saved) return JSON.parse(saved);
 
-// =====================
-// ランダム生成
-// =====================
-function generateSkills(){
+  const elements = ["火","水","風","光","闇"];
+  const ranges = ["単体","全体","ランダム"];
+  const types = ["物理","魔法"];
 
   const list = [];
-  let id = 1;
 
-  elements.forEach(elem=>{
-    types.forEach(type=>{
-      targets.forEach(target=>{
-        styles.forEach(style=>{
+  for(let i=0;i<150;i++){
 
-          list.push({
-            id: "g" + id++,
+    const type = types[Math.floor(Math.random()*2)];
+    const hits = Math.ceil(Math.random()*3);
+    const rarity = Math.ceil(Math.random()*5);
+    const element = elements[Math.floor(Math.random()*elements.length)];
 
-            name: `${elem}${type}・${style}`,
+    let powerBase = 0.8 + rarity * 0.2;
 
-            power:
-              target==="単体"
-                ? 1.1 + Math.random()*0.5
-                : 0.9 + Math.random()*0.3,
-
-            target: target,
-
-            cost:{
-              sp: Math.floor(Math.random()*6),
-              mp: Math.floor(Math.random()*10)
-            },
-
-            desc: `${elem}属性の${type}（${style}）`
-          });
-
-        });
-      });
+    list.push({
+      id:"gen_"+i,
+      name:`${element}${type}技${i}`,
+      power:Number((powerBase + Math.random()*0.5).toFixed(2)),
+      hits:hits,
+      range:ranges[Math.floor(Math.random()*ranges.length)],
+      type:type,
+      element:element,
+      rarity:rarity,
+      cost:{
+        sp:type==="物理"?hits*5:0,
+        mp:type==="魔法"?hits*5:0
+      },
+      special:
+        rarity>=4 ? "会心強化" :
+        hits>=3 ? "連撃" :
+        "通常"
     });
-  });
+  }
 
+  localStorage.setItem("generatedSkills", JSON.stringify(list));
   return list;
 }
 
-// =====================
-// 保存 or 読み込み
-// =====================
-let generatedSkills = JSON.parse(localStorage.getItem("generatedSkills"));
-
-if(!generatedSkills){
-
-  generatedSkills = generateSkills();
-
-  localStorage.setItem("generatedSkills", JSON.stringify(generatedSkills));
-
-  console.log("スキル生成完了！");
-}else{
-  console.log("保存済みスキル読み込み");
-}
-
-// =====================
-// 最終スキル
-// =====================
+// ===== マスター =====
 const skillMaster = [
-  ...manualSkills,
-  ...generatedSkills
+  {id:"s1",name:"星裂斬",power:1.2,hits:1,range:"単体",type:"物理",element:"無",rarity:3,cost:{sp:5,mp:0}},
+  {id:"s2",name:"蒼流波",power:1.0,hits:1,range:"全体",type:"魔法",element:"水",rarity:3,cost:{sp:0,mp:8}},
+  {id:"s3",name:"月影突",power:0.9,hits:2,range:"単体",type:"物理",element:"闇",rarity:4,cost:{sp:3,mp:2}},
+  ...getGeneratedSkills()
 ];
+
+function getAllSkills(){
+  return skillMaster;
+}
