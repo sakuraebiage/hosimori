@@ -123,22 +123,69 @@ select{
 let player = JSON.parse(localStorage.getItem("playerData")) || {
   base:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
   trainingBonus:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
+  points:30,
   skillsEquipped:[],
-  equipment:{}
+  equipment:{weapon:"",armor:""}
 };
+
+// ===== 装備マスター =====
+const equipmentMaster = [
+  {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
+  {id:"w2",name:"魔導書",type:"weapon",bonus:{magic:5}},
+  {id:"a1",name:"革の鎧",type:"armor",bonus:{endurance:5}},
+  {id:"a2",name:"ローブ",type:"armor",bonus:{spirit:5}}
+];
 
 // ===== ステ計算 =====
 function getTotalStats(){
+
   const t={...player.base};
+
   for(let k in player.trainingBonus){
     t[k]+=player.trainingBonus[k];
   }
+
+  Object.values(player.equipment).forEach(id=>{
+    const eq=equipmentMaster.find(e=>e.id===id);
+    if(eq){
+      for(let k in eq.bonus){
+        t[k]+=eq.bonus[k];
+      }
+    }
+  });
+
   return t;
 }
 
-// ===== 入力 =====
+// ===== 入力（ポイント制） =====
 function setStat(k,val){
-  player.base[k]=Number(val)||0;
+
+  val = Number(val)||0;
+  const diff = val - player.base[k];
+
+  if(diff > player.points){
+    alert("ポイント不足");
+    return;
+  }
+
+  player.base[k]=val;
+  player.points -= diff;
+
+  save(); render();
+}
+
+// ===== ＋－ =====
+function addStat(k){
+  if(player.points<=0)return;
+  player.base[k]++;
+  player.points--;
+  save(); render();
+}
+
+function minusStat(k){
+  if(player.base[k]<=0)return;
+  player.base[k]--;
+  player.points++;
   save(); render();
 }
 
@@ -153,7 +200,10 @@ function renderStats(){
 
   const t=getTotalStats();
   const div=document.getElementById("stats");
-  div.innerHTML="";
+
+  div.innerHTML=`
+    <div class="box">残ポイント：${player.points}</div>
+  `;
 
   for(let k in player.base){
     div.innerHTML+=`
@@ -166,8 +216,8 @@ function renderStats(){
 
         → ${t[k]}<br>
 
-        <button onclick="player.base['${k}']++;save();render()">＋</button>
-        <button onclick="player.base['${k}']--;save();render()">－</button>
+        <button onclick="addStat('${k}')">＋</button>
+        <button onclick="minusStat('${k}')">－</button>
         <button onclick="train('${k}')">訓練</button>
 
       </div>
@@ -195,6 +245,42 @@ function renderTotal(){
 
     <div class="total-row">幸運 <span>${t.luck}</span></div>
   `;
+}
+
+// ===== 装備 =====
+function renderEquipment(){
+
+  const div=document.getElementById("equipment");
+  div.innerHTML="";
+
+  ["weapon","armor"].forEach(type=>{
+
+    let options="<option value=''>なし</option>";
+
+    equipmentMaster
+      .filter(e=>e.type===type)
+      .forEach(e=>{
+        options+=`
+          <option value="${e.id}" ${player.equipment[type]===e.id?"selected":""}>
+            ${e.name}
+          </option>
+        `;
+      });
+
+    div.innerHTML+=`
+      <div class="box">
+        ${type}<br>
+        <select onchange="equip('${type}',this.value)">
+          ${options}
+        </select>
+      </div>
+    `;
+  });
+}
+
+function equip(type,id){
+  player.equipment[type]=id;
+  save(); render();
 }
 
 // ===== 立ち絵 =====
@@ -287,6 +373,7 @@ function save(){
 function render(){
   renderStats();
   renderTotal();
+  renderEquipment();
   renderSkills();
   renderSkillList();
   renderPortrait();
