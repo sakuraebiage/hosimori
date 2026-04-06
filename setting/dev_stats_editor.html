@@ -67,7 +67,7 @@ nav a{
 }
 
 select{
-  width:150px;
+  width:180px;
 }
 
 .skill-list{
@@ -115,10 +115,9 @@ select{
 <input id="skillSearch" placeholder="検索" oninput="renderSkillList()">
 <div id="skillList" class="skill-list"></div>
 
-<!-- 🔥 ① スキルJS先に読み込む -->
+<!-- 🔥 スキル読み込み（最優先） -->
 <script src="/hosimori/js/skills.js"></script>
 
-<!-- 🔥 ② メインJS -->
 <script>
 
 // ===== 初期ステ =====
@@ -295,29 +294,22 @@ function equip(type,id){
   save(); render();
 }
 
-// ===== 立ち絵 =====
-function renderPortrait(){
-  const img = localStorage.getItem("profileImage");
-  if(img){
-    document.getElementById("portrait").src = img;
-  }
-}
-
 // ===== スキル =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
   div.innerHTML="";
 
+  const skills = getAllSkills() || [];
   const slotCount = getSkillSlots();
 
   for(let i=0;i<slotCount;i++){
 
     const current=player.skillsEquipped[i];
-    const skill=getAllSkills().find(s=>s.id===current);
+    const skill=skills.find(s=>s.id===current);
 
     let options=`<option value="">未設定</option>`;
-    getAllSkills().forEach(s=>{
+    skills.forEach(s=>{
       options+=`<option value="${s.id}" ${current===s.id?"selected":""}>${s.name}</option>`;
     });
 
@@ -334,10 +326,7 @@ function renderSkills(){
                ｜ 威力:${skill.power}
                ｜ HIT:${skill.hits}
                ｜ 属性:${skill.element}
-               ｜ ★${skill.rarity}
-               ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}
-               ｜ 対象:${skill.range}
-               ｜ 種別:${skill.type}`
+               ｜ ★${skill.rarity}`
             : "未設定"
           }
         </div>
@@ -357,7 +346,9 @@ function renderSkillList(){
   const div=document.getElementById("skillList");
   div.innerHTML="";
 
-  getAllSkills()
+  const skills = getAllSkills() || [];
+
+  skills
     .filter(s=>s.name.includes(word))
     .forEach(s=>{
       div.innerHTML+=`
@@ -367,9 +358,6 @@ function renderSkillList(){
           ｜ HIT:${s.hits}
           ｜ 属性:${s.element}
           ｜ ★${s.rarity}
-          ｜ SP:${s.cost.sp} MP:${s.cost.mp}
-          ｜ 対象:${s.range}
-          ｜ 種別:${s.type}
         </div>
       `;
     });
