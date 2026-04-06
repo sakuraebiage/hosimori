@@ -12,7 +12,6 @@ body{
   padding:20px;
 }
 
-/* header */
 header{
   background:#111;
   padding:10px;
@@ -25,7 +24,6 @@ nav a{
   text-decoration:none;
 }
 
-/* UI */
 .box{
   border:1px solid #00eaff;
   padding:6px;
@@ -42,7 +40,6 @@ nav a{
   grid-template-columns:1fr 1fr;
 }
 
-/* スキル */
 .skill-row{
   display:flex;
   gap:6px;
@@ -54,7 +51,6 @@ select{
   font-size:12px;
 }
 
-/* 一覧 */
 .skill-list{
   max-height:250px;
   overflow-y:auto;
@@ -116,18 +112,83 @@ let player = JSON.parse(localStorage.getItem("playerData")) || {
 
 // ===== スキル =====
 const skillMaster = [
-  {id:"s1",name:"星裂斬",cost:{sp:5,mp:0},target:"敵単体",type:"物理"},
-  {id:"s2",name:"蒼流波",cost:{sp:0,mp:8},target:"敵全体",type:"魔法"},
-  {id:"s3",name:"月影突",cost:{sp:3,mp:2},target:"敵単体",type:"物理"}
+  {id:"s1",name:"星裂斬",power:1.2,cost:{sp:5,mp:0},target:"敵単体",type:"物理",isCraft:false},
+  {id:"s2",name:"蒼流波",power:1.0,cost:{sp:0,mp:8},target:"敵全体",type:"魔法",isCraft:false},
+  {id:"s3",name:"月影突",power:0.9,cost:{sp:3,mp:2},target:"敵単体",type:"物理",isCraft:false}
 ];
 
-// ===== 装備 =====
-const equipmentMaster = [
-  {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
-  {id:"a1",name:"革の鎧",type:"armor",bonus:{endurance:5}}
+// ===== 自動生成 =====
+function generateSkill(seed){
+
+  const t = getTotalStats();
+  const main = t.physical > t.magic ? "物理" : "魔法";
+
+  return {
+    id:"gen_"+seed,
+    name:`${main}技${seed}`,
+    power:Number((1+Math.max(t.physical,t.magic)*0.01).toFixed(2)),
+    cost:{sp: main==="物理"?5:0, mp: main==="魔法"?5:0},
+    target:"敵単体",
+    type:main,
+    isCraft:false
+  };
+}
+
+function getGeneratedSkills(){
+  let data = JSON.parse(localStorage.getItem("genSkills"));
+
+  if(!data){
+    data=[];
+    for(let i=0;i<30;i++){
+      data.push(generateSkill(i));
+    }
+    localStorage.setItem("genSkills",JSON.stringify(data));
+  }
+
+  return data;
+}
+
+// ===== クラフト =====
+const craftedSkills = [
+  {id:"c1",name:"終焉断罪",power:2.5,cost:{sp:20,mp:10},target:"敵全体",type:"物理",isCraft:true}
 ];
 
-// ===== 計算 =====
+// ===== 統合 =====
+function getAllSkills(){
+  return [...skillMaster, ...getGeneratedSkills(), ...craftedSkills];
+}
+
+// ===== 改名 =====
+function getSkillNames(){
+  return JSON.parse(localStorage.getItem("skillNames")) || {};
+}
+
+function getDisplayName(skill){
+  const names = getSkillNames();
+  return names[skill.id] || skill.name;
+}
+
+function renameSkill(id){
+
+  const skill = getAllSkills().find(s=>s.id===id);
+
+  if(!skill || !skill.isCraft){
+    alert("改名不可");
+    return;
+  }
+
+  const name = prompt("新しい名前");
+  if(!name) return;
+
+  const data = getSkillNames();
+  data[id] = name;
+
+  localStorage.setItem("skillNames", JSON.stringify(data));
+
+  render();
+}
+
+// ===== ステ =====
 function getTotalStats(){
   const t={...player.base};
 
@@ -212,7 +273,7 @@ function renderStats(){
 
   div.innerHTML=`
     <div class="box">
-      Lv:${player.level}<br>
+      Lv:${player.level || 1}<br>
       残:${player.points}
       <button onclick="resetStats()">リセット</button>
     </div>
@@ -261,6 +322,11 @@ function renderTotal(){
 }
 
 // ===== 装備 =====
+const equipmentMaster = [
+  {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
+  {id:"a1",name:"革の鎧",type:"armor",bonus:{endurance:5}}
+];
+
 function renderEquipment(){
 
   const div=document.getElementById("equipment");
@@ -292,7 +358,7 @@ function equip(type,id){
   save(); render();
 }
 
-// ===== スキルスロット =====
+// ===== スキル =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
@@ -301,14 +367,14 @@ function renderSkills(){
   for(let i=0;i<5;i++){
 
     const current=player.skillsEquipped[i];
-    const skill=skillMaster.find(s=>s.id===current);
+    const skill=getAllSkills().find(s=>s.id===current);
 
     let options=`<option value="">未設定</option>`;
 
-    skillMaster.forEach(s=>{
+    getAllSkills().forEach(s=>{
       options+=`
         <option value="${s.id}" ${current===s.id?"selected":""}>
-          ${s.name}
+          ${getDisplayName(s)}
         </option>
       `;
     });
@@ -323,7 +389,8 @@ function renderSkills(){
         <div class="box" style="flex:1;font-size:12px;">
           ${
             skill?`
-              ${skill.name}｜
+              ${getDisplayName(skill)}｜
+              威力:${skill.power}｜
               SP:${skill.cost.sp}
               MP:${skill.cost.mp}
               ｜${skill.target}
@@ -342,7 +409,7 @@ function setSkill(i,id){
   save(); render();
 }
 
-// ===== スキル一覧 =====
+// ===== 一覧 =====
 function renderSkillList(){
 
   const word=document.getElementById("skillSearch").value||"";
@@ -350,19 +417,27 @@ function renderSkillList(){
 
   div.innerHTML="";
 
-  skillMaster
-    .filter(s=>s.name.includes(word))
+  getAllSkills()
+    .filter(s=>getDisplayName(s).includes(word))
     .forEach(s=>{
 
       div.innerHTML+=`
-        <div class="skill-item" onclick="addSkill('${s.id}')">
+        <div class="skill-item">
 
-          <strong>${s.name}</strong>
+          <strong>${getDisplayName(s)}</strong>
           <span style="font-size:11px;">
-            ｜SP:${s.cost.sp} MP:${s.cost.mp}
+            ｜威力:${s.power}
+            ｜SP:${s.cost.sp}
+            MP:${s.cost.mp}
             ｜${s.target}
             ｜${s.type}
           </span>
+
+          ${
+            s.isCraft
+            ? `<button onclick="renameSkill('${s.id}')">✏</button>`
+            : `<span>🔒</span>`
+          }
 
         </div>
       `;
