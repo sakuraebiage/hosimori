@@ -97,14 +97,12 @@ select{
 <h2>ステータス</h2>
 
 <div class="top">
-
   <div id="stats" class="stats-grid"></div>
 
   <div>
     <div id="totalStats" class="box total-box"></div>
     <img id="portrait" class="portrait">
   </div>
-
 </div>
 
 <h2>装備</h2>
@@ -121,13 +119,8 @@ select{
 
 // ===== 初期ステ =====
 const baseDefault = {
-  physical:5,
-  magic:5,
-  vitality:5,
-  endurance:5,
-  agility:5,
-  spirit:5,
-  luck:5
+  physical:5, magic:5, vitality:5,
+  endurance:5, agility:5, spirit:5, luck:5
 };
 
 // ===== プレイヤー =====
@@ -149,20 +142,13 @@ const equipmentMaster = [
 
 // ===== ステ計算 =====
 function getTotalStats(){
-
   const t={};
-
-  // 初期 + 振り分け
   for(let k in baseDefault){
     t[k] = baseDefault[k] + player.base[k];
   }
-
-  // 訓練
   for(let k in player.trainingBonus){
     t[k]+=player.trainingBonus[k];
   }
-
-  // 装備
   Object.values(player.equipment).forEach(id=>{
     const eq=equipmentMaster.find(e=>e.id===id);
     if(eq){
@@ -171,39 +157,54 @@ function getTotalStats(){
       }
     }
   });
-
   return t;
+}
+
+// ===== 会心 =====
+function getMainAtk(){
+  const t=getTotalStats();
+  return Math.max(t.physical,t.magic);
+}
+
+function getCritRate(){
+  const t=getTotalStats();
+  return Math.min(80, Math.floor(getMainAtk()*0.3 + t.luck*0.5));
+}
+
+function getCritDamage(){
+  return (1.5 + getMainAtk()*0.01 + getCritRate()*0.01).toFixed(2);
+}
+
+// ===== スロット =====
+function getSkillSlots(){
+  const t=getTotalStats();
+  const total = Object.values(t).reduce((a,b)=>a+b,0);
+  return Math.min(16, 5 + Math.floor(total/20));
 }
 
 // ===== 入力 =====
 function setStat(k,val){
-
   val = Number(val)||0;
   const diff = val - player.base[k];
-
   if(diff > player.points){
     alert("ポイント不足");
     return;
   }
-
   player.base[k]=val;
   player.points -= diff;
-
   save(); render();
 }
 
 // ===== ＋－ =====
 function addStat(k){
   if(player.points<=0)return;
-  player.base[k]++;
-  player.points--;
+  player.base[k]++; player.points--;
   save(); render();
 }
 
 function minusStat(k){
   if(player.base[k]<=0)return;
-  player.base[k]--;
-  player.points++;
+  player.base[k]--; player.points++;
   save(); render();
 }
 
@@ -213,9 +214,8 @@ function train(k){
   save(); render();
 }
 
-// ===== ステ表示 =====
+// ===== 表示 =====
 function renderStats(){
-
   const t=getTotalStats();
   const div=document.getElementById("stats");
 
@@ -225,17 +225,12 @@ function renderStats(){
     div.innerHTML+=`
       <div class="box">
         ${k}<br>
-
-        <input class="stat-input"
-          value="${player.base[k]}"
+        <input class="stat-input" value="${player.base[k]}"
           onchange="setStat('${k}',this.value)">
-
         → ${t[k]}<br>
-
         <button onclick="addStat('${k}')">＋</button>
         <button onclick="minusStat('${k}')">－</button>
         <button onclick="train('${k}')">訓練</button>
-
       </div>
     `;
   }
@@ -243,7 +238,6 @@ function renderStats(){
 
 // ===== 総合 =====
 function renderTotal(){
-
   const t=getTotalStats();
 
   document.getElementById("totalStats").innerHTML=`
@@ -256,6 +250,9 @@ function renderTotal(){
     <div class="total-row">物理 <span>${t.physical*2}</span></div>
     <div class="total-row">魔法 <span>${t.magic*2}</span></div>
 
+    <div class="total-row">会心率 <span>${getCritRate()}%</span></div>
+    <div class="total-row">会心威力 <span>${getCritDamage()}倍</span></div>
+
     <div class="total-row">防御 <span>${t.endurance*2}</span></div>
     <div class="total-row">速度 <span>${(t.agility*1.5).toFixed(1)}</span></div>
 
@@ -265,22 +262,15 @@ function renderTotal(){
 
 // ===== 装備 =====
 function renderEquipment(){
-
   const div=document.getElementById("equipment");
   div.innerHTML="";
 
   ["weapon","armor"].forEach(type=>{
-
     let options="<option value=''>なし</option>";
-
     equipmentMaster
       .filter(e=>e.type===type)
       .forEach(e=>{
-        options+=`
-          <option value="${e.id}" ${player.equipment[type]===e.id?"selected":""}>
-            ${e.name}
-          </option>
-        `;
+        options+=`<option value="${e.id}" ${player.equipment[type]===e.id?"selected":""}>${e.name}</option>`;
       });
 
     div.innerHTML+=`
@@ -318,38 +308,32 @@ function getAllSkills(){
   return skillMaster;
 }
 
-// ===== スロット =====
+// ===== スロット表示 =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
   div.innerHTML="";
 
-  for(let i=0;i<5;i++){
+  const slotCount = getSkillSlots();
+
+  for(let i=0;i<slotCount;i++){
 
     const current=player.skillsEquipped[i];
     const skill=getAllSkills().find(s=>s.id===current);
 
     let options=`<option value="">未設定</option>`;
-
     getAllSkills().forEach(s=>{
       options+=`<option value="${s.id}" ${current===s.id?"selected":""}>${s.name}</option>`;
     });
 
     div.innerHTML+=`
       <div class="skill-row">
-
         <select onchange="setSkill(${i},this.value)">
           ${options}
         </select>
-
         <div class="box" style="flex:1;">
-          ${
-            skill
-            ? `${skill.name} ｜ SP:${skill.cost.sp} MP:${skill.cost.mp} ｜ ${skill.target} ｜ ${skill.type}`
-            : "未設定"
-          }
+          ${skill ? `${skill.name} ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}` : "未設定"}
         </div>
-
       </div>
     `;
   }
@@ -362,10 +346,8 @@ function setSkill(i,id){
 
 // ===== 一覧 =====
 function renderSkillList(){
-
   const word=document.getElementById("skillSearch").value||"";
   const div=document.getElementById("skillList");
-
   div.innerHTML="";
 
   getAllSkills()
@@ -374,7 +356,6 @@ function renderSkillList(){
       div.innerHTML+=`
         <div class="skill-item">
           ${s.name} ｜ SP:${s.cost.sp} MP:${s.cost.mp}
-          ｜ ${s.target} ｜ ${s.type}
         </div>
       `;
     });
