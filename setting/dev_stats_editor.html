@@ -115,10 +115,15 @@ select{
 <input id="skillSearch" placeholder="検索" oninput="renderSkillList()">
 <div id="skillList" class="skill-list"></div>
 
-<!-- スキル読み込み -->
+<!-- 🔥 systemフォルダに修正 -->
 <script src="/hosimori/system/skills.js"></script>
 
 <script>
+
+// 🔥 保険（読み込み失敗でも落ちない）
+function getAllSkills(){
+  return window.skillMaster || [];
+}
 
 // ===== 初期ステ =====
 const baseDefault = {
@@ -143,15 +148,13 @@ const equipmentMaster = [
   {id:"a2",name:"ローブ",type:"armor",bonus:{spirit:5}}
 ];
 
-// ===== ステ計算（🔥完全修正） =====
+// ===== ステ計算 =====
 function getTotalStats(){
-
   const t={};
 
   for(let k in baseDefault){
     const base = Number(player.base[k] || 0);
     const train = Number(player.trainingBonus[k] || 0);
-
     t[k] = baseDefault[k] + base + train;
   }
 
@@ -184,11 +187,10 @@ function getCritDamage(){
   return (1.3 + main*0.005 + crit*0.003).toFixed(2);
 }
 
-// ===== スロット（🔥最低保証付き） =====
+// ===== スロット =====
 function getSkillSlots(){
   const t=getTotalStats();
   const total = Object.values(t).reduce((a,b)=>a+(Number(b)||0),0);
-
   return Math.max(3, Math.min(16, 5 + Math.floor(total/20)));
 }
 
@@ -299,13 +301,13 @@ function equip(type,id){
   save(); render();
 }
 
-// ===== スキル（🔥完全復活） =====
+// ===== スキル =====
 function renderSkills(){
 
   const div=document.getElementById("skills");
   div.innerHTML="";
 
-  const skills = getAllSkills() || [];
+  const skills = getAllSkills();
   const slotCount = getSkillSlots();
 
   for(let i=0;i<slotCount;i++){
@@ -327,14 +329,7 @@ function renderSkills(){
         <div class="box" style="flex:1;">
           ${
             skill
-            ? `${skill.name}
-               ｜ 威力:${skill.power}
-               ｜ HIT:${skill.hits}
-               ｜ 属性:${skill.element}
-               ｜ ★${skill.rarity}
-               ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}
-               ｜ 対象:${skill.range}
-               ｜ 種別:${skill.type}`
+            ? `${skill.name} ｜ 威力:${skill.power} ｜ SP:${skill.cost.sp} MP:${skill.cost.mp}`
             : "未設定"
           }
         </div>
@@ -354,20 +349,12 @@ function renderSkillList(){
   const div=document.getElementById("skillList");
   div.innerHTML="";
 
-  const skills = getAllSkills() || [];
-
-  skills
+  getAllSkills()
     .filter(s=>s.name.includes(word))
     .forEach(s=>{
       div.innerHTML+=`
         <div class="skill-item">
-          ${s.name}
-          ｜ 威力:${s.power}
-          ｜ HIT:${s.hits}
-          ｜ 属性:${s.element}
-          ｜ ★${s.rarity}
-          ｜ 対象:${s.range}
-          ｜ 種別:${s.type}
+          ${s.name} ｜ 威力:${s.power}
         </div>
       `;
     });
