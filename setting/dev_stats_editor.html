@@ -12,23 +12,24 @@ body{
   padding:20px;
 }
 
+/* header */
 header{
   background:#111;
   padding:10px;
   text-align:center;
   border-bottom:1px solid #00eaff;
 }
-
 nav a{
   margin:0 6px;
   color:#8ae1ff;
   text-decoration:none;
 }
 
+/* UI */
 .box{
   border:1px solid #00eaff;
-  padding:8px;
-  margin:5px;
+  padding:6px;
+  margin:4px;
 }
 
 .top{
@@ -41,14 +42,33 @@ nav a{
   grid-template-columns:1fr 1fr;
 }
 
+/* スキル */
 .skill-row{
   display:flex;
-  gap:10px;
-  margin-bottom:6px;
+  gap:6px;
+  margin-bottom:4px;
 }
 
 select{
-  width:220px;
+  width:150px;
+  font-size:12px;
+}
+
+/* 一覧 */
+.skill-list{
+  max-height:250px;
+  overflow-y:auto;
+  border:1px solid #00eaff;
+}
+
+.skill-item{
+  padding:6px;
+  border-bottom:1px solid #00eaff;
+  cursor:pointer;
+}
+
+.skill-item:hover{
+  background:rgba(0,255,255,0.1);
 }
 </style>
 </head>
@@ -61,7 +81,6 @@ select{
 <a href="/hosimori/index.html">🏠</a>
 <a href="/hosimori/defense/defense.html">🛡</a>
 <a href="/hosimori/setting/dev_stats_editor.html">⚔</a>
-<a href="/hosimori/traning/training.html">💪</a>
 </nav>
 </header>
 
@@ -80,11 +99,11 @@ select{
 
 <h2>スキル一覧</h2>
 <input id="skillSearch" placeholder="検索" oninput="renderSkillList()">
-<div id="skillList"></div>
+<div id="skillList" class="skill-list"></div>
 
 <script>
 
-// ===== データ =====
+// ===== プレイヤー =====
 let player = JSON.parse(localStorage.getItem("playerData")) || {
   level:1,
   admin:false,
@@ -98,7 +117,8 @@ let player = JSON.parse(localStorage.getItem("playerData")) || {
 // ===== スキル =====
 const skillMaster = [
   {id:"s1",name:"星裂斬",cost:{sp:5,mp:0},target:"敵単体",type:"物理"},
-  {id:"s2",name:"蒼流波",cost:{sp:0,mp:8},target:"敵全体",type:"魔法"}
+  {id:"s2",name:"蒼流波",cost:{sp:0,mp:8},target:"敵全体",type:"魔法"},
+  {id:"s3",name:"月影突",cost:{sp:3,mp:2},target:"敵単体",type:"物理"}
 ];
 
 // ===== 装備 =====
@@ -106,10 +126,6 @@ const equipmentMaster = [
   {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
   {id:"a1",name:"革の鎧",type:"armor",bonus:{endurance:5}}
 ];
-
-// ===== 共通 =====
-function getAllSkills(){ return skillMaster; }
-function getAllEquip(){ return equipmentMaster; }
 
 // ===== 計算 =====
 function getTotalStats(){
@@ -120,7 +136,7 @@ function getTotalStats(){
   }
 
   Object.values(player.equipment).forEach(id=>{
-    const eq=getAllEquip().find(e=>e.id===id);
+    const eq=equipmentMaster.find(e=>e.id===id);
     if(eq){
       for(let k in eq.bonus) t[k]+=eq.bonus[k];
     }
@@ -145,13 +161,11 @@ function getCritDmg(){
 
 // ===== ステ操作 =====
 function changeStat(k,val){
-
   val=Number(val);
   const diff=val-player.base[k];
 
   if(!player.admin && diff>player.points){
-    alert("ポイント不足");
-    render(); return;
+    alert("ポイント不足"); render(); return;
   }
 
   player.base[k]=val;
@@ -190,7 +204,7 @@ function resetStats(){
   save(); render();
 }
 
-// ===== ステ表示 =====
+// ===== 表示 =====
 function renderStats(){
 
   const t=getTotalStats();
@@ -209,10 +223,8 @@ function renderStats(){
     div.innerHTML+=`
       <div class="box">
         ${k}<br>
-
         <input type="number" value="${player.base[k]}"
           onchange="changeStat('${k}',this.value)">
-
         → ${t[k]}<br>
 
         <button onclick="addStat('${k}')">＋</button>
@@ -233,15 +245,15 @@ function renderTotal(){
     SP:${t.physical*2}<br>
     MP:${t.spirit*5}<br><br>
 
-    物理:${t.physical*2}<br>
-    魔法:${t.magic*2}<br>
-    会心:${getCritRate()}% (${getCritDmg()}倍)<br><br>
+    物理攻撃:${t.physical*2}<br>
+    魔法攻撃:${t.magic*2}<br>
+    会心率:${getCritRate()}% (${getCritDmg()}倍)<br><br>
 
     防御:${t.endurance*2}<br>
     速度:${(t.agility*1.5).toFixed(1)}<br><br>
 
-    回復:${Math.floor(t.spirit*1.2)}<br>
-    被回復:${Math.floor(t.vitality*1.1)}<br><br>
+    回復量:${Math.floor(t.spirit*1.2)}<br>
+    被回復量:${Math.floor(t.vitality*1.1)}<br><br>
 
     知識:100<br>
     幸運:${t.luck}
@@ -258,9 +270,11 @@ function renderEquipment(){
 
     let options="<option value=''>なし</option>";
 
-    getAllEquip().filter(e=>e.type===type).forEach(e=>{
-      options+=`<option value="${e.id}">${e.name}</option>`;
-    });
+    equipmentMaster
+      .filter(e=>e.type===type)
+      .forEach(e=>{
+        options+=`<option value="${e.id}">${e.name}</option>`;
+      });
 
     div.innerHTML+=`
       <div class="box">
@@ -287,11 +301,11 @@ function renderSkills(){
   for(let i=0;i<5;i++){
 
     const current=player.skillsEquipped[i];
-    const skill=getAllSkills().find(s=>s.id===current);
+    const skill=skillMaster.find(s=>s.id===current);
 
     let options=`<option value="">未設定</option>`;
 
-    getAllSkills().forEach(s=>{
+    skillMaster.forEach(s=>{
       options+=`
         <option value="${s.id}" ${current===s.id?"selected":""}>
           ${s.name}
@@ -306,13 +320,14 @@ function renderSkills(){
           ${options}
         </select>
 
-        <div class="box">
+        <div class="box" style="flex:1;font-size:12px;">
           ${
             skill?`
-              <strong>${skill.name}</strong><br>
-              SP:${skill.cost.sp} MP:${skill.cost.mp}<br>
-              対象:${skill.target}<br>
-              種別:${skill.type}
+              ${skill.name}｜
+              SP:${skill.cost.sp}
+              MP:${skill.cost.mp}
+              ｜${skill.target}
+              ｜${skill.type}
             `:"未設定"
           }
         </div>
@@ -335,35 +350,30 @@ function renderSkillList(){
 
   div.innerHTML="";
 
-  getAllSkills()
+  skillMaster
     .filter(s=>s.name.includes(word))
     .forEach(s=>{
 
       div.innerHTML+=`
-        <div class="box">
-          <strong>${s.name}</strong><br>
+        <div class="skill-item" onclick="addSkill('${s.id}')">
 
-          SP:${s.cost.sp} MP:${s.cost.mp}<br>
-          対象:${s.target}<br>
-          種別:${s.type}<br>
+          <strong>${s.name}</strong>
+          <span style="font-size:11px;">
+            ｜SP:${s.cost.sp} MP:${s.cost.mp}
+            ｜${s.target}
+            ｜${s.type}
+          </span>
 
-          <button onclick="addSkill('${s.id}')">
-            追加
-          </button>
         </div>
       `;
     });
 }
 
 function addSkill(id){
-
   if(player.skillsEquipped.length>=16){
-    alert("上限");
-    return;
+    alert("上限"); return;
   }
-
   player.skillsEquipped.push(id);
-
   save(); render();
 }
 
