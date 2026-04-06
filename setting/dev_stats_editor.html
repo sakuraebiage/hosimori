@@ -40,6 +40,22 @@ nav a{
   grid-template-columns:1fr 1fr;
 }
 
+.stat-input{
+  width:60px;
+}
+
+.total-flex{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.total-item{
+  width:140px;
+  border:1px solid #00eaff;
+  padding:6px;
+}
+
 .skill-row{
   display:flex;
   gap:6px;
@@ -61,10 +77,6 @@ select{
   padding:6px;
   border-bottom:1px solid #00eaff;
 }
-
-.skill-item:hover{
-  background:rgba(0,255,255,0.1);
-}
 </style>
 </head>
 
@@ -83,7 +95,10 @@ select{
 
 <div class="top">
   <div id="stats" class="stats-grid"></div>
-  <div id="totalStats" class="box"></div>
+  <div>
+    <div id="totalStats" class="box"></div>
+    <img id="portrait" style="width:150px;margin-top:10px;border:1px solid #00eaff;">
+  </div>
 </div>
 
 <h2>装備</h2>
@@ -100,86 +115,25 @@ select{
 
 // ===== プレイヤー =====
 let player = JSON.parse(localStorage.getItem("playerData")) || {
-  level:1,
   base:{physical:5,magic:5,vitality:5,endurance:5,agility:5,spirit:5,luck:5},
   trainingBonus:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
-  points:45,
   skillsEquipped:[],
   equipment:{}
 };
 
-// ===== スキル保存 =====
-function getPlayerSkills(){
-  return JSON.parse(localStorage.getItem("playerSkills")) || [];
-}
-function savePlayerSkills(list){
-  localStorage.setItem("playerSkills", JSON.stringify(list));
-}
-
-// ===== スキル =====
-const skillMaster = [
-  {id:"s1",name:"星裂斬",power:1.2,cost:{sp:5,mp:0},target:"敵単体",type:"物理"},
-  {id:"s2",name:"蒼流波",power:1.0,cost:{sp:0,mp:8},target:"敵全体",type:"魔法"},
-  {id:"s3",name:"月影突",power:0.9,cost:{sp:3,mp:2},target:"敵単体",type:"物理"}
-];
-
-// ===== 装備 =====
-const equipmentMaster = [
-  {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
-  {id:"a1",name:"革の鎧",type:"armor",bonus:{endurance:5}}
-];
-
-// ===== スキル生成 =====
-function generateSkill(){
-  const t = getTotalStats();
-  const main = t.physical > t.magic ? "物理" : "魔法";
-
-  return {
-    id:"p_"+Date.now(),
-    name: main==="物理" ? "強撃" : "魔弾",
-    power:Number((1 + Math.max(t.physical,t.magic)*0.02).toFixed(2)),
-    cost:{
-      sp: main==="物理"?8:0,
-      mp: main==="魔法"?8:0
-    },
-    target:"敵単体",
-    type:main
-  };
-}
-
-// ===== ステ =====
+// ===== ステ計算 =====
 function getTotalStats(){
   const t={...player.base};
-
   for(let k in player.trainingBonus){
     t[k]+=player.trainingBonus[k];
   }
-
-  Object.values(player.equipment).forEach(id=>{
-    const eq=equipmentMaster.find(e=>e.id===id);
-    if(eq){
-      for(let k in eq.bonus){
-        t[k]+=eq.bonus[k];
-      }
-    }
-  });
-
   return t;
 }
 
-// ===== 訓練 =====
-function train(k){
-  player.trainingBonus[k]++;
-
-  if(Math.random()<0.25){
-    const list=getPlayerSkills();
-    list.push(generateSkill());
-    savePlayerSkills(list);
-    alert("新スキル習得！");
-  }
-
-  save();
-  render();
+// ===== 入力 =====
+function setStat(k,val){
+  player.base[k]=Number(val)||0;
+  save(); render();
 }
 
 // ===== ステ表示 =====
@@ -192,8 +146,17 @@ function renderStats(){
     div.innerHTML+=`
       <div class="box">
         ${k}<br>
-        ${player.base[k]} → ${t[k]}<br>
+
+        <input class="stat-input"
+          value="${player.base[k]}"
+          onchange="setStat('${k}',this.value)">
+
+        → ${t[k]}<br>
+
+        <button onclick="player.base['${k}']++;render();save()">＋</button>
+        <button onclick="player.base['${k}']--;render();save()">－</button>
         <button onclick="train('${k}')">訓練</button>
+
       </div>
     `;
   }
@@ -201,58 +164,44 @@ function renderStats(){
 
 // ===== 総合 =====
 function renderTotal(){
+
   const t=getTotalStats();
 
   document.getElementById("totalStats").innerHTML=`
-    HP:${t.vitality*10}<br>
-    SP:${t.physical*2}<br>
-    MP:${t.spirit*5}<br><br>
+    <div class="total-flex">
 
-    物理攻撃:${t.physical*2}<br>
-    魔法攻撃:${t.magic*2}<br><br>
+      <div class="total-item">HP ${t.vitality*10}</div>
+      <div class="total-item">SP ${t.physical*2}</div>
+      <div class="total-item">MP ${t.spirit*5}</div>
 
-    防御:${t.endurance*2}<br>
-    速度:${(t.agility*1.5).toFixed(1)}<br><br>
+      <div class="total-item">物理 ${t.physical*2}</div>
+      <div class="total-item">魔法 ${t.magic*2}</div>
 
-    幸運:${t.luck}
+      <div class="total-item">防御 ${t.endurance*2}</div>
+      <div class="total-item">速度 ${(t.agility*1.5).toFixed(1)}</div>
+
+      <div class="total-item">幸運 ${t.luck}</div>
+
+    </div>
   `;
 }
 
-// ===== 装備 =====
-function renderEquipment(){
-  const div=document.getElementById("equipment");
-  div.innerHTML="";
-
-  ["weapon","armor"].forEach(type=>{
-
-    let options="<option value=''>なし</option>";
-
-    equipmentMaster
-      .filter(e=>e.type===type)
-      .forEach(e=>{
-        options+=`<option value="${e.id}">${e.name}</option>`;
-      });
-
-    div.innerHTML+=`
-      <div class="box">
-        ${type}<br>
-        <select onchange="equip('${type}',this.value)">
-          ${options}
-        </select>
-      </div>
-    `;
-  });
-}
-
-function equip(type,id){
-  player.equipment[type]=id;
-  save();
-  render();
+// ===== 立ち絵 =====
+function renderPortrait(){
+  const img = localStorage.getItem("profileImage");
+  if(img){
+    document.getElementById("portrait").src = img;
+  }
 }
 
 // ===== スキル =====
+const skillMaster = [
+  {id:"s1",name:"星裂斬",cost:{sp:5,mp:0},target:"敵単体",type:"物理"},
+  {id:"s2",name:"蒼流波",cost:{sp:0,mp:8},target:"敵全体",type:"魔法"}
+];
+
 function getAllSkills(){
-  return [...skillMaster, ...getPlayerSkills()];
+  return skillMaster;
 }
 
 function renderSkills(){
@@ -267,28 +216,22 @@ function renderSkills(){
     let options=`<option value="">未設定</option>`;
 
     getAllSkills().forEach(s=>{
-      options+=`
-        <option value="${s.id}" ${current===s.id?"selected":""}>
-          ${s.name}
-        </option>
-      `;
+      options+=`<option value="${s.id}">${s.name}</option>`;
     });
 
     div.innerHTML+=`
       <div class="skill-row">
-
         <select onchange="setSkill(${i},this.value)">
           ${options}
         </select>
 
-        <div class="box" style="flex:1;font-size:12px;">
+        <div class="box" style="flex:1;">
           ${
             skill
-            ? `${skill.name} ｜ SP:${skill.cost.sp} MP:${skill.cost.mp} ｜ ${skill.target} ｜ ${skill.type}`
+            ? `${skill.name}｜SP:${skill.cost.sp} MP:${skill.cost.mp}｜${skill.target}`
             : "未設定"
           }
         </div>
-
       </div>
     `;
   }
@@ -296,29 +239,27 @@ function renderSkills(){
 
 function setSkill(i,id){
   player.skillsEquipped[i]=id;
-  save();
-  render();
+  save(); render();
 }
 
-// ===== スキル一覧 =====
+// ===== 一覧 =====
 function renderSkillList(){
-  const word=document.getElementById("skillSearch").value||"";
   const div=document.getElementById("skillList");
-
   div.innerHTML="";
 
-  getAllSkills()
-    .filter(s=>s.name.includes(word))
-    .forEach(s=>{
-      div.innerHTML+=`
-        <div class="skill-item">
-          <strong>${s.name}</strong>
-          ｜SP:${s.cost.sp} MP:${s.cost.mp}
-          ｜${s.target}
-          ｜${s.type}
-        </div>
-      `;
-    });
+  getAllSkills().forEach(s=>{
+    div.innerHTML+=`
+      <div class="skill-item">
+        ${s.name}｜SP:${s.cost.sp} MP:${s.cost.mp}
+      </div>
+    `;
+  });
+}
+
+// ===== 訓練 =====
+function train(k){
+  player.trainingBonus[k]++;
+  save(); render();
 }
 
 // ===== 保存 =====
@@ -330,9 +271,9 @@ function save(){
 function render(){
   renderStats();
   renderTotal();
-  renderEquipment();
   renderSkills();
   renderSkillList();
+  renderPortrait();
 }
 
 render();
