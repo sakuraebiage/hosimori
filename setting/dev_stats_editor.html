@@ -128,6 +128,33 @@ let player = JSON.parse(localStorage.getItem("playerData")) || {
   equipment:{weapon:"",armor:""}
 };
 
+function getTotalStats(){
+
+  const t={};
+
+  // 初期ステ + 振り分け
+  for(let k in baseDefault){
+    t[k] = baseDefault[k] + player.base[k];
+  }
+
+  // 訓練
+  for(let k in player.trainingBonus){
+    t[k]+=player.trainingBonus[k];
+  }
+
+  // 装備
+  Object.values(player.equipment).forEach(id=>{
+    const eq=equipmentMaster.find(e=>e.id===id);
+    if(eq){
+      for(let k in eq.bonus){
+        t[k]+=eq.bonus[k];
+      }
+    }
+  });
+
+  return t;
+}
+
 // ===== 装備マスター =====
 const equipmentMaster = [
   {id:"w1",name:"鉄の剣",type:"weapon",bonus:{physical:5}},
