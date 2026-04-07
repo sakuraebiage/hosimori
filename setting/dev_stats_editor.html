@@ -282,6 +282,23 @@ function render(){
 
 render();
 
+function getMainAtk(){
+  const t=getTotalStats();
+  return Math.max(t.physical,t.magic);
+}
+
+function getCritRate(){
+  const t=getTotalStats();
+  return Math.min(80, Math.floor(getMainAtk()*0.3 + t.luck*0.5));
+}
+
+function getCritDamage(){
+  const main=getMainAtk();
+  const crit=getCritRate();
+  return (1.3 + main*0.005 + crit*0.003).toFixed(2);
+}
+
+
 </script>
 
 </body>
