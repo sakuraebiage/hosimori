@@ -190,6 +190,9 @@ function generateSkill(i){
 }
 
 function getGeneratedSkills(){
+  function getAllSkills(){
+  return [...baseSkills, ...getGeneratedSkills()];
+}
 
   let data = JSON.parse(localStorage.getItem("genSkills"));
 
