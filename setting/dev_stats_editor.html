@@ -306,6 +306,44 @@ function getCritDamage(){
   return (1.3 + main*0.005 + crit*0.003).toFixed(2);
 }
 
+<script>
+
+// 既存コードいろいろ
+
+
+// ===== 改名機能ここに追加 =====
+
+function renameSkill(id){
+
+  const skill = getAllSkills().find(s=>s.id===id);
+
+  if(!skill || !skill.isCustom){
+    alert("このスキルは改名できません");
+    return;
+  }
+
+  const name = prompt("新しいスキル名を入力");
+
+  if(!name) return;
+
+  const data = JSON.parse(localStorage.getItem("skillNames")) || {};
+  data[id] = name;
+
+  localStorage.setItem("skillNames", JSON.stringify(data));
+
+  render();
+}
+
+function getSkillName(skill){
+  const names = JSON.parse(localStorage.getItem("skillNames")) || {};
+  return names[skill.id] || skill.name;
+}
+
+
+// ⭐最後にこれ
+render();
+
+</script>
 
 </script>
 
