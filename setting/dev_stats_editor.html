@@ -191,16 +191,25 @@ function renderStats(){
 
   div.innerHTML=`<div class="box">残ポイント：${player.points}</div>`;
 
-  for(let k in player.base){
+  Object.keys(baseDefault).forEach(k=>{
+
+    if(player.base[k] === undefined){
+      player.base[k] = 0;
+    }
+
     div.innerHTML+=`
       <div class="box">
         ${k}<br>
         <small>${statDesc[k]}</small><br>
-        <input value="${player.base[k]}"
+
+        <input class="stat-input"
+        value="${player.base[k]}"
         onchange="player.base['${k}']=Number(this.value)||0;save();render();">
+
         → ${t[k]}
       </div>`;
-  }
+  });
+  
 }
 
 function renderTotal(){
