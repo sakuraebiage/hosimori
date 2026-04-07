@@ -6,14 +6,16 @@ const elements = [
   "光","闇"
 ];
 
+// ===== 名前素材 =====
 const nameParts = {
   prefix: ["紅蓮","蒼","雷鳴","氷牙","疾風","影","聖","魔","星","虚無"],
   physical: ["斬","撃","突","断","砕","連斬","崩し"],
   magic: ["波","弾","術","爆","嵐","陣","閃"],
-  suffix: ["改","式","破","極","零","改式","真"]
+  suffix: ["改","式","破","極","零","真"]
 };
 
-function name:`${element}${main}${rarity}-${i+1}`,
+// ===== 名前生成 =====
+function generateSkillName(main, element, rarity){
 
   const p = nameParts.prefix[Math.floor(Math.random()*nameParts.prefix.length)];
 
@@ -68,7 +70,7 @@ function generateSkill(i){
 
   return {
     id:"g"+i,
-    name:`${element}${main}${rarity}-${i+1}`,
+    name: generateSkillName(main, element, rarity),
     power,
     hits,
     target,
