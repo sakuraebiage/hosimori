@@ -215,11 +215,19 @@ function renderTotal(){
   const t=getTotalStats();
 
   document.getElementById("totalStats").innerHTML=`
+
     <div class="total-row">HP <span>${t.vitality*10}</span></div>
     <div class="total-row">物理 <span>${t.physical*2}</span></div>
     <div class="total-row">魔法 <span>${t.magic*2}</span></div>
     <div class="total-row">速度 <span>${t.agility}</span></div>
     <div class="total-row">幸運 <span>${t.luck}</span></div>
+
+    <hr>
+
+    <div class="total-row">会心率 <span>${getCritRate()}%</span></div>
+    <div class="total-row">会心威力 <span>${getCritDamage()}倍</span></div>
+    <div class="total-row">知識 <span>100</span></div>
+
   `;
 }
 
