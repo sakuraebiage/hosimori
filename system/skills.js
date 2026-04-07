@@ -6,6 +6,28 @@ const elements = [
   "光","闇"
 ];
 
+const nameParts = {
+  prefix: ["紅蓮","蒼","雷鳴","氷牙","疾風","影","聖","魔","星","虚無"],
+  physical: ["斬","撃","突","断","砕","連斬","崩し"],
+  magic: ["波","弾","術","爆","嵐","陣","閃"],
+  suffix: ["改","式","破","極","零","改式","真"]
+};
+
+function name:`${element}${main}${rarity}-${i+1}`,
+
+  const p = nameParts.prefix[Math.floor(Math.random()*nameParts.prefix.length)];
+
+  const core = main==="物理"
+    ? nameParts.physical[Math.floor(Math.random()*nameParts.physical.length)]
+    : nameParts.magic[Math.floor(Math.random()*nameParts.magic.length)];
+
+  const s = rarity>=4
+    ? nameParts.suffix[Math.floor(Math.random()*nameParts.suffix.length)]
+    : "";
+
+  return `${element}${p}${core}${s}`;
+}
+
 // ===== レア度 =====
 function getRarity(total){
   if(total > 200) return 5;
