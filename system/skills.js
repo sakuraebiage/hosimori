@@ -1,3 +1,4 @@
+localStorage.removeItem("genSkills");
 // ===== 属性 =====
 const elements = [
   "無",
@@ -83,7 +84,7 @@ function generateSkill(i){
 
 // ===== 生成キャッシュ =====
 function getGeneratedSkills(){
-localStorage.removeItem("genSkills");
+
   let data = JSON.parse(localStorage.getItem("genSkills"));
 
   if(!data){
