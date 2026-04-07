@@ -316,7 +316,8 @@ function renderSkills(){
 ｜威力:${skill.power ?? 1}
 ｜${skill.target ?? "単体"}
 ｜${skill.type ?? "物理"}
-｜${skill.hits ?? 1}hit`
+｜${skill.hits ?? 1}hit
+${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
 : "未設定"}
       </div>${skill
 ? `${getSkillName(skill)}
@@ -336,7 +337,7 @@ function renderSkillList(){
   div.innerHTML="";
 
   getAllSkills()
-    .filter(s=>s.name.includes(word))
+    .filter(s=>getSkillName(s).includes(word))
     .forEach(s=>{
       div.innerHTML+=`
       <div class="skill-item">
