@@ -1,4 +1,4 @@
-
+alert("skills.js読まれた");
 // ===== 属性 =====
 const elements = [
   "無",
