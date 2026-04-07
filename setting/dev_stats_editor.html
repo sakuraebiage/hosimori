@@ -255,7 +255,7 @@ function renderSkills(){
       </select>
 
       <div class="box" style="flex:1;">
-        ${skill?`${skill.name}｜威力:${skill.power}｜${skill.target}｜${skill.type}｜${skill.hits}hit`:"未設定"}
+        ${skill?`${getSkillName(skill)}｜威力:${skill.power}｜${skill.target}｜${skill.type}｜${skill.hits}hit`:"未設定"}
       </div>
     </div>`;
   }
