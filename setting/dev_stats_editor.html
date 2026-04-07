@@ -190,19 +190,21 @@ function generateSkill(i){
 }
 
 function getGeneratedSkills(){
-  let data=JSON.parse(localStorage.getItem("genSkills"));
+
+  let data = JSON.parse(localStorage.getItem("genSkills"));
+
   if(!data){
-    data=[];
+
+    data = [];
+
     for(let i=0;i<50;i++){
       data.push(generateSkill(i));
     }
-    localStorage.setItem("genSkills",JSON.stringify(data));
-  }
-  return data;
-}
 
-function getAllSkills(){
-  return [...baseSkills,...getGeneratedSkills()];
+    localStorage.setItem("genSkills", JSON.stringify(data));
+  }
+
+  return data;
 }
 
 /* ===== 改名 ===== */
@@ -309,8 +311,20 @@ function renderSkills(){
       </select>
 
       <div class="box" style="flex:1;">
-        ${skill?`${getSkillName(skill)}｜威力:${skill.power}｜${skill.target}｜${skill.type}｜${skill.hits}hit`:"未設定"}
-      </div>
+        ${skill
+? `${getSkillName(skill)}
+｜威力:${skill.power ?? 1}
+｜${skill.target ?? "単体"}
+｜${skill.type ?? "物理"}
+｜${skill.hits ?? 1}hit`
+: "未設定"}
+      </div>${skill
+? `${getSkillName(skill)}
+｜威力:${skill.power ?? 1}
+｜${skill.target ?? "単体"}
+｜${skill.type ?? "物理"}
+｜${skill.hits ?? 1}hit`
+: "未設定"}
     </div>`;
   }
 }
