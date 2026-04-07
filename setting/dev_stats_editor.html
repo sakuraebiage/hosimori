@@ -67,7 +67,6 @@ fetch("../common/header.html")
   document.getElementById("header").innerHTML = data;
 });
 
-localStorage.removeItem("genSkills");
 
 /* ===== 初期ステ ===== */
 const baseDefault = {
@@ -142,6 +141,7 @@ function generateSkill(i){
 }
 
 function getGeneratedSkills(){
+  localStorage.removeItem("genSkills");
   let data=JSON.parse(localStorage.getItem("genSkills"));
 
   if(!data){
