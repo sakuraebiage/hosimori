@@ -225,10 +225,28 @@ function renderTotal(){
   const t=getTotalStats();
 
   document.getElementById("totalStats").innerHTML=`
+
     <div class="total-row">HP <span>${t.vitality*10}</span></div>
-    <div class="total-row">物理 <span>${t.physical*2}</span></div>
-    <div class="total-row">魔法 <span>${t.magic*2}</span></div>
+    <div class="total-row">SP <span>${t.physical*2}</span></div>
+    <div class="total-row">MP <span>${t.spirit*5}</span></div>
+
+    <hr>
+
+    <div class="total-row">物理攻撃 <span>${t.physical*2}</span></div>
+    <div class="total-row">魔法攻撃 <span>${t.magic*2}</span></div>
+
+    <div class="total-row">防御 <span>${t.endurance*2}</span></div>
     <div class="total-row">速度 <span>${t.agility}</span></div>
+
+    <hr>
+
+    <div class="total-row">会心率 <span>${getCritRate()}%</span></div>
+    <div class="total-row">会心威力 <span>${getCritDamage()}倍</span></div>
+
+    <div class="total-row">回復量 <span>${Math.floor(t.spirit*1.2)}</span></div>
+    <div class="total-row">被回復量 <span>${Math.floor(t.vitality*1.1)}</span></div>
+
+    <div class="total-row">知識 <span>100</span></div>
     <div class="total-row">幸運 <span>${t.luck}</span></div>
   `;
 }
