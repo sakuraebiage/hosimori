@@ -94,6 +94,13 @@ select{
 
 <script>
 
+/* ===== header ===== */
+fetch("../common/header.html")
+.then(res=>res.text())
+.then(data=>{
+  document.getElementById("header").innerHTML = data;
+});
+
 /* ===== 初期ステ ===== */
 const baseDefault = {
   physical:10, magic:10, vitality:20,
@@ -290,8 +297,10 @@ function renderSkills(){
 
     let options=`<option value="">未設定</option>`;
     skills.forEach(s=>{
-      options+=`<option value="${s.id}">${getSkillName(s)}</option>`;
-    });
+  options+=`<option value="${s.id}" ${current===s.id?"selected":""}>
+    ${getSkillName(s)}
+  </option>`;
+});
 
     div.innerHTML+=`
     <div class="skill-row">
