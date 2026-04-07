@@ -11,41 +11,13 @@ body{
   font-family:Consolas;
   padding:20px;
 }
-
-.box{
-  border:1px solid #00eaff;
-  padding:6px;
-  margin:4px;
-}
-
-.top{
-  display:flex;
-  gap:20px;
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-}
-
-.stat-input{
-  width:60px;
-}
-
-.total-box{
-  width:260px;
-}
-
-.total-row{
-  display:flex;
-  justify-content:space-between;
-}
-
-.total-row span{
-  color:#fff;
-  font-weight:bold;
-}
-
+.box{ border:1px solid #00eaff; padding:6px; margin:4px; }
+.top{ display:flex; gap:20px; }
+.stats-grid{ display:grid; grid-template-columns:1fr 1fr; }
+.stat-input{ width:60px; }
+.total-box{ width:260px; }
+.total-row{ display:flex; justify-content:space-between; }
+.total-row span{ color:#fff; font-weight:bold; }
 .skill-row{
   display:flex;
   gap:6px;
@@ -53,17 +25,12 @@ body{
   border:1px solid rgba(0,255,255,0.3);
   padding:4px;
 }
-
-select{
-  width:180px;
-}
-
+select{ width:180px; }
 .skill-list{
   max-height:250px;
   overflow-y:auto;
   border:1px solid #00eaff;
 }
-
 .skill-item{
   padding:6px;
   border-bottom:1px solid #00eaff;
@@ -72,14 +39,13 @@ select{
 </head>
 
 <body>
-  
-  <div id="header"></div>
+
+<div id="header"></div>
 
 <h2>ステータス</h2>
 
 <div class="top">
   <div id="stats" class="stats-grid"></div>
-
   <div>
     <div id="totalStats" class="box total-box"></div>
   </div>
@@ -124,7 +90,7 @@ let player = JSON.parse(localStorage.getItem("playerData")) || {
   skillsEquipped:[]
 };
 
-/* ===== ステ計算 ===== */
+/* ===== ステ ===== */
 function getTotalStats(){
   const t={};
   for(let k in baseDefault){
@@ -142,12 +108,10 @@ function getMainAtk(){
   const t=getTotalStats();
   return Math.max(t.physical,t.magic);
 }
-
 function getCritRate(){
   const t=getTotalStats();
   return Math.min(80, Math.floor(getMainAtk()*0.3 + t.luck*0.5));
 }
-
 function getCritDamage(){
   const main=getMainAtk();
   const crit=getCritRate();
@@ -156,78 +120,59 @@ function getCritDamage(){
 
 /* ===== スキル ===== */
 const baseSkills = [
-  {id:"s1",name:"星裂斬",power:1.2,type:"物理",target:"単体",hits:1,cost:{sp:5,mp:0},isCustom:false},
-  {id:"s2",name:"蒼流波",power:1.0,type:"魔法",target:"全体",hits:1,cost:{sp:0,mp:8},isCustom:false}
+  {id:"s1",name:"星裂斬",power:1.2,type:"物理",target:"単体",hits:1,isCustom:false},
+  {id:"s2",name:"蒼流波",power:1.0,type:"魔法",target:"全体",hits:1,isCustom:false}
 ];
 
-function getRarity(total){
-  if(total<100)return 1;
-  if(total<200)return 2;
-  if(total<400)return 3;
-  if(total<700)return 4;
-  return 5;
-}
-
 function generateSkill(i){
-  const t=getTotalStats();
   const total=getTotalPower();
-  const rarity=getRarity(total);
-  const main = t.physical>t.magic?"物理":"魔法";
+  const type=Math.random()>0.5?"物理":"魔法";
 
   return {
     id:"g"+i,
-    name:`${main}${rarity}-${i}`,
-    power:Number((1+total*0.002+rarity*0.3).toFixed(2)),
-    hits:rarity>=4?Math.floor(Math.random()*3)+2:1,
-    target:rarity>=3?(Math.random()>0.5?"全体":"単体"):"単体",
-    type:main,
-    cost:{
-      sp:main==="物理"?10:0,
-      mp:main==="魔法"?10:0
-    },
+    name:`${type}技${i}`,
+    power:Number((1+total*0.002).toFixed(2)),
+    hits:1,
+    target:"単体",
+    type:type,
     isCustom:true
   };
 }
 
 function getGeneratedSkills(){
-  function getAllSkills(){
-  return [...baseSkills, ...getGeneratedSkills()];
-}
-
-  let data = JSON.parse(localStorage.getItem("genSkills"));
+  let data=JSON.parse(localStorage.getItem("genSkills"));
 
   if(!data){
-
-    data = [];
-
-    for(let i=0;i<50;i++){
+    data=[];
+    for(let i=0;i<30;i++){
       data.push(generateSkill(i));
     }
-
-    localStorage.setItem("genSkills", JSON.stringify(data));
+    localStorage.setItem("genSkills",JSON.stringify(data));
   }
 
   return data;
 }
 
+function getAllSkills(){
+  return [...baseSkills,...getGeneratedSkills()];
+}
+
 /* ===== 改名 ===== */
 function getSkillName(skill){
-  const names = JSON.parse(localStorage.getItem("skillNames")) || {};
-  return names[skill.id] || skill.name;
+  const names=JSON.parse(localStorage.getItem("skillNames"))||{};
+  return names[skill.id]||skill.name;
 }
 
 function renameSkill(id){
-  const skill = getAllSkills().find(s=>s.id===id);
-
+  const skill=getAllSkills().find(s=>s.id===id);
   if(!skill || !skill.isCustom){
-    alert("このスキルは改名できません");
+    alert("改名不可");
     return;
   }
+  const name=prompt("新しい名前");
+  if(!name)return;
 
-  const name = prompt("新しいスキル名");
-  if(!name) return;
-
-  const data = JSON.parse(localStorage.getItem("skillNames")) || {};
+  const data=JSON.parse(localStorage.getItem("skillNames"))||{};
   data[id]=name;
   localStorage.setItem("skillNames",JSON.stringify(data));
 
@@ -248,15 +193,13 @@ function renderStats(){
 
   for(let k in player.base){
     div.innerHTML+=`
-    <div class="box">
-      ${k}<br>
-      <small>${statDesc[k]}</small><br>
-
-      <input value="${player.base[k]}"
-      onchange="player.base['${k}']=Number(this.value)||0;save();render();">
-
-      → ${t[k]}
-    </div>`;
+      <div class="box">
+        ${k}<br>
+        <small>${statDesc[k]}</small><br>
+        <input value="${player.base[k]}"
+        onchange="player.base['${k}']=Number(this.value)||0;save();render();">
+        → ${t[k]}
+      </div>`;
   }
 }
 
@@ -264,7 +207,6 @@ function renderTotal(){
   const t=getTotalStats();
 
   document.getElementById("totalStats").innerHTML=`
-
     <div class="total-row">HP <span>${t.vitality*10}</span></div>
     <div class="total-row">SP <span>${t.physical*2}</span></div>
     <div class="total-row">MP <span>${t.spirit*5}</span></div>
@@ -273,7 +215,6 @@ function renderTotal(){
 
     <div class="total-row">物理攻撃 <span>${t.physical*2}</span></div>
     <div class="total-row">魔法攻撃 <span>${t.magic*2}</span></div>
-
     <div class="total-row">防御 <span>${t.endurance*2}</span></div>
     <div class="total-row">速度 <span>${t.agility}</span></div>
 
@@ -302,27 +243,29 @@ function renderSkills(){
 
     let options=`<option value="">未設定</option>`;
     skills.forEach(s=>{
-  options+=`<option value="${s.id}" ${current===s.id?"selected":""}>
-    ${getSkillName(s)}
-  </option>`;
-});
+      options+=`<option value="${s.id}" ${current===s.id?"selected":""}>
+        ${getSkillName(s)}
+      </option>`;
+    });
 
     div.innerHTML+=`
-    <div class="skill-row">
-      <select onchange="player.skillsEquipped[${i}]=this.value;save();render();">
-        ${options}
-      </select>
+      <div class="skill-row">
+        <select onchange="player.skillsEquipped[${i}]=this.value;save();render();">
+          ${options}
+        </select>
 
-      <div class="box" style="flex:1;">
-        ${skill
-? `${getSkillName(skill)}
-｜威力:${skill.power ?? 1}
-｜${skill.target ?? "単体"}
-｜${skill.type ?? "物理"}
-｜${skill.hits ?? 1}hit
-${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
-: "未設定"}
-      
+        <div class="box" style="flex:1;">
+          ${skill
+          ? `${getSkillName(skill)}
+          ｜威力:${skill.power}
+          ｜${skill.target}
+          ｜${skill.type}
+          ｜${skill.hits}hit
+          ${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
+          : "未設定"}
+        </div>
+      </div>`;
+  }
 }
 
 function renderSkillList(){
@@ -335,10 +278,10 @@ function renderSkillList(){
     .filter(s=>getSkillName(s).includes(word))
     .forEach(s=>{
       div.innerHTML+=`
-      <div class="skill-item">
-        ${getSkillName(s)}｜威力:${s.power}
-        ${s.isCustom?`<button onclick="renameSkill('${s.id}')">✏</button>`:"🔒"}
-      </div>`;
+        <div class="skill-item">
+          ${getSkillName(s)}｜威力:${s.power}
+          ${s.isCustom?`<button onclick="renameSkill('${s.id}')">✏</button>`:"🔒"}
+        </div>`;
     });
 }
 
