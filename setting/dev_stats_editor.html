@@ -251,9 +251,9 @@ function renderSkills(){
     const skill=skills.find(s=>s.id===current);
 
     let options=`<option value="">未設定</option>`;
-    skills.forEach(s=>{
+    skills.forEach((s,index)=>{
       options+=`<option value="${s.id}" ${current===s.id?"selected":""}>
-        ${getSkillName(s)}
+        No.${index+1}｜${getSkillName(s)}
       </option>`;
     });
 
@@ -265,16 +265,18 @@ function renderSkills(){
 
         <div class="box" style="flex:1;">
           ${skill
-          ? `${getSkillName(skill)}
-          ｜威力:${skill.power}
-          ｜${skill.target}
-          ｜${skill.type}
-          ｜${skill.hits}hit
+          ? `No.${skills.indexOf(skill)+1}
+          ｜${getSkillName(skill)}
+          ｜威力:${skill.power ?? 1}
+          ｜${skill.target ?? "単体"}
+          ｜${skill.type ?? "物理"}
+          ｜${skill.hits ?? 1}hit
           ${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
           : "未設定"}
         </div>
       </div>`;
   }
+}
 }
 
 function renderSkillList(){
@@ -285,10 +287,10 @@ function renderSkillList(){
 
   getAllSkills()
     .filter(s=>getSkillName(s).includes(word))
-    .forEach(s=>{
+    .forEach((s,index)=>{
       div.innerHTML+=`
         <div class="skill-item">
-          ${getSkillName(s)}｜威力:${s.power}
+          No.${index+1}｜${getSkillName(s)}｜威力:${s.power ?? 1}
           ${s.isCustom?`<button onclick="renameSkill('${s.id}')">✏</button>`:"🔒"}
         </div>`;
     });
