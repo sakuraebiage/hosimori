@@ -245,7 +245,7 @@ function renderSkills(){
 
     let options=`<option value="">未設定</option>`;
     skills.forEach(s=>{
-      options+=`<option value="${s.id}">${s.name}</option>`;
+      options+=`<option value="${s.id}">${getSkillName(skill)}</option>`;
     });
 
     div.innerHTML+=`
@@ -272,7 +272,7 @@ function renderSkillList(){
     .forEach(s=>{
       div.innerHTML+=`
       <div class="skill-item">
-        ${s.name}｜威力:${s.power}｜${s.target}｜${s.type}
+        ${getSkillName(s)}｜威力:${s.power}｜${s.target}｜${s.type}
       </div>`;
     });
 }
