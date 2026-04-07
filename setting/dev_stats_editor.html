@@ -67,6 +67,8 @@ fetch("../common/header.html")
   document.getElementById("header").innerHTML = data;
 });
 
+localStorage.removeItem("genSkills");
+
 /* ===== 初期ステ ===== */
 const baseDefault = {
   physical:10, magic:10, vitality:20,
