@@ -1,4 +1,4 @@
-localStorage.clear();
+
 // ===== 属性 =====
 const elements = [
   "無",
