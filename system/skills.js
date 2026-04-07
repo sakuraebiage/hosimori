@@ -1,50 +1,3 @@
-// ===== スキル生成（安全版） =====
-function getGeneratedSkills(){
-  // 今は空（ここ後で拡張できる）
-  return [];
-}
-
-// ===== マスター =====
-const skillMaster = [
-  {
-    id:"s1",
-    name:"星裂斬",
-    power:1.2,
-    hits:1,
-    range:"単体",
-    type:"物理",
-    element:"無",
-    rarity:3,
-    cost:{sp:5,mp:0}
-  },
-  {
-    id:"s2",
-    name:"蒼流波",
-    power:1.0,
-    hits:1,
-    range:"全体",
-    type:"魔法",
-    element:"水",
-    rarity:3,
-    cost:{sp:0,mp:8}
-  },
-  {
-    id:"s3",
-    name:"月影突",
-    power:0.9,
-    hits:2,
-    range:"単体",
-    type:"物理",
-    element:"闇",
-    rarity:4,
-    cost:{sp:3,mp:2}
-  },
-
-  // 🔥 ここが安全化ポイント
-  ...(getGeneratedSkills() || [])
-];
-
-// ===== 取得 =====
 // ===== 属性 =====
 const elements = [
   "無",
@@ -78,7 +31,7 @@ function generateSkill(i){
 
   const element = elements[Math.floor(Math.random()*elements.length)];
 
-  const power = Number((1 + total*0.002 + rarity*0.3).toFixed(2));
+  const power = Number((1 + total*0.002 + rarity*0.3).toFixed(2)) || 1;
 
   const hits = rarity >= 4 ? Math.floor(Math.random()*3)+2 : 1;
 
@@ -93,13 +46,14 @@ function generateSkill(i){
 
   return {
     id:"g"+i,
-    name:`${element}${main}${rarity}-${i}`,
+    name:`${element}${main}${rarity}-${i+1}`,
     power,
     hits,
     target,
     type:main,
     element,
-    cost
+    cost,
+    isCustom:true
   };
 }
 
@@ -121,9 +75,9 @@ function getGeneratedSkills(){
 
 // ===== 固定スキル =====
 const skillMaster = [
-  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",cost:{sp:5,mp:0}},
-  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",cost:{sp:0,mp:8}},
-  {id:"s3",name:"月影突",power:0.9,hits:2,target:"単体",type:"物理",element:"闇",cost:{sp:3,mp:2}}
+  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",cost:{sp:5,mp:0},isCustom:false},
+  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",cost:{sp:0,mp:8},isCustom:false},
+  {id:"s3",name:"月影突",power:0.9,hits:2,target:"単体",type:"物理",element:"闇",cost:{sp:3,mp:2},isCustom:false}
 ];
 
 // ===== 全スキル =====
