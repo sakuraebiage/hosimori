@@ -7,43 +7,17 @@
 <style>
 body{
   background: radial-gradient(circle at top,#0a0f2c,#020611);
-  color:#7df9ff;
-  font-family:'Orbitron','Consolas',sans-serif;
+  color:#00eaff;
+  font-family:Consolas;
   padding:20px;
 }
 
-/* ===== 近未来UI ===== */
 .box{
-  border:1px solid rgba(0,255,255,0.5);
-  padding:8px;
-  margin:6px;
-  background:rgba(0,0,0,0.3);
-  box-shadow:0 0 10px rgba(0,255,255,0.2);
-  backdrop-filter: blur(4px);
+  border:1px solid #00eaff;
+  padding:6px;
+  margin:4px;
 }
 
-h1,h2{
-  text-shadow:0 0 8px #00f7ff;
-}
-
-/* ===== header ===== */
-header{
-  background:#050a1a;
-  padding:12px;
-  text-align:center;
-  border-bottom:1px solid #00eaff;
-}
-
-nav a{
-  margin:0 10px;
-  color:#7df9ff;
-  text-decoration:none;
-}
-nav a:hover{
-  text-shadow:0 0 6px #00ffff;
-}
-
-/* ===== レイアウト ===== */
 .top{
   display:flex;
   gap:20px;
@@ -54,107 +28,71 @@ nav a:hover{
   grid-template-columns:1fr 1fr;
 }
 
-/* ===== ステ入力 ===== */
 .stat-input{
   width:60px;
-  background:#000;
-  color:#00eaff;
-  border:1px solid #00eaff;
 }
 
-/* ===== 総合 ===== */
 .total-box{
-  width:220px;
+  width:260px;
 }
+
 .total-row{
   display:flex;
   justify-content:space-between;
 }
 
-/* ===== 立ち絵 ===== */
-.portrait{
-  width:220px;
-  border:1px solid #00eaff;
-  box-shadow:0 0 10px #00eaff;
+.total-row span{
+  color:#fff;
+  font-weight:bold;
 }
 
-/* ===== スキル ===== */
+.portrait{
+  width:200px;
+  margin-top:10px;
+  border:1px solid #00eaff;
+}
+
 .skill-row{
   display:flex;
-  gap:8px;
-  margin-bottom:6px;
+  gap:6px;
+  margin-bottom:4px;
+  border:1px solid rgba(0,255,255,0.3);
+  padding:4px;
 }
 
 select{
   width:180px;
-  background:#000;
-  color:#00eaff;
-  border:1px solid #00eaff;
 }
 
-/* ===== セリフ ===== */
-.voice-input{
-  width:100%;
-  font-size:11px;
-  background:#000;
-  color:#7df9ff;
-  border:1px solid #00eaff;
-}
-
-/* ===== 一覧 ===== */
 .skill-list{
   max-height:250px;
   overflow-y:auto;
   border:1px solid #00eaff;
 }
+
 .skill-item{
   padding:6px;
   border-bottom:1px solid #00eaff;
-}
-
-/* ===== 保存ボタン ===== */
-.save-btn{
-  position:fixed;
-  right:20px;
-  top:20px;
-  background:#000;
-  color:#00eaff;
-  border:1px solid #00eaff;
-  padding:6px 12px;
 }
 </style>
 </head>
 
 <body>
 
-<button class="save-btn" onclick="save()">💾 保存</button>
-
-<header>
-<h1>星守戦線</h1>
-<nav>
-<a href="#">🏠</a>
-<a href="#">🛡</a>
-<a href="#">⚔</a>
-</nav>
-</header>
+<div id="header"></div>
 
 <h2>ステータス</h2>
 
 <div class="top">
-
   <div id="stats" class="stats-grid"></div>
 
-  <div style="display:flex; gap:10px;">
+  <div>
     <div id="totalStats" class="box total-box"></div>
     <img id="portrait" class="portrait">
   </div>
-
 </div>
 
-<h2>装備</h2>
-<div id="equipment"></div>
-
-<h2>スキルスロット</h2>
+<h2 id="slotTitle">スキルスロット</h2>
 <div id="skills"></div>
 
 <h2>スキル一覧</h2>
@@ -163,160 +101,183 @@ select{
 
 <script>
 
-// ===== スキル =====
-const skillMaster = [
-  {id:"s1",name:"星裂斬",cost:{sp:5,mp:0},type:"物理"},
-  {id:"s2",name:"蒼流波",cost:{sp:0,mp:8},type:"魔法"},
-  {id:"s3",name:"月影突",cost:{sp:3,mp:2},type:"物理"}
-];
+/* ===== header ===== */
+fetch("../common/header.html")
+.then(res => res.text())
+.then(data => document.getElementById("header").innerHTML = data);
 
-function getAllSkills(){ return skillMaster; }
-
-// ===== ステ説明 =====
-const statDesc = {
-  physical:"攻撃/SP",
-  magic:"魔攻/MP",
-  vitality:"HP",
-  endurance:"防御",
-  agility:"速度",
-  spirit:"回復",
-  luck:"会心"
-};
-
-// ===== 初期 =====
+/* ===== 初期ステ ===== */
 const baseDefault = {
   physical:10, magic:10, vitality:20,
   endurance:5, agility:5, spirit:5, luck:5
 };
 
-let player = JSON.parse(localStorage.getItem("playerData")) || {};
+let player = JSON.parse(localStorage.getItem("playerData")) || {
+  base:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
+  trainingBonus:{physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0},
+  points:30,
+  skillsEquipped:[]
+};
 
-player.base ||= {physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0};
-player.trainingBonus ||= {physical:0,magic:0,vitality:0,endurance:0,agility:0,spirit:0,luck:0};
-player.points ??= 30;
-player.skillsEquipped ||= [];
-player.skillVoices ||= {};
-player.equipment ||= {weapon:"",armor:""};
-
-// ===== 計算 =====
+/* ===== ステ ===== */
 function getTotalStats(){
   const t={};
   for(let k in baseDefault){
-    t[k]=baseDefault[k]+player.base[k]+player.trainingBonus[k];
+    t[k]=baseDefault[k]+(player.base[k]||0)+(player.trainingBonus[k]||0);
   }
   return t;
 }
 
-function getCritRate(){
+function getTotalPower(){
   const t=getTotalStats();
-  return Math.floor((t.physical+t.magic)*0.2+t.luck*0.5);
+  return Object.values(t).reduce((a,b)=>a+b,0);
 }
 
-function getCritDamage(){
-  return (1.3+getCritRate()*0.01).toFixed(2);
+/* ===== スキル生成 ===== */
+const baseSkills = [
+  {id:"s1",name:"星裂斬",power:1.2,type:"物理",target:"単体",hits:1,cost:{sp:5,mp:0}},
+  {id:"s2",name:"蒼流波",power:1.0,type:"魔法",target:"全体",hits:1,cost:{sp:0,mp:8}}
+];
+
+function getRarity(total){
+  if(total<100)return 1;
+  if(total<200)return 2;
+  if(total<400)return 3;
+  if(total<700)return 4;
+  return 5;
 }
 
-// ===== 表示 =====
+function generateSkill(i){
+  const t=getTotalStats();
+  const total=getTotalPower();
+  const rarity=getRarity(total);
+
+  const main = t.physical>t.magic?"物理":"魔法";
+
+  const power=Number((1+total*0.002+rarity*0.3).toFixed(2));
+
+  const hits=rarity>=4?Math.floor(Math.random()*3)+2:1;
+  const target=rarity>=3?(Math.random()>0.5?"全体":"単体"):"単体";
+
+  return {
+    id:"g"+i,
+    name:`${main}${rarity}-${i}`,
+    power,
+    hits,
+    target,
+    type:main,
+    cost:{
+      sp:main==="物理"?Math.floor(power*5):0,
+      mp:main==="魔法"?Math.floor(power*5):0
+    }
+  };
+}
+
+function getGeneratedSkills(){
+  let data=JSON.parse(localStorage.getItem("genSkills"));
+  if(!data){
+    data=[];
+    for(let i=0;i<100;i++){
+      data.push(generateSkill(i));
+    }
+    localStorage.setItem("genSkills",JSON.stringify(data));
+  }
+  return data;
+}
+
+function getAllSkills(){
+  return [...baseSkills,...getGeneratedSkills()];
+}
+
+/* ===== スロット ===== */
+function getSkillSlots(){
+  return Math.min(16,5+Math.floor(getTotalPower()/25));
+}
+
+/* ===== 表示 ===== */
 function renderStats(){
   const t=getTotalStats();
   const div=document.getElementById("stats");
-
-  div.innerHTML=`<div class="box">残:${player.points}</div>`;
+  div.innerHTML=`<div class="box">残ポイント：${player.points}</div>`;
 
   for(let k in player.base){
     div.innerHTML+=`
-      <div class="box">
-        ${k}<br>
-        <small>${statDesc[k]}</small><br>
-        <input class="stat-input" value="${player.base[k]}"
-          onchange="player.base['${k}']=Number(this.value)||0;render();">
-        → ${t[k]}
-      </div>
-    `;
+    <div class="box">
+      ${k}<br>
+      <input class="stat-input" value="${player.base[k]}"
+      onchange="player.base['${k}']=Number(this.value)||0;save();render();">
+      → ${t[k]}
+    </div>`;
   }
 }
 
 function renderTotal(){
   const t=getTotalStats();
+
   document.getElementById("totalStats").innerHTML=`
-    <div class="total-row">HP ${t.vitality*10}</div>
-    <div class="total-row">物理 ${t.physical*2}</div>
-    <div class="total-row">魔法 ${t.magic*2}</div>
-    <div class="total-row">会心 ${getCritRate()}%</div>
-    <div class="total-row">威力 ${getCritDamage()}倍</div>
+    <div class="total-row">HP <span>${t.vitality*10}</span></div>
+    <div class="total-row">物理 <span>${t.physical*2}</span></div>
+    <div class="total-row">魔法 <span>${t.magic*2}</span></div>
+    <div class="total-row">速度 <span>${t.agility}</span></div>
+    <div class="total-row">幸運 <span>${t.luck}</span></div>
   `;
 }
 
-// ===== スキル =====
 function renderSkills(){
   const div=document.getElementById("skills");
   div.innerHTML="";
-
   const skills=getAllSkills();
+  const count=getSkillSlots();
 
-  for(let i=0;i<6;i++){
+  document.getElementById("slotTitle").innerText=`スキルスロット（${count}枠）`;
 
+  for(let i=0;i<count;i++){
     const current=player.skillsEquipped[i];
     const skill=skills.find(s=>s.id===current);
 
     let options=`<option value="">未設定</option>`;
     skills.forEach(s=>{
-      options+=`<option value="${s.id}" ${current===s.id?"selected":""}>${s.name}</option>`;
+      options+=`<option value="${s.id}">${s.name}</option>`;
     });
 
     div.innerHTML+=`
-      <div class="skill-row">
+    <div class="skill-row">
+      <select onchange="player.skillsEquipped[${i}]=this.value;save();render();">
+        ${options}
+      </select>
 
-        <select onchange="player.skillsEquipped[${i}]=this.value;save();render();">
-          ${options}
-        </select>
-
-        <div class="box" style="flex:1;">
-          ${skill ? skill.name : "未設定"}
-
-          ${
-            skill
-            ? `<input class="voice-input"
-                placeholder="セリフ (**太字 *斜体*)"
-                value="${player.skillVoices[skill.id]||""}"
-                onchange="player.skillVoices['${skill.id}']=this.value;save();">`
-            : ""
-          }
-
-        </div>
-
+      <div class="box" style="flex:1;">
+        ${skill?`${skill.name}｜威力:${skill.power}｜${skill.target}｜${skill.type}｜${skill.hits}hit`:"未設定"}
       </div>
-    `;
+    </div>`;
   }
 }
 
-// ===== 一覧 =====
 function renderSkillList(){
   const div=document.getElementById("skillList");
+  const word=document.getElementById("skillSearch").value||"";
+
   div.innerHTML="";
-  getAllSkills().forEach(s=>{
-    div.innerHTML+=`<div class="skill-item">${s.name}</div>`;
-  });
+
+  getAllSkills()
+    .filter(s=>s.name.includes(word))
+    .forEach(s=>{
+      div.innerHTML+=`
+      <div class="skill-item">
+        ${s.name}｜威力:${s.power}｜${s.target}｜${s.type}
+      </div>`;
+    });
 }
 
-// ===== 立ち絵 =====
-function renderPortrait(){
-  const img=localStorage.getItem("profileImage");
-  if(img) document.getElementById("portrait").src=img;
-}
-
-// ===== 保存 =====
 function save(){
   localStorage.setItem("playerData",JSON.stringify(player));
 }
 
-// ===== 初期 =====
 function render(){
   renderStats();
   renderTotal();
   renderSkills();
   renderSkillList();
-  renderPortrait();
 }
 
 render();
