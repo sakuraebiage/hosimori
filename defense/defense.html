@@ -109,6 +109,13 @@ body {
 
 <script>
 
+/* ===== header ===== */
+fetch("../common/header.html")
+.then(res=>res.text())
+.then(data=>{
+  document.getElementById("header").innerHTML = data;
+});
+
 // ===== 要素 =====
 const map = document.getElementById("map");
 const modalBg = document.getElementById("modalBg");
