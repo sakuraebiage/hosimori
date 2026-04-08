@@ -62,7 +62,7 @@ input, select { padding:5px; margin:5px; border-radius:3px; border:1px solid #55
 
 select{
   width:180px;
-  height:28px;          /* ←高さ固定 */
+  height:23px;          /* ←高さ固定 */
   font-size:12px;       /* ←文字小さく */
   padding:2px;
 }
