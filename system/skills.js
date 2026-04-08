@@ -31,6 +31,33 @@ function getRarity(total){
   return 2;
 }
 
+function createComboEffect(rarity){
+
+  const list = [];
+
+  if(Math.random()<0.4){
+    list.push({
+      type:"bonusVsStatus",
+      value:20 + rarity*10
+    });
+  }
+
+  if(Math.random()<0.3){
+    list.push({
+      type:"bonusPerDebuff",
+      value:10
+    });
+  }
+
+  if(Math.random()<0.2){
+    list.push({
+      type:"critIfFrozen"
+    });
+  }
+
+  return list;
+}
+
 // ===============================
 // 🔷 カテゴリ
 // ===============================
@@ -166,6 +193,12 @@ function createEffect(category, rarity){
         : []
     };
   }
+
+return {
+  type:"damage",
+  extra:createDebuffEffect(rarity),
+  combo:createComboEffect(rarity)
+};
 
   return null;
 }
