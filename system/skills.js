@@ -1,4 +1,9 @@
 // ===============================
+// 🔷 バージョン管理（超重要）
+// ===============================
+const SKILL_VERSION = "2.0";
+
+// ===============================
 // 🔷 属性
 // ===============================
 const elements = ["無","火","水","雷","氷","風","土","光","闇"];
@@ -17,19 +22,6 @@ const buffNames = ["加護","守護","祝福","強化"];
 const healNames = ["癒し","治癒","再生"];
 
 // ===============================
-// 🔷 カテゴリ
-// ===============================
-function getSkillCategory(i){
-
-  if(i >= 300 && Math.random() < 0.2) return "authority";
-
-  const r = Math.random();
-  if(r < 0.6) return "attack";
-  if(r < 0.85) return "buff";
-  return "heal";
-}
-
-// ===============================
 // 🔷 レア度
 // ===============================
 function getRarity(total){
@@ -40,28 +32,35 @@ function getRarity(total){
 }
 
 // ===============================
+// 🔷 カテゴリ
+// ===============================
+function getSkillCategory(i){
+  if(i >= 300 && Math.random() < 0.2) return "authority";
+
+  const r = Math.random();
+  if(r < 0.6) return "attack";
+  if(r < 0.85) return "buff";
+  return "heal";
+}
+
+// ===============================
 // 🔷 名前生成
 // ===============================
 function generateSkillName(category, main, element, rarity){
 
   if(category==="buff"){
-    const b = buffNames[Math.floor(Math.random()*buffNames.length)];
-    return `${element}の${b}`;
+    return `${element}の${buffNames[Math.floor(Math.random()*buffNames.length)]}`;
   }
 
   if(category==="heal"){
-    const h = healNames[Math.floor(Math.random()*healNames.length)];
-    return `${element}の${h}`;
+    return `${element}の${healNames[Math.floor(Math.random()*healNames.length)]}`;
   }
 
   if(category==="authority"){
-    const list = ["覚醒","領域","幸運","防護"];
-    const a = list[Math.floor(Math.random()*list.length)];
-    return `${element}の${a}`;
+    return `${element}の覚醒`;
   }
 
   const p = nameParts.prefix[Math.floor(Math.random()*nameParts.prefix.length)];
-
   const core = main==="物理"
     ? nameParts.physical[Math.floor(Math.random()*nameParts.physical.length)]
     : nameParts.magic[Math.floor(Math.random()*nameParts.magic.length)];
@@ -78,9 +77,7 @@ function generateSkillName(category, main, element, rarity){
 // ===============================
 function createEffect(category){
 
-  if(category==="attack"){
-    return {type:"damage"};
-  }
+  if(category==="attack") return {type:"damage"};
 
   if(category==="buff"){
     const list = [
@@ -92,16 +89,13 @@ function createEffect(category){
     return list[Math.floor(Math.random()*list.length)];
   }
 
-  if(category==="heal"){
-    return {type:"heal"};
-  }
+  if(category==="heal") return {type:"heal"};
 
   if(category==="authority"){
     const list = [
       {type:"allUp"},
       {type:"invincible"},
-      {type:"extraTurn"},
-      {type:"critMax"}
+      {type:"extraTurn"}
     ];
     return list[Math.floor(Math.random()*list.length)];
   }
@@ -110,31 +104,7 @@ function createEffect(category){
 }
 
 // ===============================
-// 🔷 効果テキスト
-// ===============================
-function getEffectText(skill){
-
-  const e = skill.effectData;
-  if(!e) return "";
-
-  switch(e.type){
-    case "atkUp": return `攻撃+${e.value}%`;
-    case "defUp": return `防御+${e.value}%`;
-    case "spdUp": return `速度+${e.value}%`;
-    case "critUp": return `会心率+${e.value}%`;
-
-    case "heal": return "HP回復";
-    case "allUp": return "全能力上昇";
-    case "invincible": return "ダメージ無効";
-    case "extraTurn": return "追加行動";
-    case "critMax": return "会心確定";
-
-    default: return "";
-  }
-}
-
-// ===============================
-// 🔷 スキル生成（本体）
+// 🔷 スキル生成
 // ===============================
 function generateSkill(i){
 
@@ -147,8 +117,8 @@ function generateSkill(i){
   const element = elements[Math.floor(Math.random()*elements.length)];
 
   let power = 0;
-  let target = "単体";
   let hits = 1;
+  let target = "単体";
 
   const variance = (Math.random()*0.4 - 0.2);
 
@@ -164,20 +134,21 @@ function generateSkill(i){
   }
 
   if(category==="buff"){
-    power = 0;
     target = "味方全体";
   }
 
   if(category==="authority"){
-    power = 0;
     target = "自分";
   }
 
-  const name = generateSkillName(category, main, element, rarity);
+  const cost = {
+    sp: main==="物理" ? Math.floor(power*5) : 0,
+    mp: main==="魔法" ? Math.floor(power*5) : 0
+  };
 
   return {
     id:"g"+i,
-    name,
+    name: generateSkillName(category, main, element, rarity),
     power,
     hits,
     target,
@@ -185,15 +156,24 @@ function generateSkill(i){
     element,
     category,
     rarity,
+    cost,
     effectData:createEffect(category),
     isCustom:true
   };
 }
 
 // ===============================
-// 🔷 キャッシュ生成
+// 🔷 キャッシュ管理（ここが神）
 // ===============================
 function getGeneratedSkills(){
+
+  const savedVersion = localStorage.getItem("skillVersion");
+
+  // バージョン違ったらリセット
+  if(savedVersion !== SKILL_VERSION){
+    localStorage.removeItem("genSkills");
+    localStorage.setItem("skillVersion", SKILL_VERSION);
+  }
 
   let data = JSON.parse(localStorage.getItem("genSkills"));
 
@@ -212,12 +192,12 @@ function getGeneratedSkills(){
 // 🔷 固定スキル
 // ===============================
 const skillMaster = [
-  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",category:"attack",effectData:{type:"damage"},isCustom:false},
-  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",category:"attack",effectData:{type:"damage"},isCustom:false}
+  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",category:"attack",cost:{sp:5,mp:0},effectData:{type:"damage"},isCustom:false},
+  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",category:"attack",cost:{sp:0,mp:8},effectData:{type:"damage"},isCustom:false}
 ];
 
 // ===============================
-// 🔷 全スキル
+// 🔷 全取得
 // ===============================
 function getAllSkills(){
   return [...skillMaster, ...getGeneratedSkills()];
