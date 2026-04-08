@@ -1,7 +1,7 @@
 // ===============================
 // 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "3.0";
+const SKILL_VERSION = "4.0";
 
 // ===============================
 // 🔷 属性
@@ -15,6 +15,7 @@ const nameParts = {
   prefix:["紅蓮","蒼","雷鳴","氷牙","疾風","影","剛","烈"],
   physical:["斬","撃","突","断","砕","連斬","崩し"],
   magic:["波","弾","術","爆","嵐","陣","閃"],
+  hybrid:["双刃","混成","連環"],
   suffix:["改","式","破","極","零","真"]
 };
 
@@ -44,6 +45,24 @@ function getSkillCategory(i){
 }
 
 // ===============================
+// 🔷 タイプ決定（物理・魔法・物魔）
+// ===============================
+function getMainType(t){
+
+  if(t.physical === t.magic){
+
+    const r = Math.random();
+
+    if(r < 0.4) return "物理";
+    if(r < 0.8) return "魔法";
+    return "物魔"; // レア
+
+  }else{
+    return t.physical > t.magic ? "物理" : "魔法";
+  }
+}
+
+// ===============================
 // 🔷 名前生成
 // ===============================
 function generateSkillName(category, main, element, rarity){
@@ -61,9 +80,16 @@ function generateSkillName(category, main, element, rarity){
   }
 
   const p = nameParts.prefix[Math.floor(Math.random()*nameParts.prefix.length)];
-  const core = main==="物理"
-    ? nameParts.physical[Math.floor(Math.random()*nameParts.physical.length)]
-    : nameParts.magic[Math.floor(Math.random()*nameParts.magic.length)];
+
+  let core;
+
+  if(main==="物理"){
+    core = nameParts.physical[Math.floor(Math.random()*nameParts.physical.length)];
+  }else if(main==="魔法"){
+    core = nameParts.magic[Math.floor(Math.random()*nameParts.magic.length)];
+  }else{
+    core = nameParts.hybrid[Math.floor(Math.random()*nameParts.hybrid.length)];
+  }
 
   const s = rarity>=4
     ? nameParts.suffix[Math.floor(Math.random()*nameParts.suffix.length)]
@@ -73,7 +99,7 @@ function generateSkillName(category, main, element, rarity){
 }
 
 // ===============================
-// 🔷 効果生成（🔥強化版）
+// 🔷 効果生成（拡張版）
 // ===============================
 function createEffect(category){
 
@@ -145,7 +171,7 @@ function generateSkill(i){
   const rarity = getRarity(total);
 
   const category = getSkillCategory(i);
-  const main = t.physical > t.magic ? "物理" : "魔法";
+  const main = getMainType(t);
   const element = elements[Math.floor(Math.random()*elements.length)];
 
   let power = 0;
@@ -173,9 +199,16 @@ function generateSkill(i){
     target = "自分";
   }
 
+  // 🔥 物魔強化
+  if(main==="物魔"){
+    power *= 1.2;
+    hits += 1;
+  }
+
+  // 🔥 コスト
   const cost = {
-    sp: main==="物理" ? Math.floor(power*5) : 0,
-    mp: main==="魔法" ? Math.floor(power*5) : 0
+    sp: (main==="物理" || main==="物魔") ? Math.floor(power*3) : 0,
+    mp: (main==="魔法" || main==="物魔") ? Math.floor(power*3) : 0
   };
 
   return {
