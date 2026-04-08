@@ -274,12 +274,15 @@ function renderSkills(){
 
 function renderSkillList(){
   const div=document.getElementById("skillList");
-  const word=document.getElementById("skillSearch").value||"";
+  const word=(document.getElementById("skillSearch").value || "").trim();
 
   div.innerHTML="";
 
   getAllSkills()
-    .filter(s=>getSkillName(s).includes(word))
+    .filter(s=>{
+      if(!word) return true; // ←これ重要
+      return getSkillName(s).includes(word);
+    })
     .forEach((s,index)=>{
       div.innerHTML+=`
         <div class="skill-item">
