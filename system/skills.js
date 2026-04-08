@@ -1,7 +1,7 @@
 // ===============================
-// 🔷 バージョン管理（超重要）
+// 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "2.0";
+const SKILL_VERSION = "3.0";
 
 // ===============================
 // 🔷 属性
@@ -73,31 +73,63 @@ function generateSkillName(category, main, element, rarity){
 }
 
 // ===============================
-// 🔷 効果生成
+// 🔷 効果生成（🔥強化版）
 // ===============================
 function createEffect(category){
 
-  if(category==="attack") return {type:"damage"};
+  if(category==="attack"){
 
-  if(category==="buff"){
-    const list = [
-      {type:"atkUp", value:20},
-      {type:"defUp", value:20},
-      {type:"spdUp", value:10},
-      {type:"critUp", value:15}
-    ];
-    return list[Math.floor(Math.random()*list.length)];
+    const extra = [];
+
+    // 防御ダウン
+    if(Math.random() < 0.4){
+      extra.push({
+        type:"defDown",
+        value:10 + Math.floor(Math.random()*20),
+        chance:30 + Math.floor(Math.random()*40)
+      });
+    }
+
+    // 追撃
+    if(Math.random() < 0.3){
+      extra.push({
+        type:"multiHit",
+        hits:2 + Math.floor(Math.random()*2),
+        chance:40
+      });
+    }
+
+    // 吸収
+    if(Math.random() < 0.2){
+      extra.push({
+        type:"drain",
+        value:15 + Math.floor(Math.random()*15)
+      });
+    }
+
+    return {
+      type:"damage",
+      extra
+    };
   }
 
-  if(category==="heal") return {type:"heal"};
+  if(category==="buff"){
+    return {
+      type:"atkUp",
+      value:20
+    };
+  }
+
+  if(category==="heal"){
+    return {
+      type:"heal"
+    };
+  }
 
   if(category==="authority"){
-    const list = [
-      {type:"allUp"},
-      {type:"invincible"},
-      {type:"extraTurn"}
-    ];
-    return list[Math.floor(Math.random()*list.length)];
+    return {
+      type:"allUp"
+    };
   }
 
   return null;
@@ -163,13 +195,12 @@ function generateSkill(i){
 }
 
 // ===============================
-// 🔷 キャッシュ管理（ここが神）
+// 🔷 キャッシュ管理
 // ===============================
 function getGeneratedSkills(){
 
   const savedVersion = localStorage.getItem("skillVersion");
 
-  // バージョン違ったらリセット
   if(savedVersion !== SKILL_VERSION){
     localStorage.removeItem("genSkills");
     localStorage.setItem("skillVersion", SKILL_VERSION);
@@ -192,8 +223,32 @@ function getGeneratedSkills(){
 // 🔷 固定スキル
 // ===============================
 const skillMaster = [
-  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",category:"attack",cost:{sp:5,mp:0},effectData:{type:"damage"},isCustom:false},
-  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",category:"attack",cost:{sp:0,mp:8},effectData:{type:"damage"},isCustom:false}
+  {
+    id:"s1",
+    name:"星裂斬",
+    power:1.2,
+    hits:1,
+    target:"単体",
+    type:"物理",
+    element:"無",
+    category:"attack",
+    cost:{sp:5,mp:0},
+    effectData:{type:"damage"},
+    isCustom:false
+  },
+  {
+    id:"s2",
+    name:"蒼流波",
+    power:1.0,
+    hits:1,
+    target:"全体",
+    type:"魔法",
+    element:"水",
+    category:"attack",
+    cost:{sp:0,mp:8},
+    effectData:{type:"damage"},
+    isCustom:false
+  }
 ];
 
 // ===============================
