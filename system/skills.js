@@ -283,6 +283,34 @@ const skillMaster = [
     isCustom:false
   }
 ];
+function renderSlotVoices(){
+
+  const div = document.getElementById("slotVoices");
+  if(!div) return;
+
+  const data = JSON.parse(localStorage.getItem("slotVoices")) || {};
+  const count = getSkillSlots();
+
+  div.innerHTML = "";
+
+  for(let i=0;i<count;i++){
+
+    div.innerHTML += `
+      <div class="box">
+        スロット${i+1}<br>
+        <input
+          placeholder="セリフ"
+          value="${data[i] || ""}"
+          onchange="
+            let v = JSON.parse(localStorage.getItem('slotVoices')) || {};
+            v[${i}] = this.value;
+            localStorage.setItem('slotVoices', JSON.stringify(v));
+          "
+        >
+      </div>
+    `;
+  }
+}
 
 // ===============================
 // 🔷 全取得
