@@ -232,15 +232,22 @@ function renderSkills(){
           ${skill
           ? `No.${skills.indexOf(skill)+1}
           ｜${getSkillName(skill)}
-          ｜威力:${skill.power ?? 1}
+
+          ${skill.category==="attack"
+            ? `｜威力:${skill.power ?? 1}`
+            : `｜効果:${getEffectText(skill)}`
+          }
+
           ｜${skill.target ?? "単体"}
           ｜${skill.type ?? "物理"}
           ｜${skill.hits ?? 1}hit
+          ｜SP:${skill.cost?.sp ?? 0} / MP:${skill.cost?.mp ?? 0}
+
           ${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
           : "未設定"}
         </div>
       </div>`;
-}
+  }
 }
 
 function renderSkillList(){
