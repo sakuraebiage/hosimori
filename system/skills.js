@@ -329,3 +329,84 @@ const skillMaster = [
 function getAllSkills(){
   return [...skillMaster, ...getGeneratedSkills()];
 }
+
+// ===============================
+// 🔷 効果テキスト（完全版）
+// ===============================
+function getEffectText(skill){
+
+  const e = skill.effectData;
+  if(!e) return "効果なし";
+
+  let parts = [];
+
+  // ======================
+  // 基本
+  // ======================
+  if(e.type==="damage") parts.push("💥ダメージ");
+  if(e.type==="heal") parts.push(`💚回復(${e.value})`);
+
+  // ======================
+  // 🟢 バフ
+  // ======================
+  if(e.type==="buff" && e.buffs){
+
+    const buffs = e.buffs.map(b=>{
+
+      if(b.type==="regen") return `🟢リジェネ(${b.duration}T)`;
+      if(b.type==="speedUp") return `🟢速度+${b.value}%(${b.duration}T)`;
+      if(b.type==="healBoost") return `🟢回復量+${b.value}%`;
+      if(b.type==="skillBoost") return `🟢スキル+${b.value}%`;
+
+      return "";
+    });
+
+    return buffs.join(" / ");
+  }
+
+  // ======================
+  // 🔥 extra（ここがメイン）
+  // ======================
+  if(e.extra){
+
+    e.extra.forEach(x=>{
+
+      if(x.type==="atkDown") parts.push(`🟣攻撃-${x.value}%(${x.duration}T/${x.chance}%)`);
+      if(x.type==="defDown") parts.push(`🟣防御-${x.value}%(${x.duration}T/${x.chance}%)`);
+      if(x.type==="spdDown") parts.push(`🟣速度-${x.value}%(${x.duration}T/${x.chance}%)`);
+      if(x.type==="critDown") parts.push(`🟣会心-${x.value}%(${x.duration}T/${x.chance}%)`);
+
+      if(x.type==="poison") parts.push(`☠毒(${x.duration}T/${x.chance}%)`);
+      if(x.type==="burn") parts.push(`🔥火傷(${x.duration}T/${x.chance}%)`);
+      if(x.type==="freeze") parts.push(`❄凍結(${x.duration}T/${x.chance}%)`);
+
+      if(x.type==="multiHit") parts.push(`⚡追撃${x.hits}回(${x.chance}%)`);
+      if(x.type==="drain") parts.push(`🩸吸収${x.value}%`);
+
+    });
+  }
+
+  // ======================
+  // 🧠 コンボ
+  // ======================
+  if(e.combo){
+
+    e.combo.forEach(c=>{
+
+      if(c.type==="bonusVsStatus"){
+        parts.push(`🧠状態異常特効+${c.value}%`);
+      }
+
+      if(c.type==="bonusPerDebuff"){
+        parts.push(`🧠デバフ数×${c.value}%`);
+      }
+
+      if(c.type==="critIfFrozen"){
+        parts.push(`🧠凍結時クリティカル`);
+      }
+
+    });
+  }
+
+  return parts.join("｜");
+}
