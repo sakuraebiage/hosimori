@@ -1,33 +1,64 @@
-// ===== 属性 =====
-const attackElements = [
-  "無",
-  "火","水","雷",
-  "氷","風","土",
-  "光","闇"
-];
+// ===============================
+// 🔷 属性
+// ===============================
+const elements = ["無","火","水","雷","氷","風","土","光","闇"];
 
-const sacredElements = [
-  "星","月","陽"
-];
-
-// ===== 名前素材 =====
+// ===============================
+// 🔷 名前素材
+// ===============================
 const nameParts = {
-  prefix: ["紅蓮","蒼","雷鳴","氷牙","疾風","影","聖","魔"],
-  physical: ["斬","撃","突","断","砕","連斬","崩し"],
-  magic: ["波","弾","術","爆","嵐","陣","閃"],
-  suffix: ["改","式","破","極","零","真","滅"]
+  prefix:["紅蓮","蒼","雷鳴","氷牙","疾風","影","剛","烈"],
+  physical:["斬","撃","突","断","砕","連斬","崩し"],
+  magic:["波","弾","術","爆","嵐","陣","閃"],
+  suffix:["改","式","破","極","零","真"]
 };
 
-// ===== スキル種別 =====
-function getSkillCategory(){
+const buffNames = ["加護","守護","祝福","強化"];
+const healNames = ["癒し","治癒","再生"];
+
+// ===============================
+// 🔷 カテゴリ
+// ===============================
+function getSkillCategory(i){
+
+  if(i >= 300 && Math.random() < 0.2) return "authority";
+
   const r = Math.random();
-  if(r < 0.7) return "attack";
-  if(r < 0.9) return "buff";
+  if(r < 0.6) return "attack";
+  if(r < 0.85) return "buff";
   return "heal";
 }
 
-// ===== 名前生成 =====
-function generateSkillName(main, element, rarity, category){
+// ===============================
+// 🔷 レア度
+// ===============================
+function getRarity(total){
+  if(total > 200) return 5;
+  if(total > 120) return 4;
+  if(total > 60) return 3;
+  return 2;
+}
+
+// ===============================
+// 🔷 名前生成
+// ===============================
+function generateSkillName(category, main, element, rarity){
+
+  if(category==="buff"){
+    const b = buffNames[Math.floor(Math.random()*buffNames.length)];
+    return `${element}の${b}`;
+  }
+
+  if(category==="heal"){
+    const h = healNames[Math.floor(Math.random()*healNames.length)];
+    return `${element}の${h}`;
+  }
+
+  if(category==="authority"){
+    const list = ["覚醒","領域","幸運","防護"];
+    const a = list[Math.floor(Math.random()*list.length)];
+    return `${element}の${a}`;
+  }
 
   const p = nameParts.prefix[Math.floor(Math.random()*nameParts.prefix.length)];
 
@@ -39,100 +70,110 @@ function generateSkillName(main, element, rarity, category){
     ? nameParts.suffix[Math.floor(Math.random()*nameParts.suffix.length)]
     : "";
 
-  if(category === "attack"){
-    return `${element}${p}${core}${s}`;
+  return `${element}${p}${core}${s}`;
+}
+
+// ===============================
+// 🔷 効果生成
+// ===============================
+function createEffect(category){
+
+  if(category==="attack"){
+    return {type:"damage"};
   }
 
-  if(category === "buff"){
-    const sacred = sacredElements[Math.floor(Math.random()*sacredElements.length)];
-    return `${sacred}の加護`;
+  if(category==="buff"){
+    const list = [
+      {type:"atkUp", value:20},
+      {type:"defUp", value:20},
+      {type:"spdUp", value:10},
+      {type:"critUp", value:15}
+    ];
+    return list[Math.floor(Math.random()*list.length)];
   }
 
-  if(category === "heal"){
-    const sacred = sacredElements[Math.floor(Math.random()*sacredElements.length)];
-    return `${sacred}の癒し`;
+  if(category==="heal"){
+    return {type:"heal"};
+  }
+
+  if(category==="authority"){
+    const list = [
+      {type:"allUp"},
+      {type:"invincible"},
+      {type:"extraTurn"},
+      {type:"critMax"}
+    ];
+    return list[Math.floor(Math.random()*list.length)];
+  }
+
+  return null;
+}
+
+// ===============================
+// 🔷 効果テキスト
+// ===============================
+function getEffectText(skill){
+
+  const e = skill.effectData;
+  if(!e) return "";
+
+  switch(e.type){
+    case "atkUp": return `攻撃+${e.value}%`;
+    case "defUp": return `防御+${e.value}%`;
+    case "spdUp": return `速度+${e.value}%`;
+    case "critUp": return `会心率+${e.value}%`;
+
+    case "heal": return "HP回復";
+    case "allUp": return "全能力上昇";
+    case "invincible": return "ダメージ無効";
+    case "extraTurn": return "追加行動";
+    case "critMax": return "会心確定";
+
+    default: return "";
   }
 }
 
-// ===== レア度 =====
-function getRarity(total){
-  if(total > 600) return 6;
-  if(total > 400) return 5;
-  if(total > 200) return 4;
-  if(total > 100) return 3;
-  return 2;
-}
-
-// ===== 総合値 =====
-function getTotalPower(){
-  const t = getTotalStats();
-  return Object.values(t).reduce((a,b)=>a+b,0);
-}
-
-// ===== 複合属性 =====
-function getElement(i){
-
-  if(i >= 200 && Math.random() < 0.5){
-    const e1 = attackElements[Math.floor(Math.random()*attackElements.length)];
-    const e2 = attackElements[Math.floor(Math.random()*attackElements.length)];
-    if(e1 !== e2){
-      return `${e1}+${e2}`;
-    }
-  }
-
-  return attackElements[Math.floor(Math.random()*attackElements.length)];
-}
-
-// ===== スキル生成 =====
+// ===============================
+// 🔷 スキル生成（本体）
+// ===============================
 function generateSkill(i){
 
   const t = getTotalStats();
   const total = getTotalPower();
   const rarity = getRarity(total);
 
-  const category = getSkillCategory();
-
+  const category = getSkillCategory(i);
   const main = t.physical > t.magic ? "物理" : "魔法";
+  const element = elements[Math.floor(Math.random()*elements.length)];
 
-  const element = getElement(i);
-
-  const name = generateSkillName(main, element, rarity, category);
-
-  let power = Number(
-    (1 + total*0.005 + rarity*0.6 + Math.random()*0.8)
-    .toFixed(2)
-  );
-
-  let hits = 1;
+  let power = 0;
   let target = "単体";
+  let hits = 1;
 
-  // ===== 分岐 =====
-  if(category === "attack"){
-    hits = rarity >= 5
-      ? Math.floor(Math.random()*4)+2
-      : rarity >= 4
-      ? Math.floor(Math.random()*3)+2
-      : 1;
+  const variance = (Math.random()*0.4 - 0.2);
 
-    target = rarity >= 4
-      ? (Math.random()>0.4 ? "全体" : "単体")
-      : "単体";
+  if(category==="attack"){
+    power = Number((1 + total*0.002 + rarity*0.3 + variance).toFixed(2));
+    hits = rarity>=4 ? Math.floor(Math.random()*3)+2 : 1;
+    target = rarity>=3 && Math.random()>0.5 ? "全体" : "単体";
   }
 
-  if(category === "buff"){
-    power = 0;
-    target = "味方全体";
-  }
-
-  if(category === "heal"){
+  if(category==="heal"){
     power = Number((total*0.01 + rarity*2).toFixed(2));
     target = "味方単体";
   }
 
-  const cost = {
-    sp: main==="物理" ? Math.floor(power*4 + hits*2) : 0,
-    mp: main==="魔法" ? Math.floor(power*4 + hits*2) : 5
-  };
+  if(category==="buff"){
+    power = 0;
+    target = "味方全体";
+  }
+
+  if(category==="authority"){
+    power = 0;
+    target = "自分";
+  }
+
+  const name = generateSkillName(category, main, element, rarity);
 
   return {
     id:"g"+i,
@@ -144,19 +185,21 @@ function generateSkill(i){
     element,
     category,
     rarity,
-    cost,
+    effectData:createEffect(category),
     isCustom:true
   };
 }
 
-// ===== 生成キャッシュ =====
+// ===============================
+// 🔷 キャッシュ生成
+// ===============================
 function getGeneratedSkills(){
 
   let data = JSON.parse(localStorage.getItem("genSkills"));
 
   if(!data){
     data=[];
-    for(let i=0;i<400;i++){
+    for(let i=0;i<50;i++){
       data.push(generateSkill(i));
     }
     localStorage.setItem("genSkills", JSON.stringify(data));
@@ -165,14 +208,17 @@ function getGeneratedSkills(){
   return data;
 }
 
-// ===== 固定スキル =====
+// ===============================
+// 🔷 固定スキル
+// ===============================
 const skillMaster = [
-  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",cost:{sp:5,mp:0},isCustom:false},
-  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",cost:{sp:0,mp:8},isCustom:false},
-  {id:"s3",name:"月影突",power:0.9,hits:2,target:"単体",type:"物理",element:"闇",cost:{sp:3,mp:2},isCustom:false}
+  {id:"s1",name:"星裂斬",power:1.2,hits:1,target:"単体",type:"物理",element:"無",category:"attack",effectData:{type:"damage"},isCustom:false},
+  {id:"s2",name:"蒼流波",power:1.0,hits:1,target:"全体",type:"魔法",element:"水",category:"attack",effectData:{type:"damage"},isCustom:false}
 ];
 
-// ===== 全スキル =====
+// ===============================
+// 🔷 全スキル
+// ===============================
 function getAllSkills(){
   return [...skillMaster, ...getGeneratedSkills()];
 }
