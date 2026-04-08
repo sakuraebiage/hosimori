@@ -67,6 +67,28 @@ fetch("../common/header.html")
   document.getElementById("header").innerHTML = data;
 });
 
+function getEffectText(skill){
+
+  const e = skill.effectData;
+  if(!e) return "効果なし";
+
+  switch(e.type){
+
+    case "atkUp": return `攻撃+${e.value}%`;
+    case "defUp": return `防御+${e.value}%`;
+    case "spdUp": return `速度+${e.value}%`;
+    case "critUp": return `会心率+${e.value}%`;
+
+    case "heal": return "HP回復";
+    case "damage": return "ダメージ";
+
+    case "allUp": return "全能力上昇";
+    case "invincible": return "ダメージ無効";
+    case "extraTurn": return "追加行動";
+
+    default: return "特殊効果";
+  }
+}
 
 /* ===== 初期ステ ===== */
 const baseDefault = {
