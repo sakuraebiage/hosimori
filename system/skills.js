@@ -350,39 +350,37 @@ function getEffectText(skill){
   // 🟢 バフ
   // ======================
   if(e.type==="buff" && e.buffs){
-
-    const buffs = e.buffs.map(b=>{
+    return e.buffs.map(b=>{
 
       if(b.type==="regen") return `🟢リジェネ(${b.duration}T)`;
       if(b.type==="speedUp") return `🟢速度+${b.value}%(${b.duration}T)`;
-      if(b.type==="healBoost") return `🟢回復量+${b.value}%`;
-      if(b.type==="skillBoost") return `🟢スキル+${b.value}%`;
+      if(b.type==="healBoost") return `🟢回復量+${b.value}%(${b.duration}T)`;
+      if(b.type==="skillBoost") return `🟢スキル+${b.value}%(${b.duration}T)`;
 
-      return "";
-    });
-
-    return buffs.join(" / ");
+    }).join(" / ");
   }
 
   // ======================
-  // 🔥 extra（ここがメイン）
+  // 🔥 extra（デバフ・状態異常）
   // ======================
   if(e.extra){
 
     e.extra.forEach(x=>{
 
+      // 🔻デバフ
       if(x.type==="atkDown") parts.push(`🟣攻撃-${x.value}%(${x.duration}T/${x.chance}%)`);
       if(x.type==="defDown") parts.push(`🟣防御-${x.value}%(${x.duration}T/${x.chance}%)`);
       if(x.type==="spdDown") parts.push(`🟣速度-${x.value}%(${x.duration}T/${x.chance}%)`);
       if(x.type==="critDown") parts.push(`🟣会心-${x.value}%(${x.duration}T/${x.chance}%)`);
 
+      // ☠状態異常
       if(x.type==="poison") parts.push(`☠毒(${x.duration}T/${x.chance}%)`);
       if(x.type==="burn") parts.push(`🔥火傷(${x.duration}T/${x.chance}%)`);
       if(x.type==="freeze") parts.push(`❄凍結(${x.duration}T/${x.chance}%)`);
 
+      // ⚡特殊
       if(x.type==="multiHit") parts.push(`⚡追撃${x.hits}回(${x.chance}%)`);
       if(x.type==="drain") parts.push(`🩸吸収${x.value}%`);
-
     });
   }
 
