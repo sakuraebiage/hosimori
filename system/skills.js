@@ -1,7 +1,7 @@
-// ===============================
+　// ===============================
 // 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "4.0";
+const SKILL_VERSION = "3.0";
 
 // ===============================
 // 🔷 属性
@@ -15,7 +15,6 @@ const nameParts = {
   prefix:["紅蓮","蒼","雷鳴","氷牙","疾風","影","剛","烈"],
   physical:["斬","撃","突","断","砕","連斬","崩し"],
   magic:["波","弾","術","爆","嵐","陣","閃"],
-  hybrid:["双刃","混成","連環"],
   suffix:["改","式","破","極","零","真"]
 };
 
@@ -35,31 +34,25 @@ function getRarity(total){
 // ===============================
 // 🔷 カテゴリ
 // ===============================
-function getSkillCategory(i){
-  if(i >= 300 && Math.random() < 0.2) return "authority";
-
+function getSkillCategory(){
   const r = Math.random();
-  if(r < 0.6) return "attack";
-  if(r < 0.85) return "buff";
+  if(r < 0.4) return "attack";
+  if(r < 0.7) return "debuff";
+  if(r < 0.9) return "buff";
   return "heal";
 }
 
 // ===============================
-// 🔷 タイプ決定（物理・魔法・物魔）
+// 🔷 ターゲット
 // ===============================
-function getMainType(t){
+function getTarget(category){
 
-  if(t.physical === t.magic){
-
-    const r = Math.random();
-
-    if(r < 0.4) return "物理";
-    if(r < 0.8) return "魔法";
-    return "物魔"; // レア
-
-  }else{
-    return t.physical > t.magic ? "物理" : "魔法";
+  if(category==="buff" || category==="heal"){
+    return Math.random()<0.5 ? "味方単体" : "味方全体";
   }
+
+  const list = ["単体","2体","3体","前列","後列","敵全体"];
+  return list[Math.floor(Math.random()*list.length)];
 }
 
 // ===============================
@@ -75,21 +68,10 @@ function generateSkillName(category, main, element, rarity){
     return `${element}の${healNames[Math.floor(Math.random()*healNames.length)]}`;
   }
 
-  if(category==="authority"){
-    return `${element}の覚醒`;
-  }
-
   const p = nameParts.prefix[Math.floor(Math.random()*nameParts.prefix.length)];
-
-  let core;
-
-  if(main==="物理"){
-    core = nameParts.physical[Math.floor(Math.random()*nameParts.physical.length)];
-  }else if(main==="魔法"){
-    core = nameParts.magic[Math.floor(Math.random()*nameParts.magic.length)];
-  }else{
-    core = nameParts.hybrid[Math.floor(Math.random()*nameParts.hybrid.length)];
-  }
+  const core = main==="物理"
+    ? nameParts.physical[Math.floor(Math.random()*nameParts.physical.length)]
+    : nameParts.magic[Math.floor(Math.random()*nameParts.magic.length)];
 
   const s = rarity>=4
     ? nameParts.suffix[Math.floor(Math.random()*nameParts.suffix.length)]
@@ -99,62 +81,89 @@ function generateSkillName(category, main, element, rarity){
 }
 
 // ===============================
-// 🔷 効果生成（拡張版）
+// 🔷 デバフ生成
 // ===============================
-function createEffect(category){
+function createDebuffEffect(rarity){
 
+  const list = [];
+  const pool = ["atkDown","defDown","spdDown","critDown"];
+
+  const count = 1 + Math.floor(rarity/3);
+
+  for(let i=0;i<count;i++){
+    const type = pool[Math.floor(Math.random()*pool.length)];
+
+    list.push({
+      type,
+      value:10 + rarity*5,
+      duration:2 + Math.floor(rarity/2),
+      chance:60
+    });
+  }
+
+  return list;
+}
+
+// ===============================
+// 🔷 効果生成（最重要）
+// ===============================
+function createEffect(category, rarity){
+
+  // 🔴 攻撃
   if(category==="attack"){
-
-    const extra = [];
-
-    // 防御ダウン
-    if(Math.random() < 0.4){
-      extra.push({
-        type:"defDown",
-        value:10 + Math.floor(Math.random()*20),
-        chance:30 + Math.floor(Math.random()*40)
-      });
-    }
-
-    // 追撃
-    if(Math.random() < 0.3){
-      extra.push({
-        type:"multiHit",
-        hits:2 + Math.floor(Math.random()*2),
-        chance:40
-      });
-    }
-
-    // 吸収
-    if(Math.random() < 0.2){
-      extra.push({
-        type:"drain",
-        value:15 + Math.floor(Math.random()*15)
-      });
-    }
-
     return {
       type:"damage",
-      extra
+      extra:[]
     };
   }
 
-  if(category==="buff"){
+  // 🟣 デバフ（攻撃＋弱体）
+  if(category==="debuff"){
     return {
-      type:"atkUp",
-      value:20
+      type:"damage",
+      extra:createDebuffEffect(rarity)
     };
   }
 
+  // 🟢 バフ
+  if(category==="buff"){
+
+    const buffs = [];
+    const pool = ["regen","speedUp","healBoost","skillBoost"];
+
+    const count = 1 + Math.floor(rarity/3);
+
+    for(let i=0;i<count;i++){
+      const type = pool[Math.floor(Math.random()*pool.length)];
+
+      if(type==="regen"){
+        buffs.push({type:"regen", value:5+rarity*3, duration:3});
+      }
+
+      if(type==="speedUp"){
+        buffs.push({type:"speedUp", value:10+rarity*5, duration:2});
+      }
+
+      if(type==="healBoost"){
+        buffs.push({type:"healBoost", value:15+rarity*5, duration:3});
+      }
+
+      if(type==="skillBoost"){
+        buffs.push({type:"skillBoost", value:10+rarity*5, duration:2});
+      }
+    }
+
+    return { type:"buff", buffs };
+  }
+
+  // 💚 回復（バフ付き）
   if(category==="heal"){
     return {
-      type:"heal"
-    };
-  }
-
-  if(category==="authority"){
-    return {
-      type:"allUp"
+      type:"heal",
+      value:20 + rarity*10,
+      bonusBuff: Math.random()<0.5
+        ? [{type:"regen", value:5+rarity*3, duration:3}]
+        : []
     };
   }
 
@@ -170,45 +179,35 @@ function generateSkill(i){
   const total = getTotalPower();
   const rarity = getRarity(total);
 
-  const category = getSkillCategory(i);
-  const main = getMainType(t);
-  const element = elements[Math.floor(Math.random()*elements.length)];
+  // 🔥 バランス型対応
+  let main;
+  if(Math.abs(t.physical - t.magic) < 5){
+    main = Math.random()<0.5 ? "物理" : "魔法";
+  }else{
+    main = t.physical > t.magic ? "物理" : "魔法";
+  }
 
-  let power = 0;
-  let hits = 1;
-  let target = "単体";
+  const category = getSkillCategory();
+  const element = elements[Math.floor(Math.random()*elements.length)];
+  const target = getTarget(category);
 
   const variance = (Math.random()*0.4 - 0.2);
 
-  if(category==="attack"){
+  let power = 0;
+  let hits = 1;
+
+  if(category==="attack" || category==="debuff"){
     power = Number((1 + total*0.002 + rarity*0.3 + variance).toFixed(2));
-    hits = rarity>=4 ? Math.floor(Math.random()*3)+2 : 1;
-    target = rarity>=3 && Math.random()>0.5 ? "全体" : "単体";
+    hits = rarity>=4 ? Math.floor(Math.random()*3)+1 : 1;
   }
 
   if(category==="heal"){
     power = Number((total*0.01 + rarity*2).toFixed(2));
-    target = "味方単体";
   }
 
-  if(category==="buff"){
-    target = "味方全体";
-  }
-
-  if(category==="authority"){
-    target = "自分";
-  }
-
-  // 🔥 物魔強化
-  if(main==="物魔"){
-    power *= 1.2;
-    hits += 1;
-  }
-
-  // 🔥 コスト
   const cost = {
-    sp: (main==="物理" || main==="物魔") ? Math.floor(power*3) : 0,
-    mp: (main==="魔法" || main==="物魔") ? Math.floor(power*3) : 0
+    sp: main==="物理" ? Math.floor(power*5) : 0,
+    mp: main==="魔法" ? Math.floor(power*5) : 0
   };
 
   return {
@@ -222,13 +221,13 @@ function generateSkill(i){
     category,
     rarity,
     cost,
-    effectData:createEffect(category),
+    effectData:createEffect(category, rarity),
     isCustom:true
   };
 }
 
 // ===============================
-// 🔷 キャッシュ管理
+// 🔷 キャッシュ管理（神）
 // ===============================
 function getGeneratedSkills(){
 
@@ -283,34 +282,6 @@ const skillMaster = [
     isCustom:false
   }
 ];
-function renderSlotVoices(){
-
-  const div = document.getElementById("slotVoices");
-  if(!div) return;
-
-  const data = JSON.parse(localStorage.getItem("slotVoices")) || {};
-  const count = getSkillSlots();
-
-  div.innerHTML = "";
-
-  for(let i=0;i<count;i++){
-
-    div.innerHTML += `
-      <div class="box">
-        スロット${i+1}<br>
-        <input
-          placeholder="セリフ"
-          value="${data[i] || ""}"
-          onchange="
-            let v = JSON.parse(localStorage.getItem('slotVoices')) || {};
-            v[${i}] = this.value;
-            localStorage.setItem('slotVoices', JSON.stringify(v));
-          "
-        >
-      </div>
-    `;
-  }
-}
 
 // ===============================
 // 🔷 全取得
