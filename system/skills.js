@@ -1,7 +1,7 @@
-　// ===============================
+// ===============================
 // 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "3.0";
+const SKILL_VERSION = "4.0";
 
 // ===============================
 // 🔷 属性
@@ -31,28 +31,23 @@ function getRarity(total){
   return 2;
 }
 
+// ===============================
+// 🔷 コンボ
+// ===============================
 function createComboEffect(rarity){
 
   const list = [];
 
   if(Math.random()<0.4){
-    list.push({
-      type:"bonusVsStatus",
-      value:20 + rarity*10
-    });
+    list.push({ type:"bonusVsStatus", value:20 + rarity*10 });
   }
 
   if(Math.random()<0.3){
-    list.push({
-      type:"bonusPerDebuff",
-      value:10
-    });
+    list.push({ type:"bonusPerDebuff", value:10 });
   }
 
   if(Math.random()<0.2){
-    list.push({
-      type:"critIfFrozen"
-    });
+    list.push({ type:"critIfFrozen" });
   }
 
   return list;
@@ -63,8 +58,8 @@ function createComboEffect(rarity){
 // ===============================
 function getSkillCategory(){
   const r = Math.random();
-  if(r < 0.4) return "attack";
-  if(r < 0.7) return "debuff";
+  if(r < 0.35) return "attack";
+  if(r < 0.65) return "debuff";
   if(r < 0.9) return "buff";
   return "heal";
 }
@@ -108,47 +103,64 @@ function generateSkillName(category, main, element, rarity){
 }
 
 // ===============================
-// 🔷 デバフ生成
+// 🔷 デバフ＋状態異常
 // ===============================
 function createDebuffEffect(rarity){
 
   const list = [];
-  const pool = ["atkDown","defDown","spdDown","critDown"];
+  const pool = ["atkDown","defDown","spdDown","critDown","poison","burn","freeze"];
 
   const count = 1 + Math.floor(rarity/3);
 
   for(let i=0;i<count;i++){
+
     const type = pool[Math.floor(Math.random()*pool.length)];
 
-    list.push({
-      type,
-      value:10 + rarity*5,
-      duration:2 + Math.floor(rarity/2),
-      chance:60
-    });
+    if(["poison","burn","freeze"].includes(type)){
+      list.push({
+        type,
+        value:5+rarity*3,
+        duration:2+Math.floor(rarity/2),
+        chance:40
+      });
+    }else{
+      list.push({
+        type,
+        value:10+rarity*5,
+        duration:2+Math.floor(rarity/2),
+        chance:60
+      });
+    }
   }
 
   return list;
 }
 
 // ===============================
-// 🔷 効果生成（最重要）
+// 🔷 効果生成（完全版）
 // ===============================
 function createEffect(category, rarity){
 
   // 🔴 攻撃
   if(category==="attack"){
+
     return {
       type:"damage",
-      extra:[]
+      extra:[
+        ...(Math.random()<0.4 ? [{type:"multiHit", hits:2+Math.floor(rarity/2), chance:40}] : []),
+        ...(Math.random()<0.3 ? [{type:"drain", value:10+rarity*5}] : [])
+      ],
+      combo:createComboEffect(rarity)
     };
   }
 
-  // 🟣 デバフ（攻撃＋弱体）
+  // 🟣 デバフ
   if(category==="debuff"){
+
     return {
       type:"damage",
-      extra:createDebuffEffect(rarity)
+      extra:createDebuffEffect(rarity),
+      combo:createComboEffect(rarity)
     };
   }
 
@@ -161,6 +173,7 @@ function createEffect(category, rarity){
     const count = 1 + Math.floor(rarity/3);
 
     for(let i=0;i<count;i++){
+
       const type = pool[Math.floor(Math.random()*pool.length)];
 
       if(type==="regen"){
@@ -183,8 +196,9 @@ function createEffect(category, rarity){
     return { type:"buff", buffs };
   }
 
-  // 💚 回復（バフ付き）
+  // 💚 回復
   if(category==="heal"){
+
     return {
       type:"heal",
       value:20 + rarity*10,
@@ -193,12 +207,6 @@ function createEffect(category, rarity){
         : []
     };
   }
-
-return {
-  type:"damage",
-  extra:createDebuffEffect(rarity),
-  combo:createComboEffect(rarity)
-};
 
   return null;
 }
@@ -212,7 +220,6 @@ function generateSkill(i){
   const total = getTotalPower();
   const rarity = getRarity(total);
 
-  // 🔥 バランス型対応
   let main;
   if(Math.abs(t.physical - t.magic) < 5){
     main = Math.random()<0.5 ? "物理" : "魔法";
@@ -260,7 +267,7 @@ function generateSkill(i){
 }
 
 // ===============================
-// 🔷 キャッシュ管理（神）
+// 🔷 キャッシュ管理
 // ===============================
 function getGeneratedSkills(){
 
