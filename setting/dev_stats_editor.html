@@ -301,9 +301,15 @@ function render(){
 }
 
 </script>
-<script src="../system/skills.js?v=2"></script>
+<script src="../system/skills.js?v=3"></script>
 <script>
-render();
+
+localStorage.removeItem("genSkills"); // ←1回だけ入れる
+
+window.onload = function(){
+  render();
+};
+
 </script>
 </body>
 </html>
