@@ -21,15 +21,22 @@ body{
 .skill-row{
   display:flex;
   gap:6px;
-  margin-bottom:4px;
+  margin-bottom:2px;   /* ←詰める */
   border:1px solid rgba(0,255,255,0.3);
-  padding:1px;
+  padding:2px 4px;     /* ←上下圧縮 */
+  align-items:center;  /* ←中央揃え */
 }
-select{ width:180px; }
-.skill-list{
-  max-height:250px;
-  overflow-y:auto;
-  border:1px solid #00eaff;
+
+.skill-row .box{
+  padding:2px 4px;     /* ←中も圧縮 */
+  font-size:12px;      /* ←小さく */
+  line-height:1.2;     /* ←詰める */
+}
+
+select{
+  width:160px;
+  height:24px;         /* ←高さ固定 */
+  font-size:12px;
 }
 .skill-item{
   padding:6px;
