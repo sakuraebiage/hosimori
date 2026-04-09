@@ -2,7 +2,19 @@
 // 🔷 バージョン管理
 // ===============================
 const SKILL_VERSION = "4.0";
-
+if(typeof getTotalStats !== "function"){
+  function getTotalStats(){
+    return {
+      physical:10,
+      magic:10,
+      vitality:10,
+      endurance:10,
+      agility:10,
+      spirit:10,
+      luck:10
+    };
+  }
+}
 // ===============================
 // 🔷 属性
 // ===============================
