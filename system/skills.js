@@ -1,21 +1,16 @@
 // ===============================
 // 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "4.1";
+const SKILL_VERSION = "4.2";
 
 // ===============================
-// 🔷 安全ガード（超重要）
+// 🔷 安全ガード
 // ===============================
 if(typeof getTotalStats !== "function"){
   window.getTotalStats = function(){
     return {
-      physical:10,
-      magic:10,
-      vitality:10,
-      endurance:10,
-      agility:10,
-      spirit:10,
-      luck:10
+      physical:10, magic:10, vitality:10,
+      endurance:10, agility:10, spirit:10, luck:10
     };
   };
 }
@@ -31,6 +26,21 @@ if(typeof getTotalPower !== "function"){
 // 🔷 属性
 // ===============================
 const elements = ["無","火","水","雷","氷","風","土","光","闇"];
+
+// ===============================
+// 🔷 属性別バフ（重要）
+// ===============================
+const elementBuffMap = {
+  無: ["normalAtkUp","counter","preStrike"],
+  火: ["burnBoost","atkUp"],
+  水: ["regen","healBoost"],
+  雷: ["speedUp","multiHitBoost"],
+  氷: ["freezeBoost","defUp"],
+  風: ["speedUp","evasion"],
+  土: ["defUp","damageCut"],
+  光: ["healBoost","revive"],
+  闇: ["drain","critUp"]
+};
 
 // ===============================
 // 🔷 名前素材
@@ -59,7 +69,6 @@ function getRarity(total){
 // 🔷 コンボ
 // ===============================
 function createComboEffect(rarity){
-
   const list = [];
 
   if(Math.random()<0.4){
@@ -140,37 +149,89 @@ function createDebuffEffect(rarity){
 
     const type = pool[Math.floor(Math.random()*pool.length)];
 
-    if(["poison","burn","freeze"].includes(type)){
-      list.push({
-        type,
-        value:5+rarity*3,
-        duration:2+Math.floor(rarity/2),
-        chance:40
-      });
-    }else{
-      list.push({
-        type,
-        value:10+rarity*5,
-        duration:2+Math.floor(rarity/2),
-        chance:60
-      });
-    }
+    list.push({
+      type,
+      value:10+rarity*5,
+      duration:2+Math.floor(rarity/2),
+      chance:60
+    });
   }
 
   return list;
 }
 
 // ===============================
+// 🔷 バフ生成（属性連動🔥）
+// ===============================
+function createBuffEffect(rarity, element){
+
+  const buffs = [];
+  const pool = elementBuffMap[element] || [];
+
+  const count = 1 + Math.floor(rarity/3);
+
+  for(let i=0;i<count;i++){
+
+    const type = pool[Math.floor(Math.random()*pool.length)];
+
+    switch(type){
+
+      case "normalAtkUp":
+        buffs.push({type:"normalAtkUp", value:20+rarity*10, duration:3});
+        break;
+
+      case "counter":
+        buffs.push({type:"counter", chance:30+rarity*5, duration:2});
+        break;
+
+      case "preStrike":
+        buffs.push({type:"preStrike", chance:30+rarity*5, duration:2});
+        break;
+
+      case "regen":
+        buffs.push({type:"regen", value:5+rarity*3, duration:3});
+        break;
+
+      case "speedUp":
+        buffs.push({type:"speedUp", value:10+rarity*5, duration:2});
+        break;
+
+      case "healBoost":
+        buffs.push({type:"healBoost", value:15+rarity*5, duration:3});
+        break;
+
+      case "atkUp":
+        buffs.push({type:"atkUp", value:15+rarity*5, duration:3});
+        break;
+
+      case "defUp":
+        buffs.push({type:"defUp", value:15+rarity*5, duration:3});
+        break;
+
+      case "critUp":
+        buffs.push({type:"critUp", value:10+rarity*5, duration:3});
+        break;
+
+      case "drain":
+        buffs.push({type:"drain", value:10+rarity*5});
+        break;
+    }
+  }
+
+  return buffs;
+}
+
+// ===============================
 // 🔷 効果生成
 // ===============================
-function createEffect(category, rarity){
+function createEffect(category, rarity, element){
 
   if(category==="attack"){
     return {
       type:"damage",
       extra:[
         ...(Math.random()<0.4 ? [{type:"multiHit", hits:2+Math.floor(rarity/2), chance:40}] : []),
-        ...(Math.random()<0.3 ? [{type:"drain", value:10+rarity*5}] : [])
+        ...(Math.random()<0.4 ? createDebuffEffect(rarity) : [])
       ],
       combo:createComboEffect(rarity)
     };
@@ -185,43 +246,17 @@ function createEffect(category, rarity){
   }
 
   if(category==="buff"){
-
-    const buffs = [];
-    const pool = ["regen","speedUp","healBoost","skillBoost"];
-
-    const count = 1 + Math.floor(rarity/3);
-
-    for(let i=0;i<count;i++){
-
-      const type = pool[Math.floor(Math.random()*pool.length)];
-
-      if(type==="regen"){
-        buffs.push({type:"regen", value:5+rarity*3, duration:3});
-      }
-
-      if(type==="speedUp"){
-        buffs.push({type:"speedUp", value:10+rarity*5, duration:2});
-      }
-
-      if(type==="healBoost"){
-        buffs.push({type:"healBoost", value:15+rarity*5, duration:3});
-      }
-
-      if(type==="skillBoost"){
-        buffs.push({type:"skillBoost", value:10+rarity*5, duration:2});
-      }
-    }
-
-    return { type:"buff", buffs };
+    return {
+      type:"buff",
+      buffs:createBuffEffect(rarity, element)
+    };
   }
 
   if(category==="heal"){
     return {
       type:"heal",
       value:20 + rarity*10,
-      bonusBuff: Math.random()<0.5
-        ? [{type:"regen", value:5+rarity*3, duration:3}]
-        : []
+      bonusBuff:createBuffEffect(rarity, element)
     };
   }
 
@@ -278,7 +313,7 @@ function generateSkill(i){
     category,
     rarity,
     cost,
-    effectData:createEffect(category, rarity),
+    effectData:createEffect(category, rarity, element),
     isCustom:true
   };
 }
