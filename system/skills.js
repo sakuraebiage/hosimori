@@ -1,9 +1,13 @@
 // ===============================
 // 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "4.0";
+const SKILL_VERSION = "4.1";
+
+// ===============================
+// 🔷 安全ガード（超重要）
+// ===============================
 if(typeof getTotalStats !== "function"){
-  function getTotalStats(){
+  window.getTotalStats = function(){
     return {
       physical:10,
       magic:10,
@@ -13,8 +17,16 @@ if(typeof getTotalStats !== "function"){
       spirit:10,
       luck:10
     };
-  }
+  };
 }
+
+if(typeof getTotalPower !== "function"){
+  window.getTotalPower = function(){
+    const t = getTotalStats();
+    return Object.values(t).reduce((a,b)=>a+b,0);
+  };
+}
+
 // ===============================
 // 🔷 属性
 // ===============================
@@ -149,13 +161,11 @@ function createDebuffEffect(rarity){
 }
 
 // ===============================
-// 🔷 効果生成（完全版）
+// 🔷 効果生成
 // ===============================
 function createEffect(category, rarity){
 
-  // 🔴 攻撃
   if(category==="attack"){
-
     return {
       type:"damage",
       extra:[
@@ -166,9 +176,7 @@ function createEffect(category, rarity){
     };
   }
 
-  // 🟣 デバフ
   if(category==="debuff"){
-
     return {
       type:"damage",
       extra:createDebuffEffect(rarity),
@@ -176,7 +184,6 @@ function createEffect(category, rarity){
     };
   }
 
-  // 🟢 バフ
   if(category==="buff"){
 
     const buffs = [];
@@ -208,9 +215,7 @@ function createEffect(category, rarity){
     return { type:"buff", buffs };
   }
 
-  // 💚 回復
   if(category==="heal"){
-
     return {
       type:"heal",
       value:20 + rarity*10,
@@ -340,83 +345,4 @@ const skillMaster = [
 // ===============================
 function getAllSkills(){
   return [...skillMaster, ...getGeneratedSkills()];
-}
-
-// ===============================
-// 🔷 効果テキスト（完全版）
-// ===============================
-function getEffectText(skill){
-
-  const e = skill.effectData;
-  if(!e) return "効果なし";
-
-  let parts = [];
-
-  // ======================
-  // 基本
-  // ======================
-  if(e.type==="damage") parts.push("💥ダメージ");
-  if(e.type==="heal") parts.push(`💚回復(${e.value})`);
-
-  // ======================
-  // 🟢 バフ
-  // ======================
-  if(e.type==="buff" && e.buffs){
-    return e.buffs.map(b=>{
-
-      if(b.type==="regen") return `🟢リジェネ(${b.duration}T)`;
-      if(b.type==="speedUp") return `🟢速度+${b.value}%(${b.duration}T)`;
-      if(b.type==="healBoost") return `🟢回復量+${b.value}%(${b.duration}T)`;
-      if(b.type==="skillBoost") return `🟢スキル+${b.value}%(${b.duration}T)`;
-
-    }).join(" / ");
-  }
-
-  // ======================
-  // 🔥 extra（デバフ・状態異常）
-  // ======================
-  if(e.extra){
-
-    e.extra.forEach(x=>{
-
-      // 🔻デバフ
-      if(x.type==="atkDown") parts.push(`🟣攻撃-${x.value}%(${x.duration}T/${x.chance}%)`);
-      if(x.type==="defDown") parts.push(`🟣防御-${x.value}%(${x.duration}T/${x.chance}%)`);
-      if(x.type==="spdDown") parts.push(`🟣速度-${x.value}%(${x.duration}T/${x.chance}%)`);
-      if(x.type==="critDown") parts.push(`🟣会心-${x.value}%(${x.duration}T/${x.chance}%)`);
-
-      // ☠状態異常
-      if(x.type==="poison") parts.push(`☠毒(${x.duration}T/${x.chance}%)`);
-      if(x.type==="burn") parts.push(`🔥火傷(${x.duration}T/${x.chance}%)`);
-      if(x.type==="freeze") parts.push(`❄凍結(${x.duration}T/${x.chance}%)`);
-
-      // ⚡特殊
-      if(x.type==="multiHit") parts.push(`⚡追撃${x.hits}回(${x.chance}%)`);
-      if(x.type==="drain") parts.push(`🩸吸収${x.value}%`);
-    });
-  }
-
-  // ======================
-  // 🧠 コンボ
-  // ======================
-  if(e.combo){
-
-    e.combo.forEach(c=>{
-
-      if(c.type==="bonusVsStatus"){
-        parts.push(`🧠状態異常特効+${c.value}%`);
-      }
-
-      if(c.type==="bonusPerDebuff"){
-        parts.push(`🧠デバフ数×${c.value}%`);
-      }
-
-      if(c.type==="critIfFrozen"){
-        parts.push(`🧠凍結時クリティカル`);
-      }
-
-    });
-  }
-
-  return parts.join("｜");
 }
