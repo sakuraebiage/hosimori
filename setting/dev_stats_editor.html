@@ -105,28 +105,23 @@ function getEffectText(skill){
       if(b.type==="defUp") text.push(`防御↑${b.value}%`);
       if(b.type==="speedUp") text.push(`速度↑${b.value}`);
       if(b.type==="regen") text.push(`再生(${b.value})`);
+      if(b.type==="critUp") text.push(`会心↑${b.value}%`);
     });
   }
-
-  return text.join("｜");
-}
 
   // 🔥 デバフ・状態異常
   if(e.extra){
     e.extra.forEach(x=>{
 
-      // 🔻デバフ
       if(x.type==="atkDown") text.push(`攻撃↓${x.value}%(${x.duration}T)`);
       if(x.type==="defDown") text.push(`防御↓${x.value}%(${x.duration}T)`);
       if(x.type==="spdDown") text.push(`速度↓${x.value}%(${x.duration}T)`);
 
-      // 🔥状態異常
       if(x.type==="burn") text.push(`🔥火傷(${x.duration}T)`);
       if(x.type==="freeze") text.push(`❄凍結(${x.duration}T)`);
       if(x.type==="poison") text.push(`☠毒(${x.duration}T)`);
       if(x.type==="shock") text.push(`⚡感電(${x.duration}T)`);
 
-      // 特殊
       if(x.type==="multiHit") text.push(`多段(${x.hits})`);
     });
   }
