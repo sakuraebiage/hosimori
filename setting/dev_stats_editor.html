@@ -89,20 +89,27 @@ function getEffectText(skill){
 
   // メイン
   if(e.type==="damage") text.push("ダメージ");
-  if(e.type==="heal") text.push("HP回復");
+
+  if(e.type==="heal"){
+    if(e.healType==="hp") text.push("HP回復");
+    if(e.healType==="sp") text.push("SP回復");
+    if(e.healType==="mp") text.push("MP回復");
+  }
+
   if(e.type==="buff") text.push("強化");
 
-  // 🔷 バフ
+  // バフ
   if(e.buffs){
     e.buffs.forEach(b=>{
       if(b.type==="atkUp") text.push(`攻撃↑${b.value}%`);
       if(b.type==="defUp") text.push(`防御↑${b.value}%`);
-      if(b.type==="speedUp") text.push(`速度↑${b.value ?? ""}`);
+      if(b.type==="speedUp") text.push(`速度↑${b.value}`);
       if(b.type==="regen") text.push(`再生(${b.value})`);
-      if(b.type==="critUp") text.push(`会心↑${b.value}%`);
-      if(b.type==="counter") text.push(`反撃${b.chance}%`);
     });
   }
+
+  return text.join("｜");
+}
 
   // 🔥 デバフ・状態異常
   if(e.extra){
