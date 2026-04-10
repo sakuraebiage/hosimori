@@ -314,6 +314,57 @@ function render(){
   renderTotal();
   renderSkills();
   renderSkillList();
+  renderSkillVoices(); ←これを足す！！！
+}
+
+const elementColors = {
+  無:"#ccc", 火:"#ff4d4d", 水:"#4da6ff", 雷:"#e6e600",
+  氷:"#66ffff", 風:"#66ff99", 土:"#cc9966",
+  光:"#ffffcc", 闇:"#9933ff"
+};
+
+function renderSkillVoices(){
+
+  const div = document.getElementById("skillVoices");
+  div.innerHTML = "";
+
+  const skills = getAllSkills();
+  const saved = JSON.parse(localStorage.getItem("skillVoices")) || {};
+
+  for(let i=0;i<getSkillSlots();i++){
+
+    const id = player.skillsEquipped[i];
+    const skill = skills.find(s=>s.id===id);
+    if(!skill) continue;
+
+    const data = saved["slot_"+i] || {text:"",icon:""};
+    const color = elementColors[skill.element] || "#fff";
+
+    div.innerHTML += `
+      <div class="box" style="border-color:${color}">
+        <b style="color:${color}">
+          Slot${i+1}｜${getSkillName(skill)}
+        </b>
+
+        <input style="width:100%"
+          placeholder="アイコンURL"
+          value="${data.icon}"
+          onchange="saveVoice(${i},this.value,'icon')">
+
+        <input style="width:100%"
+          placeholder="セリフ"
+          value="${data.text}"
+          onchange="saveVoice(${i},this.value,'text')">
+      </div>
+    `;
+  }
+}
+
+function saveVoice(slot,val,type){
+  const data = JSON.parse(localStorage.getItem("skillVoices")) || {};
+  if(!data["slot_"+slot]) data["slot_"+slot]={};
+  data["slot_"+slot][type]=val;
+  localStorage.setItem("skillVoices",JSON.stringify(data));
 }
 
 </script>
