@@ -6,6 +6,7 @@ const SKILL_VERSION = "4.4";
 // ===============================
 // 🔷 安全ガード
 // ===============================
+console.log("🔥 skills.js 読み込まれた");
 if(typeof getTotalStats !== "function"){
   window.getTotalStats = function(){
     return {
