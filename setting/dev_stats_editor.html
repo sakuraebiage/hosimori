@@ -268,10 +268,8 @@ function renderSkills(){
           ? `No.${skills.indexOf(skill)+1}
           ｜${getSkillName(skill)}
 
-          ${skill.category==="attack"
-            ? `｜威力:${skill.power ?? 1}`
-            : `｜効果:${getEffectText(skill)}`
-          }
+          ${skill.power ? `｜威力:${skill.power.toFixed(2)}` : ""}
+　　　　　　　｜効果:${getEffectText(skill)}
 
           ｜${skill.target ?? "単体"}
           ｜${skill.type ?? "物理"}
@@ -299,7 +297,9 @@ function renderSkillList(){
     .forEach((s,index)=>{
       div.innerHTML+=`
         <div class="skill-item">
-          No.${index+1}｜${getSkillName(s)}｜威力:${s.power ?? 1}
+          No.${index+1}｜${getSkillName(s)}
+${s.power ? `｜威力:${s.power.toFixed(2)}` : ""}
+｜効果:${getEffectText(s)}
           ${s.isCustom?`<button onclick="renameSkill('${s.id}')">✏</button>`:"🔒"}
         </div>`;
     });
