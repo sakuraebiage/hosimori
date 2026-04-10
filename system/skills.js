@@ -313,3 +313,111 @@ function createEffect(category, rarity, element){
 
   return null;
 }
+
+// ===============================
+// 🔷 スキル生成
+// ===============================
+function generateSkill(i){
+
+  const t = getTotalStats();
+  const total = getTotalPower();
+  const rarity = getRarity(total);
+
+  let main;
+  if(Math.abs(t.physical - t.magic) < 5){
+    main = Math.random()<0.5 ? "物理" : "魔法";
+  }else{
+    main = t.physical > t.magic ? "物理" : "魔法";
+  }
+
+  const category = getSkillCategory();
+  const element = elements[Math.floor(Math.random()*elements.length)];
+  const target = getTarget(category);
+
+  let power = 1;
+  let hits = 1;
+
+  const cost = {
+    sp: main==="物理" ? Math.floor(power*5) : 0,
+    mp: main==="魔法" ? Math.floor(power*5) : 0
+  };
+
+  return {
+    id:"g"+i,
+    name: generateSkillName(category, main, element, rarity),
+    power,
+    hits,
+    target,
+    type:main,
+    element,
+    category,
+    rarity,
+    cost,
+    effectData:createEffect(category, rarity, element),
+    isCustom:true
+  };
+}
+
+// ===============================
+// 🔷 キャッシュ管理
+// ===============================
+function getGeneratedSkills(){
+
+  const savedVersion = localStorage.getItem("skillVersion");
+
+  if(savedVersion !== SKILL_VERSION){
+    localStorage.removeItem("genSkills");
+    localStorage.setItem("skillVersion", SKILL_VERSION);
+  }
+
+  let data = JSON.parse(localStorage.getItem("genSkills"));
+
+  if(!data){
+    data=[];
+    for(let i=0;i<50;i++){
+      data.push(generateSkill(i));
+    }
+    localStorage.setItem("genSkills", JSON.stringify(data));
+  }
+
+  return data;
+}
+
+// ===============================
+// 🔷 固定スキル
+// ===============================
+const skillMaster = [
+  {
+    id:"s1",
+    name:"星裂斬",
+    power:1.2,
+    hits:1,
+    target:"単体",
+    type:"物理",
+    element:"無",
+    category:"attack",
+    cost:{sp:5,mp:0},
+    effectData:{type:"damage"},
+    isCustom:false
+  },
+  {
+    id:"s2",
+    name:"蒼流波",
+    power:1.0,
+    hits:1,
+    target:"全体",
+    type:"魔法",
+    element:"水",
+    category:"attack",
+    cost:{sp:0,mp:8},
+    effectData:{type:"damage"},
+    isCustom:false
+  }
+];
+
+// ===============================
+// 🔷 全取得
+// ===============================
+function getAllSkills(){
+  return [...skillMaster, ...getGeneratedSkills()];
+}
