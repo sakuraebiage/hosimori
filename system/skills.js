@@ -304,13 +304,13 @@ function createEffect(category, rarity, element){
     };
   }
 
-  if(category==="heal"){
-    return {
-      type:"heal",
-      value:20 + rarity*10,
-      bonusBuff:createBuffEffect(rarity, element)
-    };
-  }
+if(category==="heal"){
+  return {
+    type:"heal",
+    value:20 + rarity*10,
+    bonusBuff:createBuffEffect(rarity, element)
+  };
+}
 
   return null;
 }
