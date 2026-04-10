@@ -338,6 +338,17 @@ function generateSkill(i){
   let power = 1;
   let hits = 1;
 
+const variance = (Math.random()*0.4 - 0.2);
+
+if(category==="attack" || category==="debuff"){
+  power = Number((1 + total*0.002 + rarity*0.3 + variance).toFixed(2));
+  hits = rarity>=4 ? Math.floor(Math.random()*3)+1 : 1;
+}
+
+if(category==="heal"){
+  power = Number((total*0.01 + rarity*2).toFixed(2));
+}
+
   const cost = {
     sp: main==="物理" ? Math.floor(power*5) : 0,
     mp: main==="魔法" ? Math.floor(power*5) : 0
@@ -366,7 +377,6 @@ function getGeneratedSkills(){
 
   const savedVersion = localStorage.getItem("skillVersion");
 
-  localStorage.removeItem("genSkills");
   localStorage.setItem("skillVersion", SKILL_VERSION);
 
   let data = JSON.parse(localStorage.getItem("genSkills"));
