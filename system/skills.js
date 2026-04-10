@@ -1,7 +1,7 @@
 // ===============================
 // 🔷 バージョン管理
 // ===============================
-const SKILL_VERSION = "4.3";
+const SKILL_VERSION = "4.4";
 
 // ===============================
 // 🔷 安全ガード
@@ -365,10 +365,8 @@ function getGeneratedSkills(){
 
   const savedVersion = localStorage.getItem("skillVersion");
 
-  if(savedVersion !== SKILL_VERSION){
-    localStorage.removeItem("genSkills");
-    localStorage.setItem("skillVersion", SKILL_VERSION);
-  }
+  localStorage.removeItem("genSkills");
+  localStorage.setItem("skillVersion", SKILL_VERSION);
 
   let data = JSON.parse(localStorage.getItem("genSkills"));
 
