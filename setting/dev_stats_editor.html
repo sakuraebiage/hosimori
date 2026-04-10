@@ -257,29 +257,29 @@ function renderSkills(){
       </option>`;
     });
 
-    div.innerHTML+=`
-      <div class="skill-row">
-        onchange="equipSkill(${i}, this.value)"
-          ${options}
-        </select>
+div.innerHTML+=`
+  <div class="skill-row">
+    <select onchange="equipSkill(${i}, this.value)">
+      ${options}
+    </select>
 
-        <div class="box" style="flex:1;">
-          ${skill
-          ? `No.${skills.indexOf(skill)+1}
-          ｜${getSkillName(skill)}
+    <div class="box" style="flex:1;">
+      ${skill
+      ? `No.${skills.indexOf(skill)+1}
+      ｜${getSkillName(skill)}
 
-          ${skill.power ? `｜威力:${skill.power.toFixed(2)}` : ""}
-　　　　　　　｜効果:${getEffectText(skill)}
+      ${skill.power ? `｜威力:${skill.power.toFixed(2)}` : ""}
+      ｜効果:${getEffectText(skill)}
 
-          ｜${skill.target ?? "単体"}
-          ｜${skill.type ?? "物理"}
-          ｜${skill.hits ?? 1}hit
-          ｜SP:${skill.cost?.sp ?? 0} / MP:${skill.cost?.mp ?? 0}
+      ｜${skill.target ?? "単体"}
+      ｜${skill.type ?? "物理"}
+      ｜${skill.hits ?? 1}hit
+      ｜SP:${skill.cost?.sp ?? 0} / MP:${skill.cost?.mp ?? 0}
 
-          ${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
-          : "未設定"}
-        </div>
-      </div>`;
+      ${skill.isCustom?`<button onclick="renameSkill('${skill.id}')">✏</button>`:""}`
+      : "未設定"}
+    </div>
+  </div>`;
   }
 }
 
