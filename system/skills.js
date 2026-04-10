@@ -377,7 +377,10 @@ function getGeneratedSkills(){
 
   const savedVersion = localStorage.getItem("skillVersion");
 
-  localStorage.setItem("skillVersion", SKILL_VERSION);
+  if(savedVersion !== SKILL_VERSION){
+    localStorage.removeItem("genSkills");
+    localStorage.setItem("skillVersion", SKILL_VERSION);
+  }
 
   let data = JSON.parse(localStorage.getItem("genSkills"));
 
