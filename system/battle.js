@@ -55,6 +55,15 @@ function applyEffect(attacker, target, skill){
 
   const e = skill.effectData;
   let logs = [];
+  
+  // 命中判定
+let hit = attacker.stats.agility * 1.2 + attacker.stats.luck * 0.5;
+let evade = target.stats.agility * 1.0;
+
+if(Math.random()*100 > hit - evade){
+  logs.push(`${target.name}にMISS！`);
+  return logs;
+}
 
   // ======================
   // 💥 ダメージ
