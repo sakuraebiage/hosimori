@@ -85,24 +85,47 @@ function getEffectText(skill){
   const e = skill.effectData;
   if(!e) return "効果なし";
 
-  switch(e.type){
+  let text = [];
 
-    case "atkUp": return `攻撃+${e.value}%`;
-    case "defUp": return `防御+${e.value}%`;
-    case "spdUp": return `速度+${e.value}%`;
-    case "critUp": return `会心率+${e.value}%`;
+  // メイン
+  if(e.type==="damage") text.push("ダメージ");
+  if(e.type==="heal") text.push("HP回復");
+  if(e.type==="buff") text.push("強化");
 
-    case "heal": return "HP回復";
-    case "damage": return "ダメージ";
-
-    case "allUp": return "全能力上昇";
-    case "invincible": return "ダメージ無効";
-    case "extraTurn": return "追加行動";
-
-    default: return "特殊効果";
+  // 🔷 バフ
+  if(e.buffs){
+    e.buffs.forEach(b=>{
+      if(b.type==="atkUp") text.push(`攻撃↑${b.value}%`);
+      if(b.type==="defUp") text.push(`防御↑${b.value}%`);
+      if(b.type==="speedUp") text.push(`速度↑${b.value ?? ""}`);
+      if(b.type==="regen") text.push(`再生(${b.value})`);
+      if(b.type==="critUp") text.push(`会心↑${b.value}%`);
+      if(b.type==="counter") text.push(`反撃${b.chance}%`);
+    });
   }
-}
 
+  // 🔥 デバフ・状態異常
+  if(e.extra){
+    e.extra.forEach(x=>{
+
+      // 🔻デバフ
+      if(x.type==="atkDown") text.push(`攻撃↓${x.value}%(${x.duration}T)`);
+      if(x.type==="defDown") text.push(`防御↓${x.value}%(${x.duration}T)`);
+      if(x.type==="spdDown") text.push(`速度↓${x.value}%(${x.duration}T)`);
+
+      // 🔥状態異常
+      if(x.type==="burn") text.push(`🔥火傷(${x.duration}T)`);
+      if(x.type==="freeze") text.push(`❄凍結(${x.duration}T)`);
+      if(x.type==="poison") text.push(`☠毒(${x.duration}T)`);
+      if(x.type==="shock") text.push(`⚡感電(${x.duration}T)`);
+
+      // 特殊
+      if(x.type==="multiHit") text.push(`多段(${x.hits})`);
+    });
+  }
+
+  return text.join("｜");
+}
 /* ===== 初期ステ ===== */
 const baseDefault = {
   physical:10, magic:10, vitality:20,
