@@ -239,7 +239,8 @@ function renderStats(){
 
 function renderTotal(){
   const t=getTotalStats();
-
+  const hit = Math.min(95, Math.max(30, t.agility*1.2 + t.luck*0.5));
+  const evade = Math.min(80, t.agility*0.8);
   document.getElementById("totalStats").innerHTML=`
     <div class="total-row">HP <span>${t.vitality*10}</span></div>
     <div class="total-row">SP <span>${t.physical*2}</span></div>
@@ -251,6 +252,8 @@ function renderTotal(){
     <div class="total-row">魔法攻撃 <span>${t.magic*2}</span></div>
     <div class="total-row">防御 <span>${t.endurance*2}</span></div>
     <div class="total-row">速度 <span>${t.agility}</span></div>
+    <div class="total-row">命中率 <span>${Math.floor(hit)}%</span></div>
+    <div class="total-row">回避率 <span>${Math.floor(evade)}%</span></div>
 
     <hr>
 
