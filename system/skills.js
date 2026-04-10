@@ -274,17 +274,29 @@ function createBuffEffect(rarity, element){
 // ===============================
 function createEffect(category, rarity, element){
 
-  if(category==="attack"){
-    return {
-      type:"damage",
-      extra:[
-        ...(Math.random()<0.4 ? [{type:"multiHit", hits:2+Math.floor(rarity/2), chance:40}] : []),
-        ...createStatusBonus(element, rarity),
-        ...(Math.random()<0.3 ? createDebuffEffect(rarity) : [])
-      ],
-      combo:createComboEffect(rarity)
-    };
+if(category==="attack"){
+
+  let extra = [
+    ...createStatusBonus(element, rarity),
+    ...createDebuffEffect(rarity)
+  ];
+
+  // 🔥 最低保証（これが神）
+  if(extra.length === 0){
+    extra.push({
+      type:"atkDown",
+      value:10,
+      duration:2,
+      chance:100
+    });
   }
+
+  return {
+    type:"damage",
+    extra,
+    combo:createComboEffect(rarity)
+  };
+}
 
   if(category==="debuff"){
     return {
