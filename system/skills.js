@@ -305,13 +305,16 @@ function createEffect(category, rarity, element){
   }
 
 if(category==="heal"){
+
+  const healType = ["hp","sp","mp"][Math.floor(Math.random()*3)];
+
   return {
     type:"heal",
+    healType, // ←これ追加
     value:20 + rarity*10,
     bonusBuff:createBuffEffect(rarity, element)
   };
 }
-
   return null;
 }
 
