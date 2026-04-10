@@ -259,7 +259,7 @@ function renderSkills(){
 
     div.innerHTML+=`
       <div class="skill-row">
-        <select onchange="player.skillsEquipped[${i}]=this.value;save();render();">
+        onchange="equipSkill(${i}, this.value)"
           ${options}
         </select>
 
@@ -373,6 +373,27 @@ function saveVoice(slot,val,type){
 window.onload = function(){
   render();
 };
+function equipSkill(slot, skillId){
+
+  // 空選択は許可
+  if(!skillId){
+    player.skillsEquipped[slot] = "";
+    save();
+    render();
+    return;
+  }
+
+  // 重複チェック
+  if(player.skillsEquipped.includes(skillId)){
+    alert("同じスキルは装備できません！");
+    return;
+  }
+
+  player.skillsEquipped[slot] = skillId;
+
+  save();
+  render();
+}
 </script>
 </body>
 </html>
