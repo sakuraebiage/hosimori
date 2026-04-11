@@ -89,6 +89,32 @@ function getEffectText(skill){
 
   // メイン
   if(e.type==="damage") text.push("ダメージ");
+  let tA = attacker.stats;
+let tB = target.stats;
+
+// 命中（攻撃側）
+let hit =
+  tA.agility * 1.0 +
+  tA.luck * 0.7 +
+  tA.spirit * 0.5;
+
+// 回避（防御側）
+let evade =
+  tB.agility * 0.9 +
+  tB.luck * 0.3;
+
+// 最終命中率
+let finalHit = hit - evade;
+
+// 最低保証・上限
+finalHit = Math.max(40, finalHit);
+finalHit = Math.min(95, finalHit);
+
+// 判定
+if(Math.random()*100 > finalHit){
+  logs.push(`${target.name}にMISS！`);
+  return logs;
+}
 
   if(e.type==="heal"){
     if(e.healType==="hp") text.push("HP回復");
