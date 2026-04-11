@@ -69,7 +69,36 @@ if(Math.random()*100 > hit - evade){
   // 💥 ダメージ
   // ======================
   if(e.type==="damage"){
+　　　if(e.type==="damage"){
 
+  // 🔥 命中計算（ここ追加）
+  let tA = attacker.stats;
+  let tB = target.stats;
+
+  let hit =
+    tA.agility * 1.0 +
+    tA.luck * 0.7 +
+    tA.spirit * 0.5;
+
+  let evade =
+    tB.agility * 0.9 +
+    tB.luck * 0.3;
+
+  let finalHit = hit - evade;
+
+  finalHit = Math.max(40, finalHit);
+  finalHit = Math.min(95, finalHit);
+
+  if(Math.random()*100 > finalHit){
+    logs.push(`${target.name}にMISS！`);
+    return logs;
+  }
+
+  // 👇ここから元のダメージ処理
+  let dmg = calcDamage(attacker, target, skill);
+  target.hp -= dmg;
+
+  logs.push(`${target.name}に${dmg}ダメージ`);
     let dmg = calcDamage(attacker, target, skill);
     target.hp -= dmg;
     if(target.hp < 0) target.hp = 0;
