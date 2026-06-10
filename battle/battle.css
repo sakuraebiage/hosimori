@@ -1,21 +1,294 @@
-#battle-ui{
-  width:90%;
-  max-width:1200px;
-  margin-top:15px;
-  padding:10px;
-  border:1px solid #444;
-  background:#111;
+body{
+  margin:0;
+  background:#050814;
+  color:#e8f6ff;
+  font-family:Consolas, monospace;
 }
 
-.skill-btn{
-  margin:4px;
-  padding:8px 12px;
+/* =======================
+   ヘッダー
+======================= */
+
+header{
+  background:#0c1328;
+  border-bottom:1px solid #2f4d75;
+  padding:12px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  color:#7fdcff;
+}
+
+/* =======================
+   全体
+======================= */
+
+#battle-container{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:12px;
+}
+
+/* =======================
+   戦場
+======================= */
+
+#battlefield{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  min-height:320px;
+
+  border:1px solid #2f4d75;
+  background:#09101f;
+
+  padding:10px;
+}
+
+/* =======================
+   味方 / 敵
+======================= */
+
+.party{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.party h3{
+  text-align:center;
+  color:#7fdcff;
+}
+
+/* =======================
+   キャラカード
+======================= */
+
+.character-card{
+
+  width:120px;
+
+  background:#111827;
+
+  border:1px solid #314b73;
+
+  border-radius:8px;
+
+  padding:6px;
+
+  text-align:center;
+}
+
+.character-card img{
+
+  width:64px;
+  height:64px;
+
+  border-radius:50%;
+
+  border:2px solid #7fdcff;
+}
+
+.name{
+  margin-top:4px;
+  font-weight:bold;
+}
+
+/* =======================
+   ターゲット表示
+======================= */
+
+.target-icons{
+
+  min-height:20px;
+
+  margin-top:4px;
+
+  font-size:18px;
+}
+
+.eye-red{
+  color:#ff4444;
+}
+
+.eye-blue{
+  color:#55aaff;
+}
+
+.eye-green{
+  color:#66ff66;
+}
+
+.eye-yellow{
+  color:#ffd700;
+}
+
+/* =======================
+   HP SP MP
+======================= */
+
+.status-bar{
+
+  width:100%;
+
+  height:8px;
+
   background:#222;
-  color:#8ae1ff;
-  border:1px solid #555;
+
+  margin-top:3px;
+
+  border-radius:5px;
+
+  overflow:hidden;
+}
+
+.hp-fill{
+  height:100%;
+  background:#ff5555;
+}
+
+.sp-fill{
+  height:100%;
+  background:#559dff;
+}
+
+.mp-fill{
+  height:100%;
+  background:#55ff88;
+}
+
+/* =======================
+   サイド戦況
+======================= */
+
+#battle-status{
+
+  border:1px solid #2f4d75;
+
+  background:#09101f;
+
+  padding:10px;
+}
+
+.status-unit{
+
+  border-bottom:1px solid #243850;
+
+  padding:6px;
+}
+
+.status-unit:last-child{
+  border-bottom:none;
+}
+
+.status-name{
+  font-weight:bold;
+  color:#7fdcff;
+}
+
+.status-target{
+  color:#ffd700;
+  font-size:12px;
+}
+
+/* =======================
+   ログ
+======================= */
+
+#action-log{
+
+  border:1px solid #2f4d75;
+
+  background:#09101f;
+
+  height:260px;
+
+  overflow-y:auto;
+
+  padding:10px;
+}
+
+.log-line{
+  margin-bottom:4px;
+}
+
+/* 通常 */
+.action-normal{
+  color:#ffffff;
+}
+
+/* ダメージ */
+.action-damage{
+  color:#ff7777;
+}
+
+/* 回復 */
+.action-heal{
+  color:#66ff99;
+}
+
+/* バフ */
+.action-buff{
+  color:#66ccff;
+}
+
+/* デバフ */
+.action-debuff{
+  color:#d18cff;
+}
+
+/* クリティカル */
+.action-critical{
+
+  color:#ffd700;
+
+  font-weight:bold;
+
+  text-shadow:
+    0 0 6px #ffd700,
+    0 0 12px #ffd700;
+}
+
+/* 撃破 */
+.action-kill{
+
+  color:#ff4444;
+
+  font-weight:bold;
+}
+
+/* 救世者乱入 */
+.action-savior{
+
+  color:#ffcc66;
+
+  font-weight:bold;
+
+  text-shadow:
+    0 0 8px #ffcc66;
+}
+
+/* =======================
+   開始ボタン
+======================= */
+
+#battle-start{
+
+  background:#152443;
+
+  border:1px solid #4d7cb3;
+
+  color:#7fdcff;
+
+  padding:10px;
+
   cursor:pointer;
 }
 
-.skill-btn:hover{
-  background:#333;
+#battle-start:hover{
+
+  background:#203760;
 }
