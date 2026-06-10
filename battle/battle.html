@@ -136,6 +136,35 @@ setInterval(()=>{
   <script src="../system/skills.js"></script>
   <script src="../system/battle.js"></script>
   <script src="../data/player.js"></script>
+  
+  function renderSkillButtons(){
+
+  const div = document.getElementById("skill-buttons");
+
+  if(typeof getAllSkills !== "function"){
+    div.innerHTML = "skills.js未接続";
+    return;
+  }
+
+  const skills = getAllSkills();
+
+  div.innerHTML = "";
+
+  skills.slice(0,8).forEach(skill=>{
+
+    const btn = document.createElement("button");
+
+    btn.className = "skill-btn";
+
+    btn.innerText = skill.name;
+
+    btn.onclick = ()=>useSkill(skill);
+
+    div.appendChild(btn);
+
+  });
+
+}
 
 </body>
 </html>
