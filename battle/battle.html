@@ -19,14 +19,17 @@ header h1 { color:#8ae1ff; }
 .sp-fill { background:#4bafff; height:100%; width:100%; }
 .mp-fill { background:#8aff4b; height:100%; width:100%; }
 
-#action-log { width:90%; max-width:1200px; background:#111; border:1px solid #444; margin-top:15px; padding:10px; height:120px; overflow-y:auto; }
-.action-entry { margin-bottom:4px; }
-<div id="battle-ui">
-</div>
-
-  <h3>スキル</h3>
-
-  <div id="skill-buttons"></div>
+#action-log { 
+  width:90%; 
+  max-width:1200px; 
+  background:#111; 
+  border:1px solid #444; 
+  margin-top:15px; padding:10px; 
+  height:120px; overflow-y:auto; 
+}
+.action-entry {
+   margin-bottom:4px; 
+}
 
 </style>
 </head>
@@ -160,8 +163,6 @@ setInterval(()=>{
   <script src="../system/skills.js"></script>
   <script src="../system/battle.js"></script>
   <script src="../data/player.js"></script>
-  
-  function renderSkillButtons(){
 
   const div = document.getElementById("skill-buttons");
 
@@ -190,7 +191,5 @@ setInterval(()=>{
 
 }
 
-</body>
-</html>
 </body>
 </html>
