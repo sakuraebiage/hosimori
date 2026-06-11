@@ -170,58 +170,27 @@ console.log(
 
 function renderBattlefield() {
 
-  console.log("render開始");
+function renderBattlefield() {
 
-  alliesContainer.innerHTML =
-    "<h3>味方</h3>";
+  alert("render開始");
 
-  enemiesContainer.innerHTML =
-    "<h3>敵</h3>";
-    
-    console.log(
-  "敵数",
-  enemiesData.length
-);
+  alliesContainer.innerHTML = "";
+  enemiesContainer.innerHTML = "";
 
-console.log(
-  "味方数",
-  alliesData.length
-);
-
-  alliesContainer.innerHTML =
-    "<h3>味方</h3>";
-
-  enemiesContainer.innerHTML =
-    "<h3>敵</h3>";
-
-  // 味方
+  alert("味方初期化完了");
 
   if(alliesData.length === 0){
 
     const div =
       document.createElement("div");
 
-    div.textContent =
-      "参加PCなし";
+    div.textContent = "参加PCなし";
 
     alliesContainer.appendChild(div);
 
-  }else{
-
-    alliesData.forEach(c=>{
-
-      alliesContainer.appendChild(
-        createCharacterCard(
-          c,
-          "ally"
-        )
-      );
-
-    });
-
   }
 
-  // 敵
+  alert("味方処理完了");
 
   enemiesData.forEach(c=>{
 
@@ -234,6 +203,7 @@ console.log(
 
   });
 
+  alert("敵処理完了");
 }
 
 // ======== アクションログ ========
