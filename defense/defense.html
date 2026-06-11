@@ -217,9 +217,46 @@ combatBtn.onclick = ()=>{
     "../battle/battle.html";
 
 };
-exploreBtn.onclick = ()=> alert("探索へ");
-rescueBtn.onclick = ()=> alert("救助へ");
+// ===== 探索 =====
 
+exploreBtn.onclick = ()=>{
+
+  if(!selectedBase){
+
+    alert("拠点を選択してください");
+
+    return;
+  }
+
+  localStorage.setItem(
+    "selectedBase",
+    selectedBase.dataset.id
+  );
+
+  window.location.href =
+    "../explore/explore.html";
+
+};
+// ===== 救助 =====
+
+rescueBtn.onclick = ()=>{
+
+  if(!selectedBase){
+
+    alert("拠点を選択してください");
+
+    return;
+  }
+
+  localStorage.setItem(
+    "selectedBase",
+    selectedBase.dataset.id
+  );
+
+  window.location.href =
+    "../rescue/rescue.html";
+
+};
 closeBtn.onclick = closeModal;
 
 modalBg.onclick = e=>{
