@@ -131,20 +131,38 @@ const closeBtn = document.getElementById("closeBtn");
 
 let selectedBase = null;
 
+// ===== 拠点データ =====
+
+const baseData = [
+
+  { id:"本部",  x:0,    y:0 },
+
+  { id:"拠点1", x:0,    y:-120 },
+
+  { id:"拠点2", x:115,  y:-35 },
+
+  { id:"拠点3", x:70,   y:95 },
+
+  { id:"拠点4", x:-70,  y:95 },
+
+  { id:"拠点5", x:-115, y:-35 }
+
+];
+
 const bases = [];
-const numBases = 20;
-const radius = 250;
 
 // ===== 拠点生成 =====
-for(let i=0;i<numBases;i++){
+
+baseData.forEach(data=>{
 
   const base = document.createElement("div");
+
   base.className = "base";
 
-  base.dataset.id = i===0 ? "本部" : `拠点${i}`;
+  base.dataset.id = data.id;
   base.dataset.hp = 100;
 
-  base.textContent = base.dataset.id;
+  base.textContent = data.id;
 
   const bar = document.createElement("div");
   bar.className = "hp-bar";
@@ -152,45 +170,70 @@ for(let i=0;i<numBases;i++){
   const fill = document.createElement("div");
   fill.className = "hp-fill";
 
+  fill.style.width = "100%";
+
   bar.appendChild(fill);
   base.appendChild(bar);
 
-  base.onclick = ()=> {
+  base.onclick = ()=>{
+
     selectedBase = base;
 
-    modalTitle.textContent = base.dataset.id;
-    modalBody.innerHTML = `<p>${base.dataset.id}を選択しました</p>`;
+    modalTitle.textContent =
+      base.dataset.id;
+
+    modalBody.innerHTML =
+      `<p>${base.dataset.id}を選択しました</p>`;
 
     modalBg.style.display = "flex";
   };
 
   map.appendChild(base);
-  bases.push(base);
-}
+
+  bases.push({
+    element: base,
+    x: data.x,
+    y: data.y
+  });
+
+});
 
 // ===== 配置 =====
+
 function positionBases(){
 
-  const cx = map.offsetWidth / 2;
-  const cy = map.offsetHeight / 2;
+  const cx = map.clientWidth / 2;
+  const cy = map.clientHeight / 2;
 
-  bases.forEach((b,i)=>{
+  console.log(
+    "map size:",
+    map.clientWidth,
+    map.clientHeight
+  );
 
-    if(i===0){
-      b.style.left = cx - 27 + "px";
-      b.style.top = cy - 27 + "px";
-      return;
-    }
+  bases.forEach(base=>{
 
-    const angle = (i-1)/(numBases-1) * Math.PI * 2;
+    base.element.style.left =
+      (cx + base.x - 27) + "px";
 
-    b.style.left = cx + Math.cos(angle) * radius - 27 + "px";
-    b.style.top = cy + Math.sin(angle) * radius - 27 + "px";
+    base.element.style.top =
+      (cy + base.y - 27) + "px";
+
   });
+
 }
 
-window.onresize = positionBases;
-positionBases();
+// ===== 初期配置 =====
+
+window.addEventListener(
+  "load",
+  positionBases
+);
+
+window.addEventListener(
+  "resize",
+  positionBases
+);
 
 // ===== モーダル =====
 function closeModal(){
