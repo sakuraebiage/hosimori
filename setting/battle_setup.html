@@ -116,19 +116,42 @@ function selectPC(index){
 }
 
 // 保存
+// 保存
 saveBtn.onclick = ()=>{
-  if(selectedPC === null) return;
+
+  if(selectedPC === null){
+    alert("キャラクターを選択してください");
+    return;
+  }
+
   const pc = pcs[selectedPC];
-  pc.hp = parseInt(hpInput.value);
-  pc.sp = parseInt(spInput.value);
-  pc.mp = parseInt(mpInput.value);
+
+  pc.hp = parseInt(hpInput.value) || 0;
+  pc.sp = parseInt(spInput.value) || 0;
+  pc.mp = parseInt(mpInput.value) || 0;
+
   pc.row = rowSelect.value;
+
   pc.dialogue = dialogueInput.value;
   pc.cutin = cutinInput.value;
   pc.icon = iconInput.value;
-  pc.skills = Array.from(skillSelect.selectedOptions).map(o=>o.value);
-  alert(pc.name + " の設定を保存しました！");
-}
+
+  pc.skills =
+    Array.from(
+      skillSelect.selectedOptions
+    ).map(o=>o.value);
+
+  // localStorage保存
+  localStorage.setItem(
+    "pcStats",
+    JSON.stringify(pcs)
+  );
+
+  alert(
+    pc.name + " の設定を保存しました！"
+  );
+
+};
 
 renderPCList();
 </script>
