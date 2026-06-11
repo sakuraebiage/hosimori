@@ -40,17 +40,43 @@ header h1 { color:#8ae1ff; }
 </header>
 
 <div id="battle-container">
-  <div id="battlefield">
-    <div id="allies" class="party">
+
+  <div id="battle-top">
+
+    <!-- 味方 -->
+    <div id="allies-panel">
       <h3>味方</h3>
-      <!-- 味方キャラクター挿入 -->
+      <div id="allies"></div>
     </div>
-    <div id="enemies" class="party">
+
+    <!-- 戦闘ログ -->
+    <div id="battle-log-panel">
+      <h3>戦闘ログ</h3>
+
+      <div id="action-log">
+      </div>
+    </div>
+
+    <!-- 敵 -->
+    <div id="enemies-panel">
       <h3>敵</h3>
-      <!-- 敵キャラクター挿入 -->
+      <div id="enemies"></div>
     </div>
+
   </div>
 
+  <!-- 戦況ログ -->
+  <div id="war-panel">
+
+    <h3>戦況</h3>
+
+    <div id="war-log">
+
+    </div>
+
+  </div>
+
+</div>
   <div id="action-log">
     <!-- 誰が誰に行動したか表示 -->
   </div>
@@ -68,14 +94,18 @@ const enemiesData = [
 // ======== PCステータス取得 ========
 function loadPCStats(){
 
-  return JSON.parse(
-    localStorage.getItem("pcStats")
-    || "[]"
-  );
+  const data =
+    localStorage.getItem("pcStats");
+
+  console.log("pcStats =", data);
+
+  if(!data){
+    return [];
+  }
+
+  return JSON.parse(data);
 
 }
-
-let alliesData = loadPCStats();
 
 // ======== キャラクター生成 ========
 function createCharacterCard(char,idPrefix){
@@ -119,13 +149,64 @@ function createCharacterCard(char,idPrefix){
 
 const alliesContainer = document.getElementById("allies");
 const enemiesContainer = document.getElementById("enemies");
+console.log(
+  "alliesContainer",
+  alliesContainer
+);
+
+console.log(
+  "enemiesContainer",
+  enemiesContainer
+);
 
 function renderBattlefield() {
-  alliesContainer.innerHTML = "<h3>味方</h3>";
-  enemiesContainer.innerHTML = "<h3>敵</h3>";
 
-  alliesData.forEach(c => alliesContainer.appendChild(createCharacterCard(c,"ally")));
-  enemiesData.forEach(c => enemiesContainer.appendChild(createCharacterCard(c,"enemy")));
+  alliesContainer.innerHTML =
+    "<h3>味方</h3>";
+
+  enemiesContainer.innerHTML =
+    "<h3>敵</h3>";
+
+  // 味方
+
+  if(alliesData.length === 0){
+
+    const div =
+      document.createElement("div");
+
+    div.textContent =
+      "参加PCなし";
+
+    alliesContainer.appendChild(div);
+
+  }else{
+
+    alliesData.forEach(c=>{
+
+      alliesContainer.appendChild(
+        createCharacterCard(
+          c,
+          "ally"
+        )
+      );
+
+    });
+
+  }
+
+  // 敵
+
+  enemiesData.forEach(c=>{
+
+    enemiesContainer.appendChild(
+      createCharacterCard(
+        c,
+        "enemy"
+      )
+    );
+
+  });
+
 }
 
 // ======== アクションログ ========
