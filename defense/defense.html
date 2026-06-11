@@ -131,19 +131,19 @@ const closeBtn = document.getElementById("closeBtn");
 
 let selectedBase = null;
 
-// ===== 拠点データ =====
+// ===== 五芒星拠点 =====
 
 const baseData = [
 
-  { id:"本部",  x:0,    y:0 },
+  { id:"本部", x:0, y:0 },
 
-  { id:"拠点1", x:0,    y:-120 },
+  { id:"拠点1", x:0, y:-120 },
 
-  { id:"拠点2", x:115,  y:-35 },
+  { id:"拠点2", x:115, y:-35 },
 
-  { id:"拠点3", x:70,   y:95 },
+  { id:"拠点3", x:70, y:95 },
 
-  { id:"拠点4", x:-70,  y:95 },
+  { id:"拠点4", x:-70, y:95 },
 
   { id:"拠点5", x:-115, y:-35 }
 
@@ -169,7 +169,6 @@ baseData.forEach(data=>{
 
   const fill = document.createElement("div");
   fill.className = "hp-fill";
-
   fill.style.width = "100%";
 
   bar.appendChild(fill);
@@ -182,8 +181,28 @@ baseData.forEach(data=>{
     modalTitle.textContent =
       base.dataset.id;
 
-    modalBody.innerHTML =
-      `<p>${base.dataset.id}を選択しました</p>`;
+    // ===== 本部 =====
+    if(base.dataset.id === "本部"){
+
+      modalBody.innerHTML = `
+        <p>指揮・補給拠点</p>
+        <p>戦況確認や補給を行えます。</p>
+      `;
+
+      combatBtn.style.display = "none";
+
+      modalBg.style.display = "flex";
+
+      return;
+    }
+
+    // ===== 通常拠点 =====
+
+    combatBtn.style.display = "inline-block";
+
+    modalBody.innerHTML = `
+      <p>${base.dataset.id}を選択しました</p>
+    `;
 
     modalBg.style.display = "flex";
   };
@@ -205,19 +224,13 @@ function positionBases(){
   const cx = map.clientWidth / 2;
   const cy = map.clientHeight / 2;
 
-  console.log(
-    "map size:",
-    map.clientWidth,
-    map.clientHeight
-  );
-
   bases.forEach(base=>{
 
     base.element.style.left =
-      (cx + base.x - 27) + "px";
+      (cx + base.x - 35) + "px";
 
     base.element.style.top =
-      (cy + base.y - 27) + "px";
+      (cy + base.y - 35) + "px";
 
   });
 
