@@ -195,7 +195,28 @@ function closeModal(){
   modalBg.style.display = "none";
 }
 
-combatBtn.onclick = ()=> alert("戦闘へ");
+// ===== 戦闘 =====
+
+combatBtn.onclick = ()=>{
+
+  if(!selectedBase){
+
+    alert("拠点を選択してください");
+
+    return;
+  }
+
+  // 選択拠点保存
+  localStorage.setItem(
+    "selectedBase",
+    selectedBase.dataset.id
+  );
+
+  // 戦闘画面へ移動
+  window.location.href =
+    "../battle/battle.html";
+
+};
 exploreBtn.onclick = ()=> alert("探索へ");
 rescueBtn.onclick = ()=> alert("救助へ");
 
