@@ -198,58 +198,31 @@ function closeModal(){
 }
 
 // ===== 戦闘 =====
-
 combatBtn.onclick = ()=>{
 
   if(!selectedBase){
-
     alert("拠点を選択してください");
-
     return;
   }
 
-  // 選択拠点保存
   localStorage.setItem(
     "selectedBase",
     selectedBase.dataset.id
   );
 
-  // 戦闘画面へ移動
   window.location.href =
-    "../battle/battle.html";
-
+    "/hosimori/battle/battle.html";
 };
+
 // ===== 探索 =====
-
 exploreBtn.onclick = ()=>{
-
-  if(!selectedBase){
-
-    alert("拠点を選択してください");
-
-    return;
-  }
-
-  localStorage.setItem(
-    "selectedBase",
-    selectedBase.dataset.id
-  );
-
-  window.location.href =
-    "../explore/explore.html";
-
+  alert("探索画面は工事中です");
 };
+
 // ===== 救助 =====
-
 rescueBtn.onclick = ()=>{
-
-  if(!selectedBase){
-
-    alert("拠点を選択してください");
-
-    return;
-  }
-
+  alert("救助画面は工事中です");
+};
   localStorage.setItem(
     "selectedBase",
     selectedBase.dataset.id
