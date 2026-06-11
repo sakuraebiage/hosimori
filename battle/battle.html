@@ -66,15 +66,13 @@ const enemiesData = [
 ];
 
 // ======== PCステータス取得 ========
-function loadPCStats() {
-  const stats = JSON.parse(localStorage.getItem("pcStats") || "{}");
-  // ここでは最初の4人を味方に
-  return [
-    stats["shizumi"] || {name:"静海", hp:100, sp:50, mp:30},
-    stats["kohaku"] || {name:"瑚白", hp:100, sp:50, mp:30},
-    stats["houraku"] || {name:"宝楽", hp:100, sp:50, mp:30},
-    stats["keika"] || {name:"恵佳", hp:100, sp:50, mp:30}
-  ];
+function loadPCStats(){
+
+  return JSON.parse(
+    localStorage.getItem("pcStats")
+    || "[]"
+  );
+
 }
 
 let alliesData = loadPCStats();
