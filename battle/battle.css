@@ -322,6 +322,8 @@ header h1{
 
   flex:1;
 
+  min-width:300px;
+
   background:#111;
 
   border:1px solid #444;
