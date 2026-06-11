@@ -292,3 +292,70 @@ header h1{
 
   background:#203760;
 }
+
+#battle-top{
+
+  display:flex;
+
+  gap:15px;
+
+  width:95%;
+
+  margin:auto;
+
+}
+
+#allies-panel,
+#enemies-panel{
+
+  width:25%;
+
+  background:#111;
+
+  border:1px solid #444;
+
+  padding:10px;
+
+}
+
+#battle-log-panel{
+
+  flex:1;
+
+  background:#111;
+
+  border:1px solid #444;
+
+  padding:10px;
+
+}
+
+#action-log{
+
+  height:400px;
+
+  overflow-y:auto;
+
+}
+
+#war-panel{
+
+  width:95%;
+
+  margin:15px auto;
+
+  background:#111;
+
+  border:1px solid #444;
+
+  padding:10px;
+
+}
+
+#war-log{
+
+  height:150px;
+
+  overflow-y:auto;
+
+}
