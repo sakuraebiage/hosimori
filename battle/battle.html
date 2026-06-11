@@ -88,18 +88,6 @@ const enemiesData = [
   {name:"敵4", hp:100, sp:50, mp:30}
 ];
 
-function loadPCStats(){
-
-  return JSON.parse(
-    localStorage.getItem("pcStats")
-    || "[]"
-  );
-
-}
-
-let alliesData = loadPCStats();
-
-console.log(alliesData);
 
 // ======== PCステータス取得 ========
 function loadPCStats(){
