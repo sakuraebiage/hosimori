@@ -358,3 +358,46 @@ header h1{
   overflow-y:auto;
 
 }
+
+#battle-header{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:100;
+
+  background:#111;
+
+  border-bottom:1px solid #444;
+
+  padding:10px;
+
+}
+
+#allies,
+#enemies{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  justify-content:center;
+
+}
+
+#vs-text{
+
+  text-align:center;
+
+  font-size:24px;
+
+  font-weight:bold;
+
+  margin:10px 0;
+
+  color:#ff5555;
+
+}
