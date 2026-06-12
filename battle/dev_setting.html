@@ -105,6 +105,18 @@ let npcData = JSON.parse(localStorage.getItem("npcData")) || {};
 
 // ===== 初期化 =====
 function createEditor() {
+  function createEditor() {
+
+  alert("createEditor開始");
+
+  const container =
+    document.getElementById("dev-container");
+
+  alert("container取得");
+
+  container.innerHTML = "";
+
+  alert("初期化完了");
   const container = document.getElementById("dev-container");
   container.innerHTML = "";
   npcList.forEach(name => {
