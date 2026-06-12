@@ -218,8 +218,7 @@ function logAction(actor, action, target) {
 
 // ======== 戦闘開始 ========
 renderBattlefield();
-setTimeout(()=>logAction("静海","攻撃","敵1"),1000);
-setTimeout(()=>logAction("敵2","魔法","恵佳"),2000);
+
 // ======== リアルタイム更新 ========
 setInterval(()=>{
   alliesData = loadPCStats();
