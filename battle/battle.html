@@ -88,22 +88,42 @@ const enemiesData = [
 
 
 // ======== PCステータス取得 ========
-function loadPCStats(){
+function loadNPCData(){
 
   const data =
-    localStorage.getItem("pcStats");
+    JSON.parse(
+      localStorage.getItem("npcData")
+      || "{}"
+    );
 
-  console.log("pcStats =", data);
+  console.log("npcData =", data);
 
-  if(!data){
-    return [];
-  }
+  return Object.entries(data).map(
+    ([name, stats]) => ({
 
-  return JSON.parse(data);
+      name,
+
+      hp: stats.hp || 100,
+
+      sp: stats.sp || 100,
+
+      mp: stats.mp || 100
+
+    })
+  );
 
 }
 
-let alliesData = loadPCStats();
+let alliesData = loadNPCData();
+
+alert(
+  JSON.stringify(alliesData)
+);
+
+console.log(
+  "味方データ",
+  alliesData
+);
 
  alert(
   JSON.stringify(alliesData)
