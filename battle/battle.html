@@ -209,6 +209,21 @@ function renderBattlefield() {
     alliesContainer.appendChild(div);
 
   }
+  
+  else{
+
+  alliesData.forEach(c=>{
+
+    alliesContainer.appendChild(
+      createCharacterCard(
+        c,
+        "ally"
+      )
+    );
+
+  });
+
+}
 
   alert("味方処理完了");
 
