@@ -114,6 +114,16 @@ function createEditor() {
       <label>出撃先:</label>
 <select id="${name}_location">
 
+
+      skill1: "", skill2: "", skill3: "", skill4: ""
+    };
+    const div = document.createElement("div");
+    div.className = "character";
+    div.innerHTML = `
+    <label>出撃先:</label>
+
+<select id="${name}_location">
+
   <option value="待機"
     ${data.location==="待機"?"selected":""}>
     待機
@@ -146,11 +156,6 @@ function createEditor() {
 
 </select>
 <br>
-      skill1: "", skill2: "", skill3: "", skill4: ""
-    };
-    const div = document.createElement("div");
-    div.className = "character";
-    div.innerHTML = `
       <h2>${name}</h2>
       <label>HP:</label> <input type="number" id="${name}_hp" value="${data.hp}"><br>
       <label>SP:</label> <input type="number" id="${name}_sp" value="${data.sp}"><br>
