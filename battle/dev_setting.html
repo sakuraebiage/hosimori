@@ -109,9 +109,21 @@ function createEditor() {
   container.innerHTML = "";
   npcList.forEach(name => {
     const data = npcData[name] || {
-      hp: 1000, sp: 500, mp: 300,
-      attack: 100, defense: 80, speed: 50,
-      <label>出撃先:</label>
+  hp: 1000,
+  sp: 500,
+  mp: 300,
+
+  attack: 100,
+  defense: 80,
+  speed: 50,
+
+  location: "待機",
+
+  skill1: "",
+  skill2: "",
+  skill3: "",
+  skill4: ""
+};
 <select id="${name}_location">
 
 
@@ -183,10 +195,16 @@ function saveCharacter(name) {
     attack: Number(document.getElementById(`${name}_atk`).value),
     defense: Number(document.getElementById(`${name}_def`).value),
     speed: Number(document.getElementById(`${name}_spd`).value),
+    
+    location:
+  document.getElementById(
+    `${name}_location`
+  ).value,
     skill1: document.getElementById(`${name}_skill1`).value,
     skill2: document.getElementById(`${name}_skill2`).value,
     skill3: document.getElementById(`${name}_skill3`).value,
     skill4: document.getElementById(`${name}_skill4`).value
+    
   };
   localStorage.setItem("npcData", JSON.stringify(npcData));
   document.getElementById(`${name}_status`).textContent = "✅ 保存しました";
