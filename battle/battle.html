@@ -241,7 +241,7 @@ renderBattlefield();
 
 // ======== リアルタイム更新 ========
 setInterval(()=>{
-  alliesData = loadPCStats();
+  alliesData = loadNPCStats();
   alliesData.forEach(c=>{
     const card = document.getElementById(`ally_${c.name}`);
     if(card){
