@@ -256,17 +256,30 @@ renderBattlefield();
 
 // ======== リアルタイム更新 ========
 setInterval(()=>{
-  alliesData = loadNPCStats();
-  alliesData.forEach(c=>{
-    const card = document.getElementById(`ally_${c.name}`);
-    if(card){
-      card.querySelector(".hp-fill").style.width = c.hp+"%";
-      card.querySelector(".sp-fill").style.width = c.sp+"%";
-      card.querySelector(".mp-fill").style.width = c.mp+"%";
-    }
-  });
-},1000); // 1秒ごとにステータス更新
+  alliesData = loadNPCData();
 
+  alliesData.forEach(c=>{
+
+    const card =
+      document.getElementById(
+        `ally_${c.name}`
+      );
+
+    if(card){
+
+      card.querySelector(".hp-fill")
+        .style.width = c.hp + "%";
+
+      card.querySelector(".sp-fill")
+        .style.width = c.sp + "%";
+
+      card.querySelector(".mp-fill")
+        .style.width = c.mp + "%";
+    }
+
+  });
+
+},1000);
 </script>
 
 <!--
