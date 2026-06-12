@@ -111,6 +111,41 @@ function createEditor() {
     const data = npcData[name] || {
       hp: 1000, sp: 500, mp: 300,
       attack: 100, defense: 80, speed: 50,
+      <label>出撃先:</label>
+<select id="${name}_location">
+
+  <option value="待機"
+    ${data.location==="待機"?"selected":""}>
+    待機
+  </option>
+
+  <option value="本部前"
+    ${data.location==="本部前"?"selected":""}>
+    本部前
+  </option>
+
+  <option value="東部拠点"
+    ${data.location==="東部拠点"?"selected":""}>
+    東部拠点
+  </option>
+
+  <option value="西部拠点"
+    ${data.location==="西部拠点"?"selected":""}>
+    西部拠点
+  </option>
+
+  <option value="北部拠点"
+    ${data.location==="北部拠点"?"selected":""}>
+    北部拠点
+  </option>
+
+  <option value="南部拠点"
+    ${data.location==="南部拠点"?"selected":""}>
+    南部拠点
+  </option>
+
+</select>
+<br>
       skill1: "", skill2: "", skill3: "", skill4: ""
     };
     const div = document.createElement("div");
