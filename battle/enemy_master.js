@@ -1,8 +1,18 @@
-const titles = {};
-const traits = {};
-const elements = {};
-const races = {};
+return {
 
-function generateEnemy(){
-  ...
-}
+  id:
+    crypto.randomUUID(),
+
+  name:name,
+
+  hp:hp,
+
+  attack:attack,
+
+  defense:defense,
+
+  speed:speed,
+
+  attributes:attributes
+
+};
