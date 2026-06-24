@@ -152,6 +152,7 @@ function generateEnemy(){
   const tr = traits[trait];
   const e = elements[element];
   const r = races[race];
+  console.log(generateEnemy());
 
   return {
 
