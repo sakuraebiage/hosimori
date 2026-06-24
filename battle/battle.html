@@ -159,20 +159,18 @@ function createCharacterCard(char,idPrefix){
     <div class="target-icons">
     </div>
 
-    <div class="status-bar">
-      <div class="hp-fill"
-      style="width:${char.hp}%"></div>
+    <div class="name">
+  ${char.name}
     </div>
 
-    <div class="status-bar">
-      <div class="sp-fill"
-      style="width:${char.sp}%"></div>
+    <div style="font-size:10px;">
+  HP:${char.hp}
     </div>
 
-    <div class="status-bar">
-      <div class="mp-fill"
-      style="width:${char.mp}%"></div>
-    </div>
+<div class="status-bar">
+  <div class="hp-fill"
+  style="width:${Math.min(char.hp,100)}%"></div>
+</div>
 
   `;
 
