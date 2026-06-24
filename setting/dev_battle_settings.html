@@ -99,7 +99,7 @@ document.getElementById("saveAll").addEventListener("click", () => {
       lines: document.getElementById(`${char.id}_lines`).value.split("\n").map(l=>l.trim()).filter(l=>l)
     };
   });
-  localStorage.setItem("pcStats", JSON.stringify(data));
+  localStorage.setItem("npcStats", JSON.stringify(data));
   alert("PCステータスを保存しました！");
 });
 </script>
