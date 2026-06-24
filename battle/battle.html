@@ -209,7 +209,14 @@ console.log(
 function renderBattlefield() {
   
   console.log(enemiesData);
-
+  console.log("味方数", alliesData.length);
+  console.log("敵数", enemiesData.length);
+  console.log(
+  createCharacterCard(
+    enemiesData[0],
+    "enemy"
+  )
+);
 
   alert("render開始");
 
