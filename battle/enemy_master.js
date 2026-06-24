@@ -169,6 +169,12 @@ function generateEnemy(){
       (tr.hp || 0) +
       (e.hp || 0) +
       (r.hp || 0),
+      
+      sp:
+  (t.sp || 0) +
+  (tr.sp || 0) +
+  (e.sp || 0) +
+  (r.sp || 0),
 
     mp:
       (t.mp || 0) +
