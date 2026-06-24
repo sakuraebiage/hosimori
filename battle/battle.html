@@ -90,7 +90,7 @@ for(let i=0;i<4;i++){
 
 
 // ======== PCステータス取得 ========
-function loadNPCData(){
+function loadnpcData(){
 
   const data =
     JSON.parse(
@@ -284,7 +284,7 @@ renderBattlefield();
 
 // ======== リアルタイム更新 ========
 setInterval(()=>{
-  alliesData = loadNPCData();
+  alliesData = loadnpcData();
 
   alliesData.forEach(c=>{
 
