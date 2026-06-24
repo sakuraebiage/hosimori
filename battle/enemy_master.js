@@ -152,7 +152,6 @@ function generateEnemy(){
   const tr = traits[trait];
   const e = elements[element];
   const r = races[race];
-  console.log(generateEnemy());
 
   return {
 
@@ -215,6 +214,8 @@ function generateEnemy(){
 // ========================================
 // テスト
 // ========================================
+
+console.log(generateEnemy());
 
 for(let i=0;i<10;i++){
 
