@@ -148,31 +148,48 @@ function createCharacterCard(char,idPrefix){
 
   div.id = `${idPrefix}_${char.name}`;
 
-  div.innerHTML = `
+div.innerHTML = `
 
-    <img src="https://placehold.co/64x64">
+<img src="https://placehold.co/64x64">
 
-    <div class="name">
-      ${char.name}
-    </div>
-
-    <div class="target-icons">
-    </div>
-
-    <div class="name">
+<div class="name">
   ${char.name}
-    </div>
+</div>
 
-    <div style="font-size:10px;">
-  HP:${char.hp}
-    </div>
+<div class="target-icons">
+</div>
+
+<div style="font-size:10px;">
+  HP : ${char.hp}
+</div>
 
 <div class="status-bar">
   <div class="hp-fill"
-  style="width:${Math.min(char.hp,100)}%"></div>
+  style="width:${Math.min(char.hp,100)}%">
+  </div>
 </div>
 
-  `;
+<div style="font-size:10px;">
+  SP : ${char.sp}
+</div>
+
+<div class="status-bar">
+  <div class="sp-fill"
+  style="width:${Math.min(char.sp,100)}%">
+  </div>
+</div>
+
+<div style="font-size:10px;">
+  MP : ${char.mp}
+</div>
+
+<div class="status-bar">
+  <div class="mp-fill"
+  style="width:${Math.min(char.mp,100)}%">
+  </div>
+</div>
+
+`;
 
   return div;
 }
