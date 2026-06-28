@@ -11,8 +11,6 @@ content="width=device-width, initial-scale=1.0">
 
 <title>星守戦線</title>
 
-<link rel="stylesheet" href="css/home.css">
-
 <link
 rel="stylesheet"
 href="css/home.css">
@@ -21,9 +19,28 @@ href="css/home.css">
 
 <body>
 
-<!--==============================
+<!--=====================================
+背景
+======================================-->
+
+<div id="backgroundArea">
+
+<img
+id="backgroundImage"
+src="images/backgrounds/ChatGPT Image 2026年6月28日 17_53_03.png"
+alt="背景">
+
+<!--
+<img
+id="characterImage"
+src="images/characters/sample.png">
+-->
+
+</div>
+
+<!--=====================================
 ヘッダー
-==============================-->
+======================================-->
 
 <header id="topBar">
 
@@ -55,106 +72,57 @@ href="css/home.css">
 
 </header>
 
-<!--==============================
+<!--=====================================
 HUD
-==============================-->
+======================================-->
 
 <div id="hud">
 
-<div class="hudIcon">
+<div class="hudIcon">💰</div>
 
-💰
+<div class="hudIcon">⭐</div>
 
-</div>
+<div class="hudIcon">📦</div>
 
-<div class="hudIcon">
-
-⭐
+<div class="hudIcon">🎁</div>
 
 </div>
 
-<div class="hudIcon">
-
-📦
-
-</div>
-
-<div class="hudIcon">
-
-🎁
-
-</div>
-
-</div>
-
-<!--==============================
+<!--=====================================
 メイン
-==============================-->
+======================================-->
 
 <div id="mainContainer">
 
-<!--==============================
+<!--=====================================
 左
-==============================-->
+======================================-->
 
 <aside id="leftPanel">
 
 <div class="glass">
 
-<h2>
-
-指揮官
-
-</h2>
+<h2>指揮官</h2>
 
 <img
 id="playerIcon"
 src="images/ui/player.png">
 
-<div>
+<div>Lv.50</div>
 
-Lv.50
+<div>隊員ランクⅢ</div>
 
-</div>
-
-<div>
-
-隊員ランクⅢ
-
-</div>
-
-<div>
-
-EXP
-
-</div>
+<div>EXP</div>
 
 </div>
 
 </aside>
 
-<!--==============================
+<!--=====================================
 中央
-==============================-->
+======================================-->
 
 <main id="centerPanel">
-
-<div id="backgroundArea">
-
-<img
-
-    id="backgroundImage"
-
-    src="images/backgrounds/ChatGPT Image 2026年6月28日 17_53_03.png"
-
-    alt="背景">
-
-<!--
-<img
-    id="characterImage"
-    src="images/characters/sample.png"
-    alt="キャラクター">
--->
 
 <div id="activeBadge">
 
@@ -162,29 +130,17 @@ ACTIVE
 
 </div>
 
-</div>
-
-<div id="characterCarousel">
-
-<!-- JS -->
-
-</div>
-
 </main>
 
-<!--==============================
+<!--=====================================
 右
-==============================-->
+======================================-->
 
 <aside id="rightPanel">
 
 <div class="glass">
 
-<h2>
-
-戦況
-
-</h2>
+<h2>戦況</h2>
 
 <div id="warStatus">
 
@@ -196,55 +152,27 @@ ALL GREEN
 
 <div class="glass">
 
-<h2>
+<h2>救世者</h2>
 
-救世者
+<div>👑 十束静海</div>
 
-</h2>
-
-<div>
-
-👑 十束静海
-
-</div>
-
-<div>
-
-交戦中
-
-</div>
+<div>交戦中</div>
 
 <hr>
 
-<div>
+<div>👑 萩月要</div>
 
-👑 萩月要
-
-</div>
-
-<div>
-
-執務中
-
-</div>
+<div>執務中</div>
 
 </div>
 
 <div class="glass">
 
-<h2>
-
-イベント
-
-</h2>
+<h2>イベント</h2>
 
 <div>
 
-🐾
-
-くぅーん様
-
-本部突撃まで
+🐾 くぅーん様 本部突撃まで
 
 23:51
 
@@ -256,9 +184,9 @@ ALL GREEN
 
 </div>
 
-<!--==============================
-横スクロール
-==============================-->
+<!--=====================================
+カルーセル
+======================================-->
 
 <section id="carouselArea">
 
@@ -266,66 +194,41 @@ ALL GREEN
 
 <div class="characterCard active">
 
-<img
-src="images/ui/player.png">
+<img src="images/ui/player.png">
 
-<div>
-
-静海
-
-</div>
+<div>静海</div>
 
 </div>
 
 <div class="characterCard">
 
-<img
-src="images/ui/player.png">
+<img src="images/ui/player.png">
 
-<div>
-
-恵佳
-
-</div>
+<div>恵佳</div>
 
 </div>
 
 <div class="characterCard">
 
-<img
-src="images/ui/player.png">
+<img src="images/ui/player.png">
 
-<div>
-
-瑚白
-
-</div>
+<div>瑚白</div>
 
 </div>
 
 <div class="characterCard">
 
-<img
-src="images/ui/player.png">
+<img src="images/ui/player.png">
 
-<div>
-
-宝楽
-
-</div>
+<div>宝楽</div>
 
 </div>
 
 <div class="characterCard">
 
-<img
-src="images/ui/player.png">
+<img src="images/ui/player.png">
 
-<div>
-
-月詠
-
-</div>
+<div>月詠</div>
 
 </div>
 
@@ -333,9 +236,9 @@ src="images/ui/player.png">
 
 </section>
 
-<!--==============================
+<!--=====================================
 スクショ
-==============================-->
+======================================-->
 
 <button id="screenShotButton">
 
