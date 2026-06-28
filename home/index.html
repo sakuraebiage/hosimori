@@ -1,86 +1,341 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <title>星守戦線 - トップページ</title>
-  <style>
-    body { margin:0; font-family:"Consolas","Roboto Mono",monospace; background:#000; color:#e0e0e0; display:flex; flex-direction:column; align-items:center; }
-    main { padding:20px; width:90%; max-width:1000px; }
-    .character-card { background:#111; border:1px solid #555; border-radius:10px; padding:10px; width:200px; text-align:center; display:inline-block; margin:10px; cursor:pointer; }
-    .character-card img { width:120px; height:120px; border-radius:50%; border:2px solid #8ae1ff; object-fit:cover; }
-    .character-card .character-name { font-weight:bold; color:#8ae1ff; margin-top:6px; }
-  </style>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>星守戦線</title>
+
+<link
+rel="stylesheet"
+href="css/home.css">
+
 </head>
+
 <body>
-  <div id="header-container"></div>
-  <script src="common/header-loader.js"></script>
 
-  <main>
-    <h2>登録キャラクター一覧</h2>
-    <div id="character-list"></div>
+<!--==============================
+ヘッダー
+==============================-->
 
-    <h2>キャラ管理</h2>
-    <div id="newCharForm">
-      <input type="text" id="newCharName" placeholder="キャラ名">
-      <button onclick="addNewChar()">追加</button>
-    </div>
-    <div id="charList"></div>
-  </main>
+<header id="topBar">
 
-  <script>
-    let userData = JSON.parse(localStorage.getItem("user_chars")) || { chars: [], selectedCharIndex: 0 };
+<div id="gameTitle">
 
-    function renderCharList() {
-      const list = document.getElementById("charList");
-      list.innerHTML = "";
-      userData.chars.forEach((char,i)=>{
-        const div=document.createElement("div");
-        div.style.marginBottom="8px";
-        const selectedMark = userData.selectedCharIndex===i?"🌟":"";
-        div.innerHTML = `${selectedMark} <strong>${char.name}</strong>
-          <img src="${char.icon||'https://placehold.co/32x32?text=?'}" width="32" height="32">
-          <button onclick="selectChar(${i})">切替</button>`;
-        list.appendChild(div);
-      });
-    }
+星守戦線
 
-    function addNewChar() {
-      const name = document.getElementById("newCharName").value.trim();
-      if(!name) return alert("名前を入力してください！");
-      const newChar = { name, icon:"", stats:{}, skills:[], points:0 };
-      userData.chars.push(newChar);
-      userData.selectedCharIndex=userData.chars.length-1;
-      localStorage.setItem("user_chars", JSON.stringify(userData));
-      renderCharList();
-      document.getElementById("newCharName").value="";
-    }
+</div>
 
-    function selectChar(index) {
-      userData.selectedCharIndex=index;
-      localStorage.setItem("user_chars", JSON.stringify(userData));
-      renderCharList();
-    }
+<nav>
 
-    renderCharList();
+<button>ホーム</button>
 
-    const characters = userData.chars;
-    const list = document.getElementById("character-list");
-    if(characters.length===0){
-      list.innerHTML="<p>まだキャラクターが登録されていません。</p>";
-    } else {
-      characters.forEach(c=>{
-        const card = document.createElement("div");
-        card.classList.add("character-card");
-        const img = document.createElement("img");
-        img.src=c.icon || "https://placehold.co/120x120?text=No+Icon";
-        const name = document.createElement("div");
-        name.textContent=c.name;
-        name.classList.add("character-name");
-        card.appendChild(img); card.appendChild(name);
-        card.addEventListener("click",()=>{ window.location.href="mypage/mypage.html?char="+encodeURIComponent(c.name); });
-        list.appendChild(card);
-      });
-    }
-  </script>
+<button>防衛</button>
+
+<button>探索</button>
+
+<button>戦闘</button>
+
+<button>工房</button>
+
+<button>図鑑</button>
+
+<button>チャット</button>
+
+<button>設定</button>
+
+</nav>
+
+</header>
+
+<!--==============================
+HUD
+==============================-->
+
+<div id="hud">
+
+<div class="hudIcon">
+
+💰
+
+</div>
+
+<div class="hudIcon">
+
+⭐
+
+</div>
+
+<div class="hudIcon">
+
+📦
+
+</div>
+
+<div class="hudIcon">
+
+🎁
+
+</div>
+
+</div>
+
+<!--==============================
+メイン
+==============================-->
+
+<div id="mainContainer">
+
+<!--==============================
+左
+==============================-->
+
+<aside id="leftPanel">
+
+<div class="glass">
+
+<h2>
+
+指揮官
+
+</h2>
+
+<img
+id="playerIcon"
+src="images/ui/player.png">
+
+<div>
+
+Lv.50
+
+</div>
+
+<div>
+
+隊員ランクⅢ
+
+</div>
+
+<div>
+
+EXP
+
+</div>
+
+</div>
+
+</aside>
+
+<!--==============================
+中央
+==============================-->
+
+<main id="centerPanel">
+
+<div id="backgroundArea">
+
+<img
+id="backgroundImage"
+src="images/backgrounds/default.webp">
+
+<img
+id="characterImage"
+src="images/characters/sample.png">
+
+<div id="activeBadge">
+
+ACTIVE
+
+</div>
+
+</div>
+
+<div id="characterCarousel">
+
+<!-- JS -->
+
+</div>
+
+</main>
+
+<!--==============================
+右
+==============================-->
+
+<aside id="rightPanel">
+
+<div class="glass">
+
+<h2>
+
+戦況
+
+</h2>
+
+<div id="warStatus">
+
+ALL GREEN
+
+</div>
+
+</div>
+
+<div class="glass">
+
+<h2>
+
+救世者
+
+</h2>
+
+<div>
+
+👑 十束静海
+
+</div>
+
+<div>
+
+交戦中
+
+</div>
+
+<hr>
+
+<div>
+
+👑 萩月要
+
+</div>
+
+<div>
+
+執務中
+
+</div>
+
+</div>
+
+<div class="glass">
+
+<h2>
+
+イベント
+
+</h2>
+
+<div>
+
+🐾
+
+くぅーん様
+
+本部突撃まで
+
+23:51
+
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+<!--==============================
+横スクロール
+==============================-->
+
+<section id="carouselArea">
+
+<div id="characterList">
+
+<div class="characterCard active">
+
+<img
+src="images/ui/player.png">
+
+<div>
+
+静海
+
+</div>
+
+</div>
+
+<div class="characterCard">
+
+<img
+src="images/ui/player.png">
+
+<div>
+
+恵佳
+
+</div>
+
+</div>
+
+<div class="characterCard">
+
+<img
+src="images/ui/player.png">
+
+<div>
+
+瑚白
+
+</div>
+
+</div>
+
+<div class="characterCard">
+
+<img
+src="images/ui/player.png">
+
+<div>
+
+宝楽
+
+</div>
+
+</div>
+
+<div class="characterCard">
+
+<img
+src="images/ui/player.png">
+
+<div>
+
+月詠
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!--==============================
+スクショ
+==============================-->
+
+<button id="screenShotButton">
+
+📷
+
+</button>
+
+<script src="js/home.js"></script>
+
 </body>
+
 </html>
