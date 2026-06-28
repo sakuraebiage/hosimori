@@ -1,115 +1,102 @@
-/*=================================================
-共通
-=================================================*/
+/*=====================================
+リセット
+=====================================*/
 
 *{
 
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
 
 }
 
 body{
 
-    background:#02050a;
+    background:#05070c;
 
     color:white;
 
-    font-family:
-    "Segoe UI",
-    sans-serif;
+    font-family:"Segoe UI",sans-serif;
+
+    width:100vw;
+
+    height:100vh;
 
     overflow:hidden;
 
 }
 
+/*=====================================
+メイン
+=====================================*/
 
-/*=================================================
-背景
-=================================================*/
+#mainContainer{
 
-#backgroundArea{
+    width:100%;
+
+    height:calc(100vh - 70px);
+
+    margin-top:70px;
+
+    display:grid;
+
+    grid-template-columns:
+
+        260px
+
+        1fr
+
+        320px;
+
+}
+
+/*=====================================
+左
+=====================================*/
+
+#leftPanel{
+
+    border:2px solid red;
+
+    padding:20px;
+
+}
+
+/*=====================================
+中央
+=====================================*/
+
+#centerPanel{
 
     position:relative;
 
-    width:100%;
-
-    height:100%;
+    border:2px solid blue;
 
     overflow:hidden;
 
 }
 
-#backgroundImage{
+/*=====================================
+右
+=====================================*/
 
-    position:absolute;
+#rightPanel{
 
-    width:100%;
+    border:2px solid lime;
 
-    height:100%;
-
-    object-fit:cover;
-
-    opacity:.35;
-
-    z-index:0;
+    padding:20px;
 
 }
 
-#characterImage{
-
-    position:absolute;
-
-    bottom:0;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    height:92%;
-
-    z-index:5;
-
-}
-
-
-/*=================================================
-ACTIVE
-=================================================*/
-
-#activeBadge{
-
-    position:absolute;
-
-    top:30px;
-
-    left:30px;
-
-    background:#38bdf8;
-
-    color:white;
-
-    padding:8px 18px;
-
-    border-radius:25px;
-
-    font-weight:bold;
-
-    letter-spacing:2px;
-
-    z-index:20;
-
-}
-
-
-/*=================================================
+/*=====================================
 ヘッダー
-=================================================*/
+=====================================*/
 
 #topBar{
 
-    position:absolute;
+    position:fixed;
 
     top:0;
 
@@ -125,11 +112,9 @@ ACTIVE
 
     align-items:center;
 
-    padding:0 40px;
+    padding:0 30px;
 
-    background:rgba(0,0,0,.35);
-
-    backdrop-filter:blur(15px);
+    background:#111;
 
     z-index:100;
 
@@ -140,8 +125,6 @@ ACTIVE
     font-size:28px;
 
     font-weight:bold;
-
-    color:#9fe9ff;
 
 }
 
@@ -157,188 +140,93 @@ nav button{
 
     background:none;
 
-    border:none;
-
     color:white;
 
-    cursor:pointer;
-
-    transition:.3s;
-
-    font-size:15px;
-
-}
-
-nav button:hover{
-
-    color:#6dd5ff;
-
-}
-
-
-/*=================================================
-HUD
-=================================================*/
-
-#hud{
-
-    position:absolute;
-
-    top:90px;
-
-    left:50%;
-
-    transform:translateX(-50%);
-
-    display:flex;
-
-    gap:15px;
-
-    z-index:100;
-
-}
-
-.hudIcon{
-
-    width:55px;
-
-    height:55px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(8px);
+    border:none;
 
     cursor:pointer;
 
-    transition:.3s;
-
 }
 
-.hudIcon:hover{
+/*=====================================
+背景
+=====================================*/
 
-    transform:translateY(-5px);
+#backgroundArea{
 
-}
+    width:100%;
 
-
-/*=================================================
-メイン
-=================================================*/
-
-#mainContainer{
-
-    display:grid;
-
-    grid-template-columns:
-
-        280px
-
-        1fr
-
-        320px;
-
-    height:100vh;
-
-}
-
-
-/*=================================================
-左右パネル
-=================================================*/
-
-#leftPanel,
-#rightPanel{
-
-    padding:100px 20px 20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
-    z-index:10;
-
-}
-
-
-/*=================================================
-ガラス
-=================================================*/
-
-.glass{
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(15px);
-
-    border:1px solid
-    rgba(255,255,255,.15);
-
-    border-radius:18px;
-
-    padding:18px;
-
-}
-
-
-/*=================================================
-中央
-=================================================*/
-
-#centerPanel{
+    height:100%;
 
     position:relative;
 
 }
 
+#backgroundImage{
 
-/*=================================================
-戦況
-=================================================*/
+    position:absolute;
 
-#warStatus{
+    width:100%;
 
-    margin-top:10px;
+    height:100%;
 
-    padding:15px;
-
-    text-align:center;
-
-    font-size:22px;
-
-    font-weight:bold;
-
-    color:#6dffb5;
+    object-fit:cover;
 
 }
 
-
-/*=================================================
-カルーセル
-=================================================*/
-
-#carouselArea{
+#characterImage{
 
     position:absolute;
 
     left:50%;
 
-    bottom:15px;
+    bottom:0;
 
     transform:translateX(-50%);
 
-    width:75%;
+    height:85%;
 
-    z-index:30;
+}
+
+/*=====================================
+ACTIVE
+=====================================*/
+
+#activeBadge{
+
+    position:absolute;
+
+    left:30px;
+
+    top:30px;
+
+    background:#00aaff;
+
+    color:white;
+
+    padding:10px 20px;
+
+    border-radius:20px;
+
+    z-index:50;
+
+}
+
+/*=====================================
+カルーセル
+=====================================*/
+
+#carouselArea{
+
+    position:absolute;
+
+    bottom:15px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:70%;
 
 }
 
@@ -350,42 +238,19 @@ HUD
 
     overflow-x:auto;
 
-    padding:15px;
+    padding:10px;
 
 }
-
-#characterList::-webkit-scrollbar{
-
-    display:none;
-
-}
-
-
-/*=================================================
-カード
-=================================================*/
 
 .characterCard{
 
-    min-width:110px;
-
-    background:rgba(255,255,255,.08);
-
-    border-radius:15px;
-
-    padding:10px;
+    min-width:100px;
 
     text-align:center;
 
-    cursor:pointer;
+    border:2px solid white;
 
-    transition:.25s;
-
-}
-
-.characterCard:hover{
-
-    transform:translateY(-8px);
+    padding:10px;
 
 }
 
@@ -397,109 +262,18 @@ HUD
 
     border-radius:50%;
 
-    object-fit:cover;
-
 }
 
-.characterCard.active{
+/*=====================================
+ガラス
+=====================================*/
 
-    border:2px solid
-    #38bdf8;
+.glass{
 
-}
+    border:2px solid white;
 
+    padding:15px;
 
-/*=================================================
-スクショ
-=================================================*/
-
-#screenShotButton{
-
-    position:absolute;
-
-    right:25px;
-
-    bottom:25px;
-
-    width:65px;
-
-    height:65px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:#38bdf8;
-
-    color:white;
-
-    cursor:pointer;
-
-    font-size:24px;
-
-    z-index:100;
-
-}
-
-
-/*=================================================
-レスポンシブ
-=================================================*/
-
-@media(max-width:1000px){
-
-#mainContainer{
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-#leftPanel{
-
-    order:2;
-
-}
-
-#centerPanel{
-
-    order:1;
-
-    height:65vh;
-
-}
-
-#rightPanel{
-
-    order:3;
-
-}
-
-#carouselArea{
-
-    position:relative;
-
-    width:100%;
-
-    left:0;
-
-    bottom:0;
-
-    transform:none;
-
-}
-
-nav{
-
-    display:none;
-
-}
-
-}
-
-body{
-
-    background:red;
+    margin-bottom:20px;
 
 }
