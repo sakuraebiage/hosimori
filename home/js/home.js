@@ -1,1 +1,1 @@
-console.log("home.js 読み込み成功！");
+alert("読み込まれた！！");
