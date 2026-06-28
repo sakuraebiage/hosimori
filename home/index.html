@@ -19,24 +19,6 @@ href="css/home.css">
 
 <body>
 
-<!--=====================================
-背景
-======================================-->
-
-<div id="backgroundArea">
-
-<img
-id="backgroundImage"
-src="images/backgrounds/ChatGPT Image 2026年6月28日 17_53_03.png"
-alt="背景">
-
-<!--
-<img
-id="characterImage"
-src="images/characters/sample.png">
--->
-
-</div>
 
 <!--=====================================
 ヘッダー
@@ -119,122 +101,193 @@ src="images/ui/player.png">
 </aside>
 
 <!--=====================================
-中央
+メイン
 ======================================-->
 
-<main id="centerPanel">
+<div id="mainContainer">
 
-<div id="activeBadge">
+    <!--=====================================
+    左
+    ======================================-->
 
-ACTIVE
+    <aside id="leftPanel">
+
+        <div class="glass">
+
+            <h2>指揮官</h2>
+
+            <img
+                id="playerIcon"
+                src="images/ui/player.png"
+                alt="プレイヤー">
+
+            <div>Lv.50</div>
+
+            <div>隊員ランクⅢ</div>
+
+            <div>EXP</div>
+
+        </div>
+
+    </aside>
+
+    <!--=====================================
+    中央
+    ======================================-->
+
+    <main id="centerPanel">
+
+        <!--=====================================
+        背景
+        ======================================-->
+
+        <div id="backgroundArea">
+
+            <!-- 背景 -->
+
+            <img
+                id="backgroundImage"
+                src="images/backgrounds/ChatGPT Image 2026年6月28日 17_53_03.png"
+                alt="背景">
+
+            <!--=====================================
+            プレイヤー立ち絵
+            ======================================-->
+
+            <!--
+            <img
+                id="characterImage"
+                src="images/characters/sample.png"
+                alt="プレイヤー">
+            -->
+
+            <!--=====================================
+            操作中
+            ======================================-->
+
+            <div id="activeBadge">
+
+                ACTIVE
+
+            </div>
+
+        </div>
+
+        <!--=====================================
+        自PCカルーセル
+        ======================================-->
+
+        <section id="carouselArea">
+
+            <div id="characterList">
+
+                <div class="characterCard active">
+
+                    <img
+                        src="images/ui/player.png"
+                        alt="静海">
+
+                    <div>静海</div>
+
+                </div>
+
+                <div class="characterCard">
+
+                    <img
+                        src="images/ui/player.png"
+                        alt="恵佳">
+
+                    <div>恵佳</div>
+
+                </div>
+
+                <div class="characterCard">
+
+                    <img
+                        src="images/ui/player.png"
+                        alt="瑚白">
+
+                    <div>瑚白</div>
+
+                </div>
+
+                <div class="characterCard">
+
+                    <img
+                        src="images/ui/player.png"
+                        alt="宝楽">
+
+                    <div>宝楽</div>
+
+                </div>
+
+                <div class="characterCard">
+
+                    <img
+                        src="images/ui/player.png"
+                        alt="月詠">
+
+                    <div>月詠</div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!--=====================================
+    右
+    ======================================-->
+
+    <aside id="rightPanel">
+
+        <div class="glass">
+
+            <h2>戦況</h2>
+
+            <div id="warStatus">
+
+                ALL GREEN
+
+            </div>
+
+        </div>
+
+        <div class="glass">
+
+            <h2>救世者</h2>
+
+            <div>👑 十束静海</div>
+
+            <div>交戦中</div>
+
+            <hr>
+
+            <div>👑 萩月要</div>
+
+            <div>執務中</div>
+
+        </div>
+
+        <div class="glass">
+
+            <h2>イベント</h2>
+
+            <div>
+
+                🐾 くぅーん様 本部突撃まで<br>
+
+                23:51
+
+            </div>
+
+        </div>
+
+    </aside>
 
 </div>
-
-</main>
-
-<!--=====================================
-右
-======================================-->
-
-<aside id="rightPanel">
-
-<div class="glass">
-
-<h2>戦況</h2>
-
-<div id="warStatus">
-
-ALL GREEN
-
-</div>
-
-</div>
-
-<div class="glass">
-
-<h2>救世者</h2>
-
-<div>👑 十束静海</div>
-
-<div>交戦中</div>
-
-<hr>
-
-<div>👑 萩月要</div>
-
-<div>執務中</div>
-
-</div>
-
-<div class="glass">
-
-<h2>イベント</h2>
-
-<div>
-
-🐾 くぅーん様 本部突撃まで
-
-23:51
-
-</div>
-
-</div>
-
-</aside>
-
-</div>
-
-<!--=====================================
-カルーセル
-======================================-->
-
-<section id="carouselArea">
-
-<div id="characterList">
-
-<div class="characterCard active">
-
-<img src="images/ui/player.png">
-
-<div>静海</div>
-
-</div>
-
-<div class="characterCard">
-
-<img src="images/ui/player.png">
-
-<div>恵佳</div>
-
-</div>
-
-<div class="characterCard">
-
-<img src="images/ui/player.png">
-
-<div>瑚白</div>
-
-</div>
-
-<div class="characterCard">
-
-<img src="images/ui/player.png">
-
-<div>宝楽</div>
-
-</div>
-
-<div class="characterCard">
-
-<img src="images/ui/player.png">
-
-<div>月詠</div>
-
-</div>
-
-</div>
-
-</section>
 
 <!--=====================================
 スクショ
@@ -242,7 +295,7 @@ ALL GREEN
 
 <button id="screenShotButton">
 
-📷
+    📷
 
 </button>
 
