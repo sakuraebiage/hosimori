@@ -34,21 +34,15 @@ body{
 
 #mainContainer{
 
-    width:100%;
-
-    height:calc(100vh - 70px);
-
-    margin-top:70px;
-
     display:grid;
 
     grid-template-columns:
 
-        260px
+        180px
 
         1fr
 
-        320px;
+        180px;
 
 }
 
