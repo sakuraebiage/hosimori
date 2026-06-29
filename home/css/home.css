@@ -3,34 +3,46 @@
 =====================================*/
 
 *{
+
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
+
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
 }
 
 body{
 
     background:#05070c;
-    color:white;
+
+    color:#ffffff;
+
     font-family:"Segoe UI",sans-serif;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
 
 }
 
+
 /*=====================================
-メイン
+メインレイアウト
 =====================================*/
 
 #mainContainer{
 
     display:grid;
 
-    grid-template-columns:
-        260px
-        1fr
-        320px;
+    grid-template-columns:260px 1fr 300px;
+
+    width:100%;
 
     height:calc(100vh - 70px);
 
@@ -38,21 +50,26 @@ body{
 
 }
 
+
 /*=====================================
-左
+左・右
 =====================================*/
 
-#leftPanel{
+#leftPanel,
+#rightPanel{
 
-    padding:20px;
+    padding:18px;
 
     display:flex;
-    flex-direction:column;
-    gap:20px;
 
-    z-index:10;
+    flex-direction:column;
+
+    gap:18px;
+
+    z-index:5;
 
 }
+
 
 /*=====================================
 中央
@@ -66,21 +83,6 @@ body{
 
 }
 
-/*=====================================
-右
-=====================================*/
-
-#rightPanel{
-
-    padding:20px;
-
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-
-    z-index:10;
-
-}
 
 /*=====================================
 ヘッダー
@@ -91,40 +93,54 @@ body{
     position:fixed;
 
     top:0;
+
     left:0;
 
     width:100%;
+
     height:70px;
 
     display:flex;
 
     justify-content:space-between;
+
     align-items:center;
 
-    padding:0 35px;
+    padding:0 30px;
 
-    background:rgba(10,18,35,.65);
+    background:rgba(10,18,35,.90);
 
     backdrop-filter:blur(18px);
 
-    border-bottom:
-    1px solid rgba(255,255,255,.12);
+    border-bottom:1px solid rgba(120,220,255,.18);
 
     z-index:999;
 
 }
 
+
 #gameTitle{
 
-    font-size:28px;
+    font-size:30px;
 
     font-weight:bold;
 
-    color:#84d9ff;
+    letter-spacing:3px;
 
-    letter-spacing:2px;
+    color:white;
+
+    text-shadow:
+
+        0 0 12px #4fdfff,
+
+        0 0 25px #00bfff;
 
 }
+
+
+/*=====================================
+メニュー
+=====================================*/
 
 nav{
 
@@ -136,17 +152,15 @@ nav{
 
 nav button{
 
-    padding:10px 18px;
-
-    background:rgba(255,255,255,.06);
-
-    border:
-
-    1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
 
     color:white;
 
+    border:1px solid rgba(120,220,255,.18);
+
     border-radius:12px;
+
+    padding:10px 18px;
 
     cursor:pointer;
 
@@ -156,11 +170,18 @@ nav button{
 
 nav button:hover{
 
-    transform:translateY(-3px);
+    background:rgba(70,180,255,.22);
 
-    background:rgba(0,170,255,.25);
+    border-color:#7fdfff;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+
+        0 0 18px rgba(0,180,255,.30);
 
 }
+
 
 /*=====================================
 背景
@@ -168,10 +189,11 @@ nav button:hover{
 
 #backgroundArea{
 
-    position:relative;
+    position:absolute;
 
-    width:100%;
-    height:100%;
+    inset:0;
+
+    overflow:hidden;
 
 }
 
@@ -182,31 +204,36 @@ nav button:hover{
     inset:0;
 
     width:100%;
+
     height:100%;
 
     object-fit:cover;
 
-    filter:
-
-    brightness(.72);
+    z-index:0;
 
 }
+
+
+/*=====================================
+立ち絵
+=====================================*/
 
 #characterImage{
 
     position:absolute;
 
-    left:50%;
-
     bottom:0;
+
+    left:50%;
 
     transform:translateX(-50%);
 
     height:90%;
 
-    z-index:5;
+    z-index:2;
 
 }
+
 
 /*=====================================
 ACTIVE
@@ -216,14 +243,13 @@ ACTIVE
 
     position:absolute;
 
-    top:25px;
-    left:25px;
+    top:30px;
+
+    left:30px;
+
+    padding:10px 22px;
 
     background:#00b7ff;
-
-    color:white;
-
-    padding:10px 20px;
 
     border-radius:30px;
 
@@ -233,87 +259,12 @@ ACTIVE
 
     box-shadow:
 
-    0 0 20px rgba(0,183,255,.45);
+        0 0 20px rgba(0,180,255,.45);
 
     z-index:20;
 
 }
 
-/*=====================================
-ガラス
-=====================================*/
-
-.glass{
-
-    background:rgba(20,30,50,.45);
-
-    backdrop-filter:blur(20px);
-
-    border:
-
-    1px solid rgba(255,255,255,.15);
-
-    border-radius:22px;
-
-    padding:18px;
-
-    box-shadow:
-
-    0 0 20px rgba(0,160,255,.12);
-
-}
-
-.glass h2{
-
-    margin-bottom:12px;
-
-    color:#8fdcff;
-
-    font-size:20px;
-
-}
-
-/*=====================================
-プレイヤー
-=====================================*/
-
-#playerIcon{
-
-    width:120px;
-
-    height:120px;
-
-    object-fit:cover;
-
-    border-radius:50%;
-
-    display:block;
-
-    margin:15px auto;
-
-    border:
-
-    3px solid #46c7ff;
-
-}
-
-/*=====================================
-戦況
-=====================================*/
-
-#warStatus{
-
-    margin-top:15px;
-
-    text-align:center;
-
-    color:#58ff9b;
-
-    font-size:24px;
-
-    font-weight:bold;
-
-}
 
 /*=====================================
 カルーセル
@@ -329,9 +280,9 @@ ACTIVE
 
     transform:translateX(-50%);
 
-    width:85%;
+    width:75%;
 
-    z-index:50;
+    z-index:30;
 
 }
 
@@ -339,53 +290,54 @@ ACTIVE
 
     display:flex;
 
-    justify-content:center;
+    gap:16px;
 
-    gap:18px;
+    overflow-x:auto;
+
+    padding:8px;
+
+    scrollbar-width:none;
 
 }
 
+#characterList::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+
+/*=====================================
+カード
+=====================================*/
+
 .characterCard{
 
-    width:120px;
+    min-width:120px;
 
-    background:rgba(20,30,50,.55);
+    background:rgba(8,18,35,.72);
 
-    backdrop-filter:blur(15px);
+    border:1px solid rgba(120,220,255,.18);
 
-    border:
+    border-radius:18px;
 
-    1px solid rgba(255,255,255,.15);
-
-    border-radius:20px;
-
-    padding:15px;
-
-    cursor:pointer;
-
-    transition:.25s;
+    padding:12px;
 
     text-align:center;
+
+    transition:.25s;
 
 }
 
 .characterCard:hover{
 
-    transform:
+    transform:translateY(-5px);
 
-    translateY(-8px);
-
-}
-
-.characterCard.active{
-
-    border:
-
-    2px solid #46c7ff;
+    border-color:#7fdfff;
 
     box-shadow:
 
-    0 0 20px rgba(70,199,255,.4);
+        0 0 20px rgba(0,180,255,.28);
 
 }
 
@@ -395,13 +347,80 @@ ACTIVE
 
     height:72px;
 
-    object-fit:cover;
-
     border-radius:50%;
+
+    object-fit:cover;
 
     margin-bottom:10px;
 
 }
+
+
+/*=====================================
+プレイヤーアイコン
+=====================================*/
+
+#playerIcon{
+
+    width:100px;
+
+    display:block;
+
+    margin:15px auto;
+
+}
+
+
+/*=====================================
+ガラスパネル
+=====================================*/
+
+.glass{
+
+    background:rgba(8,18,35,.72);
+
+    backdrop-filter:blur(16px);
+
+    -webkit-backdrop-filter:blur(16px);
+
+    border:1px solid rgba(120,220,255,.18);
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-shadow:
+
+        0 0 20px rgba(0,180,255,.12),
+
+        inset 0 0 10px rgba(255,255,255,.03);
+
+    transition:.25s;
+
+}
+
+.glass:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+        0 0 28px rgba(0,180,255,.22);
+
+}
+
+.glass h2{
+
+    color:#7fdfff;
+
+    font-size:18px;
+
+    margin-bottom:12px;
+
+    letter-spacing:2px;
+
+}
+
 
 /*=====================================
 スクショ
@@ -415,9 +434,9 @@ ACTIVE
 
     bottom:30px;
 
-    width:70px;
+    width:60px;
 
-    height:70px;
+    height:60px;
 
     border:none;
 
@@ -427,50 +446,14 @@ ACTIVE
 
     color:white;
 
-    font-size:28px;
+    font-size:24px;
 
     cursor:pointer;
 
     box-shadow:
 
-    0 0 25px rgba(0,183,255,.5);
+        0 0 25px rgba(0,180,255,.40);
 
     z-index:999;
-
-}
-
-/*=====================================
-レスポンシブ
-=====================================*/
-
-@media(max-width:1200px){
-
-    #mainContainer{
-
-        grid-template-columns:
-
-        220px
-
-        1fr
-
-        260px;
-
-    }
-
-}
-
-@media(max-width:900px){
-
-    nav{
-
-        display:none;
-
-    }
-
-    #mainContainer{
-
-        display:block;
-
-    }
 
 }
