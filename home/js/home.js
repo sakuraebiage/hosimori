@@ -1,6 +1,6 @@
 alert("読み込まれた！！");
 const backgrounds = [
-    "images/backgrounds/yozuki_day.png"
+    "images/backgrounds/ChatGPT Image 2026年6月28日 17_53_03.png"
 ];
 
 console.log("背景ランダム成功");
