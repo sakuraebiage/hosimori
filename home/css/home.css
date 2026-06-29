@@ -491,3 +491,147 @@ ACTIVE
     z-index:999;
 
 }
+
+/*=====================================
+スマホレイアウト
+======================================*/
+
+@media screen and (max-width: 768px){
+
+    /*==========================
+      全体
+    ==========================*/
+
+    body{
+
+        overflow-x:hidden;
+
+    }
+
+    /*==========================
+      ヘッダー
+    ==========================*/
+
+    #topBar{
+
+        flex-direction:column;
+        gap:10px;
+        padding:15px;
+
+    }
+
+    #gameTitle{
+
+        text-align:center;
+
+    }
+
+    nav{
+
+        display:flex;
+        overflow-x:auto;
+        gap:10px;
+        width:100%;
+        white-space:nowrap;
+        padding-bottom:5px;
+
+    }
+
+    nav button{
+
+        flex:0 0 auto;
+
+    }
+
+    /*==========================
+      ステータスバー
+    ==========================*/
+
+    #statusBar{
+
+        display:flex;
+        overflow-x:auto;
+        gap:10px;
+        padding:10px;
+
+    }
+
+    .statusItem{
+
+        min-width:160px;
+        flex-shrink:0;
+
+    }
+
+    /*==========================
+      メイン
+    ==========================*/
+
+    #mainContainer{
+
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+        padding:15px;
+
+    }
+
+    /*==========================
+      パネル
+    ==========================*/
+
+    #infoPanel,
+    #centerPanel,
+    #monitorPanel{
+
+        width:100%;
+
+    }
+
+    /*==========================
+      背景
+    ==========================*/
+
+    #backgroundImage{
+
+        object-fit:cover;
+
+    }
+
+    /*==========================
+      カルーセル
+    ==========================*/
+
+    #carouselArea{
+
+        width:100%;
+        overflow-x:auto;
+
+    }
+
+    #characterList{
+
+        display:flex;
+        gap:15px;
+        width:max-content;
+
+    }
+
+    .characterCard{
+
+        min-width:120px;
+
+    }
+
+    /*==========================
+      スクショボタン
+    ==========================*/
+
+    #screenShotButton{
+
+        right:15px;
+        bottom:15px;
+
+    }
+
+}
