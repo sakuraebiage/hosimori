@@ -69,15 +69,27 @@ href="css/home.css">
 HUD
 ======================================-->
 
-<div id="hud">
+<div id="statusBar">
 
-<div class="hudIcon">💰</div>
+    <div class="statusItem">
+        <span>💰</span>
+        <strong>2,450,000 Cr</strong>
+    </div>
 
-<div class="hudIcon">⭐</div>
+    <div class="statusItem">
+        <span>⚡ AP</span>
+        <strong>120 /120</strong>
+    </div>
 
-<div class="hudIcon">📦</div>
+    <div class="statusItem">
+        <span>🔥 BP</span>
+        <strong>5 /5</strong>
+    </div>
 
-<div class="hudIcon">🎁</div>
+    <div class="statusItem">
+        <span>◇ CP</span>
+        <strong>8 /10</strong>
+    </div>
 
 </div>
 
@@ -95,18 +107,19 @@ HUD
 
         <div class="glass">
 
-            <h2>指揮官</h2>
+            <h2>INFO</h2>
 
-            <img
-                id="playerIcon"
-                src="images/ui/player.png"
-                alt="プレイヤー">
+<ul>
 
-            <div>Lv.50</div>
+<li>お知らせ</li>
 
-            <div>隊員ランクⅢ</div>
+<li>イベント</li>
 
-            <div>EXP</div>
+<li>Animus通信</li>
+
+<li>現在地</li>
+
+</ul>
 
         </div>
 
@@ -118,12 +131,12 @@ HUD
 
 <main id="centerPanel">
 
-    <div id="activeBadge">
+<div id="animusLogo">
 
-        ACTIVE
+System of ANIMUS
 
-    </div>
-
+</div>
+    
 </main>
 
 
@@ -191,58 +204,140 @@ HUD
 
     </main>
 
-    <!--=====================================
-    右
-    ======================================-->
+   <!--=====================================
+右（Animus Monitor）
+======================================-->
 
-    <aside id="rightPanel">
+<aside id="monitorPanel">
 
-        <div class="glass">
+    <!--=========================
+    Animus Monitor
+    ==========================-->
 
-            <h2>戦況</h2>
+    <div class="glass">
 
-            <div id="warStatus">
+        <h2>Animus Monitor</h2>
 
-                ALL GREEN
+        <div class="monitorStatus">
+
+            <div class="statusRow">
+                <span>接続状態</span>
+                <span class="online">● ONLINE</span>
+            </div>
+
+            <div class="statusRow">
+                <span>侵食率</span>
+                <span>12%</span>
+            </div>
+
+            <div class="statusRow">
+                <span>ゲート反応</span>
+                <span class="safe">正常</span>
+            </div>
+
+            <div class="statusRow">
+                <span>世界安定度</span>
+                <span>98.4%</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--=========================
+    拠点状況
+    ==========================-->
+
+    <div class="glass">
+
+        <h2>拠点状況</h2>
+
+        <div class="baseStatus">
+
+            <div class="baseItem">
+                <span>🏛 本部</span>
+                <span class="safe">正常</span>
+            </div>
+
+            <div class="baseItem">
+                <span>🌲 北部拠点</span>
+                <span>防衛中</span>
+            </div>
+
+            <div class="baseItem">
+                <span>🌊 東部拠点</span>
+                <span class="safe">安定</span>
+            </div>
+
+            <div class="baseItem">
+                <span>🏜 西部拠点</span>
+                <span class="warning">警戒</span>
+            </div>
+
+            <div class="baseItem">
+                <span>⛰ 南部拠点</span>
+                <span class="danger">侵食</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--=========================
+    救世者配置
+    ==========================-->
+
+    <div class="glass">
+
+        <h2>救世者配置</h2>
+
+        <div class="saviorList">
+
+            <div class="saviorItem">
+
+                <span>👑 萩月 要</span>
+
+                <span>本部</span>
+
+            </div>
+
+            <div class="saviorItem">
+
+                <span>⚔ 十束静海</span>
+
+                <span>北部</span>
+
+            </div>
+
+            <div class="saviorItem">
+
+                <span>🎨 九条瑚白</span>
+
+                <span>東部</span>
+
+            </div>
+
+            <div class="saviorItem">
+
+                <span>🗡 萩月宝楽</span>
+
+                <span>西部</span>
+
+            </div>
+
+            <div class="saviorItem">
+
+                <span>🌙 月詠</span>
+
+                <span>本部</span>
 
             </div>
 
         </div>
 
-        <div class="glass">
+    </div>
 
-            <h2>救世者</h2>
-
-            <div>👑 十束静海</div>
-
-            <div>交戦中</div>
-
-            <hr>
-
-            <div>👑 萩月要</div>
-
-            <div>執務中</div>
-
-        </div>
-
-        <div class="glass">
-
-            <h2>イベント</h2>
-
-            <div>
-
-                🐾 くぅーん様 本部突撃まで<br>
-
-                23:51
-
-            </div>
-
-        </div>
-
-    </aside>
-
-</div>
-
+</aside>
 <!--=====================================
 スクショ
 ======================================-->
