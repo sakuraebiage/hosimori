@@ -23,7 +23,7 @@
     Home
     ======================================-->
 
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/home_v2.css">
 
 </head>
 
@@ -31,7 +31,6 @@
 
 <!--=====================================
 Background
-ゲーム全体の背景
 ======================================-->
 
 <div id="backgroundArea">
@@ -48,7 +47,6 @@ Background
 
 <!--=====================================
 Header
-ゲーム共通ヘッダー
 ======================================-->
 
 <header id="topBar">
@@ -62,19 +60,12 @@ Header
     <nav>
 
         <button class="animus-button">ホーム</button>
-
         <button class="animus-button">防衛</button>
-
         <button class="animus-button">探索</button>
-
         <button class="animus-button">戦闘</button>
-
         <button class="animus-button">工房</button>
-
         <button class="animus-button">図鑑</button>
-
         <button class="animus-button">チャット</button>
-
         <button class="animus-button">設定</button>
 
     </nav>
@@ -83,56 +74,31 @@ Header
 
 <!--=====================================
 Status Bar
-プレイヤー情報
 ======================================-->
 
 <section id="statusBar">
 
     <div class="statusItem">
 
-        💰
-
-        <strong>
-
-            2,450,000 Cr
-
-        </strong>
+        💰 <strong>2,450,000 Cr</strong>
 
     </div>
 
     <div class="statusItem">
 
-        ⚡
-
-        <strong>
-
-            AP 120 /120
-
-        </strong>
+        ⚡ <strong>AP 120 / 120</strong>
 
     </div>
 
     <div class="statusItem">
 
-        🔥
-
-        <strong>
-
-            BP 5 /5
-
-        </strong>
+        🔥 <strong>BP 5 / 5</strong>
 
     </div>
 
     <div class="statusItem">
 
-        ◇
-
-        <strong>
-
-            CP 8 /10
-
-        </strong>
+        ◇ <strong>CP 8 / 10</strong>
 
     </div>
 
@@ -145,13 +111,12 @@ Main Layout
 <div id="mainContainer">
 
     <!--=====================================
-    Information Area
-    左サイド情報
+    Left Panel
     ======================================-->
 
     <aside id="infoPanel">
 
-        <div class="animus-card">
+        <section class="animus-card">
 
             <div class="animus-title">
 
@@ -171,26 +136,21 @@ Main Layout
 
             </ul>
 
-        </div>
+        </section>
 
     </aside>
 
         <!--=====================================
-    Hero Area
-    ホーム画面中央
+    Center Panel
     ======================================-->
 
     <main id="centerPanel">
 
-        <!--=============================
-        Hero
-        ==============================-->
+        <!--=====================================
+        Hero Area
+        ======================================-->
 
         <section id="heroArea">
-
-            <!--=========================
-            Welcome
-            ==========================-->
 
             <div id="welcomeArea">
 
@@ -208,9 +168,9 @@ Main Layout
 
             </div>
 
-            <!--=========================
+            <!--=====================================
             Character Display
-            ==========================-->
+            ======================================-->
 
             <div id="characterArea">
 
@@ -226,9 +186,9 @@ Main Layout
 
         </section>
 
-        <!--=============================
-        Character Carousel
-        ==============================-->
+        <!--=====================================
+        Character Selector
+        ======================================-->
 
         <section id="carouselArea">
 
@@ -240,7 +200,11 @@ Main Layout
                         src="images/ui/player.png"
                         alt="静海">
 
-                    <div>十束 静海</div>
+                    <div>
+
+                        十束 静海
+
+                    </div>
 
                 </div>
 
@@ -250,7 +214,11 @@ Main Layout
                         src="images/ui/player.png"
                         alt="恵佳">
 
-                    <div>萩月 恵佳</div>
+                    <div>
+
+                        萩月 恵佳
+
+                    </div>
 
                 </div>
 
@@ -260,7 +228,11 @@ Main Layout
                         src="images/ui/player.png"
                         alt="瑚白">
 
-                    <div>九条 瑚白</div>
+                    <div>
+
+                        九条 瑚白
+
+                    </div>
 
                 </div>
 
@@ -270,7 +242,11 @@ Main Layout
                         src="images/ui/player.png"
                         alt="宝楽">
 
-                    <div>萩月 宝楽</div>
+                    <div>
+
+                        萩月 宝楽
+
+                    </div>
 
                 </div>
 
@@ -280,7 +256,11 @@ Main Layout
                         src="images/ui/player.png"
                         alt="月詠">
 
-                    <div>月詠</div>
+                    <div>
+
+                        月詠
+
+                    </div>
 
                 </div>
 
@@ -290,16 +270,11 @@ Main Layout
 
     </main>
 
-        <!--=====================================
-    Monitor Area
-    ホーム画面右側
+    <!--=====================================
+    Right Panel
     ======================================-->
 
     <aside id="monitorPanel">
-
-        <!--=============================
-        Animus Monitor
-        ==============================-->
 
         <section class="animus-card">
 
@@ -362,159 +337,3 @@ Main Layout
             </div>
 
         </section>
-
-        <!--=============================
-        Base Status
-        ==============================-->
-
-        <section class="animus-card">
-
-            <div class="animus-title">
-
-                BASE STATUS
-
-            </div>
-
-            <div class="baseStatus">
-
-                <div class="baseItem">
-
-                    <span>🏛 本部</span>
-
-                    <span class="safe">
-
-                        正常
-
-                    </span>
-
-                </div>
-
-                <div class="baseItem">
-
-                    <span>🌲 北部</span>
-
-                    <span>
-
-                        防衛中
-
-                    </span>
-
-                </div>
-
-                <div class="baseItem">
-
-                    <span>🌊 東部</span>
-
-                    <span class="safe">
-
-                        安定
-
-                    </span>
-
-                </div>
-
-                <div class="baseItem">
-
-                    <span>🏜 西部</span>
-
-                    <span class="warning">
-
-                        警戒
-
-                    </span>
-
-                </div>
-
-                <div class="baseItem">
-
-                    <span>⛰ 南部</span>
-
-                    <span class="danger">
-
-                        侵食
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!--=============================
-        Savior Status
-        ==============================-->
-
-        <section class="animus-card">
-
-            <div class="animus-title">
-
-                SAVIOR STATUS
-
-            </div>
-
-            <div class="saviorList">
-
-                <div class="saviorItem">
-
-                    <span>👑 萩月 要</span>
-
-                    <span>本部</span>
-
-                </div>
-
-                <div class="saviorItem">
-
-                    <span>⚔ 十束 静海</span>
-
-                    <span>北部</span>
-
-                </div>
-
-                <div class="saviorItem">
-
-                    <span>🎨 九条 瑚白</span>
-
-                    <span>東部</span>
-
-                </div>
-
-                <div class="saviorItem">
-
-                    <span>🗡 萩月 宝楽</span>
-
-                    <span>西部</span>
-
-                </div>
-
-                <div class="saviorItem">
-
-                    <span>🌙 月詠</span>
-
-                    <span>本部</span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </aside>
-
-</div>
-
-<!--=====================================
-Floating HUD
-======================================-->
-
-<button id="screenShotButton">
-
-    📷
-
-</button>
-
-<script src="js/home.js"></script>
-
-</body>
-
-</html>
