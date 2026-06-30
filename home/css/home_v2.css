@@ -1,70 +1,78 @@
-/*=====================================
-Home Layout
-=====================================*/
+/*==================================================
+星守戦線
+Home Version 1.0
+Home CSS
+==================================================*/
 
-#mainContainer{
 
-    display:grid;
+/*==================================================
+Reset
+==================================================*/
 
-    grid-template-columns:300px 1fr 340px;
+*{
 
-    gap:25px;
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html,
+body{
 
     width:100%;
 
-    min-height:calc(100vh - 140px);
-
-    padding:140px 30px 40px;
-
-    position:relative;
-
-    z-index:5;
+    min-height:100%;
 
 }
 
-/*=====================================
-Left / Center / Right
-=====================================*/
+body{
 
-#infoPanel{
+    background:#05070c;
 
-    display:flex;
+    color:#ffffff;
 
-    flex-direction:column;
+    font-family:"Segoe UI",sans-serif;
 
-    gap:20px;
+    overflow-x:hidden;
 
 }
 
-#centerPanel{
 
-    position:relative;
+/*==================================================
+Background
+==================================================*/
 
-    display:flex;
+#backgroundArea{
 
-    flex-direction:column;
+    position:fixed;
 
-    justify-content:space-between;
+    inset:0;
 
-    align-items:center;
+    overflow:hidden;
 
-    min-height:780px;
-
-}
-
-#monitorPanel{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
+    z-index:-100;
 
 }
 
-/*=====================================
+#backgroundImage{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    filter:brightness(.82);
+
+}
+
+
+/*==================================================
 Header
-=====================================*/
+==================================================*/
 
 #topBar{
 
@@ -86,29 +94,36 @@ Header
 
     padding:0 40px;
 
-    background:rgba(8,15,32,.88);
+    background:rgba(8,15,30,.90);
 
-    backdrop-filter:blur(18px);
+    backdrop-filter:blur(20px);
 
-    border-bottom:1px solid rgba(90,220,255,.20);
+    border-bottom:1px solid rgba(120,220,255,.15);
 
-    z-index:9999;
+    z-index:1000;
 
 }
 
 #gameTitle{
 
-    font-size:40px;
+    font-size:34px;
 
     font-weight:700;
 
-    letter-spacing:4px;
+    letter-spacing:5px;
+
+    color:white;
+
+    text-shadow:
+
+        0 0 10px rgba(0,200,255,.35);
 
 }
 
-/*=====================================
-Menu
-=====================================*/
+
+/*==================================================
+Navigation
+==================================================*/
 
 nav{
 
@@ -118,15 +133,34 @@ nav{
 
 }
 
-nav button{
+.animus-button{
 
-    min-width:90px;
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.05);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.25s;
 
 }
 
-/*=====================================
+.animus-button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+/*==================================================
 Status Bar
-=====================================*/
+==================================================*/
 
 #statusBar{
 
@@ -138,7 +172,7 @@ Status Bar
 
     width:100%;
 
-    height:58px;
+    height:56px;
 
     display:flex;
 
@@ -146,13 +180,15 @@ Status Bar
 
     align-items:center;
 
-    gap:18px;
+    gap:16px;
 
-    background:rgba(8,15,32,.55);
+    background:rgba(8,15,30,.60);
 
-    backdrop-filter:blur(14px);
+    backdrop-filter:blur(16px);
 
-    z-index:998;
+    border-bottom:1px solid rgba(120,220,255,.10);
+
+    z-index:999;
 
 }
 
@@ -166,738 +202,42 @@ Status Bar
 
     padding:10px 18px;
 
-    border-radius:14px;
+    border-radius:12px;
 
-    background:rgba(255,255,255,.05);
-
-    border:1px solid rgba(120,220,255,.15);
+    background:rgba(255,255,255,.04);
 
 }
 
-/*=====================================
-Background
-=====================================*/
 
-#backgroundArea{
-
-    position:fixed;
-
-    inset:0;
-
-    overflow:hidden;
-
-    z-index:-10;
-
-}
-
-#backgroundImage{
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:cover;
-
-    filter:brightness(.9);
-
-}
-
-/*=====================================
-Welcome
-=====================================*/
-
-#welcomeArea{
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:18px;
-
-    margin-top:60px;
-
-}
-
-#welcomeText{
-
-    font-size:42px;
-
-    letter-spacing:4px;
-
-    opacity:.9;
-
-}
-
-#animusLogo{
-
-    font-size:22px;
-
-    letter-spacing:6px;
-
-    color:#8ddcff;
-
-}
-
-/*=====================================
-Center Layout
-=====================================*/
-
-#centerPanel{
-
-    position:relative;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    min-height:760px;
-
-}
-
-/*=====================================
-Welcome
-=====================================*/
-
-#welcomeArea{
-
-    width:100%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
-    margin-top:40px;
-
-    text-align:center;
-
-    z-index:20;
-
-}
-
-#welcomeText{
-
-    font-size:42px;
-
-    font-weight:300;
-
-    letter-spacing:6px;
-
-    color:white;
-
-    opacity:.9;
-
-    margin-bottom:12px;
-
-}
-
-#animusLogo{
-
-    font-size:24px;
-
-    font-weight:600;
-
-    letter-spacing:8px;
-
-    color:#8ddcff;
-
-    text-shadow:
-
-        0 0 12px rgba(80,220,255,.8),
-
-        0 0 28px rgba(0,180,255,.45);
-
-}
-
-/*=====================================
-Carousel Area
-=====================================*/
-
-#carouselArea{
-
-    width:100%;
-
-    margin-top:auto;
-
-    padding:40px 0 10px;
-
-}
-
-#characterList{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:22px;
-
-    overflow-x:auto;
-
-    padding:10px;
-
-    scrollbar-width:none;
-
-}
-
-#characterList::-webkit-scrollbar{
-
-    display:none;
-
-}
-
-/*=====================================
-Character Card
-=====================================*/
-
-.characterCard{
-
-    flex:0 0 180px;
-
-    min-height:250px;
-
-    padding:18px;
-
-    border-radius:22px;
-
-    background:rgba(8,18,35,.55);
-
-    backdrop-filter:blur(18px);
-
-    border:1px solid rgba(120,220,255,.18);
-
-    transition:.3s;
-
-    cursor:pointer;
-
-}
-
-.characterCard:hover{
-
-    transform:translateY(-8px);
-
-    border-color:#79dcff;
-
-    box-shadow:
-
-        0 0 24px rgba(0,180,255,.35);
-
-}
-
-.characterCard.active{
-
-    border:2px solid #64d6ff;
-
-    box-shadow:
-
-        0 0 30px rgba(0,180,255,.45);
-
-}
-
-.characterCard img{
-
-    width:110px;
-
-    height:110px;
-
-    border-radius:50%;
-
-    object-fit:cover;
-
-    display:block;
-
-    margin:0 auto 18px;
-
-    border:2px solid rgba(120,220,255,.35);
-
-}
-
-.characterCard div{
-
-    text-align:center;
-
-    font-size:22px;
-
-    font-weight:600;
-
-    letter-spacing:2px;
-
-}
-
-/*=====================================
-Future Animation
-=====================================*/
-
-.characterCard video{
-
-    width:100%;
-
-    height:auto;
-
-    border-radius:18px;
-
-    display:block;
-
-}
-
-/*=====================================
-Info Panel
-=====================================*/
-
-#infoPanel{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-#infoPanel ul{
-
-    list-style:none;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:14px;
-
-}
-
-#infoPanel li{
-
-    font-size:18px;
-
-    letter-spacing:1px;
-
-    transition:.25s;
-
-    cursor:pointer;
-
-}
-
-#infoPanel li:hover{
-
-    color:#8ddcff;
-
-    transform:translateX(8px);
-
-}
-
-/*=====================================
-Monitor Panel
-=====================================*/
-
-#monitorPanel{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
-}
-
-.monitorStatus,
-.baseStatus,
-.saviorList{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-}
-
-/*=====================================
-Rows
-=====================================*/
-
-.statusRow,
-.baseItem,
-.saviorItem{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:8px 0;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-
-}
-
-.statusRow:last-child,
-.baseItem:last-child,
-.saviorItem:last-child{
-
-    border-bottom:none;
-
-}
-
-/*=====================================
-Status Colors
-=====================================*/
-
-.online{
-
-    color:#68ffbe;
-
-}
-
-.safe{
-
-    color:#7ddcff;
-
-}
-
-.warning{
-
-    color:#ffd866;
-
-}
-
-.danger{
-
-    color:#ff7f7f;
-
-}
-
-/*=====================================
-Floating HUD
-=====================================*/
-
-#screenShotButton{
-
-    position:fixed;
-
-    right:30px;
-
-    bottom:30px;
-
-    width:72px;
-
-    height:72px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:linear-gradient(
-
-        180deg,
-
-        #27d4ff,
-
-        #0ca4ff
-
-    );
-
-    color:white;
-
-    font-size:28px;
-
-    cursor:pointer;
-
-    box-shadow:
-
-        0 0 35px rgba(0,180,255,.45);
-
-    transition:.3s;
-
-    z-index:999;
-
-}
-
-#screenShotButton:hover{
-
-    transform:scale(1.08);
-
-    box-shadow:
-
-        0 0 50px rgba(0,180,255,.7);
-
-}
-
-/*=====================================
-Responsive Layout
-=====================================*/
-
-@media screen and (max-width:1200px){
-
-    #mainContainer{
-
-        grid-template-columns:260px 1fr;
-
-    }
-
-    #monitorPanel{
-
-        grid-column:1 / 3;
-
-        flex-direction:row;
-
-        flex-wrap:wrap;
-
-    }
-
-    #monitorPanel .animus-card{
-
-        flex:1;
-
-        min-width:280px;
-
-    }
-
-}
-
-/*=====================================
-Tablet
-=====================================*/
-
-@media screen and (max-width:900px){
-
-    #mainContainer{
-
-        display:flex;
-
-        flex-direction:column;
-
-        padding:150px 20px 40px;
-
-        gap:24px;
-
-    }
-
-    #topBar{
-
-        flex-direction:column;
-
-        height:auto;
-
-        padding:16px;
-
-        gap:14px;
-
-    }
-
-    #statusBar{
-
-        position:relative;
-
-        top:0;
-
-        flex-wrap:wrap;
-
-        height:auto;
-
-        padding:12px;
-
-    }
-
-    nav{
-
-        width:100%;
-
-        overflow-x:auto;
-
-        justify-content:flex-start;
-
-        padding-bottom:6px;
-
-        scrollbar-width:none;
-
-    }
-
-    nav::-webkit-scrollbar{
-
-        display:none;
-
-    }
-
-}
-
-/*=====================================
-Mobile
-=====================================*/
-
-@media screen and (max-width:768px){
-
-    #mainContainer{
-
-        display:flex;
-
-        flex-direction:column;
-
-        padding:180px 16px 30px;
-
-        gap:24px;
-
-    }
-
-    #infoPanel{
-
-        order:1;
-
-    }
-
-    #centerPanel{
-
-        order:2;
-
-        min-height:auto;
-
-    }
-
-    #monitorPanel{
-
-        order:3;
-
-    }
-
-    #welcomeText{
-
-        font-size:30px;
-
-    }
-
-    #animusLogo{
-
-        font-size:18px;
-
-        letter-spacing:3px;
-
-    }
-
-    #carouselArea{
-
-        padding-top:30px;
-
-    }
-
-    #characterList{
-
-        justify-content:flex-start;
-
-        gap:16px;
-
-        padding-bottom:10px;
-
-    }
-
-    .characterCard{
-
-        flex:0 0 150px;
-
-        min-height:220px;
-
-    }
-
-    .characterCard img{
-
-        width:90px;
-
-        height:90px;
-
-    }
-
-    #screenShotButton{
-
-        right:20px;
-
-        bottom:20px;
-
-        width:64px;
-
-        height:64px;
-
-    }
-
-}
-
-/*=====================================
-Small Mobile
-=====================================*/
-
-@media screen and (max-width:480px){
-
-    #gameTitle{
-
-        font-size:28px;
-
-    }
-
-    nav button{
-
-        min-width:82px;
-
-        font-size:14px;
-
-    }
-
-    .statusItem{
-
-        font-size:14px;
-
-        padding:8px 14px;
-
-    }
-
-    #welcomeText{
-
-        font-size:24px;
-
-    }
-
-    #animusLogo{
-
-        font-size:16px;
-
-    }
-
-}
-
-/*=====================================
-Layout
-ホーム画面全体
-=====================================*/
+/*==================================================
+Main Layout
+==================================================*/
 
 #mainContainer{
 
     display:grid;
 
-    grid-template-columns:300px 1fr 360px;
+    grid-template-columns:280px 1fr 340px;
 
     gap:30px;
 
     width:100%;
 
-    min-height:calc(100vh - 140px);
+    min-height:calc(100vh - 138px);
 
-    padding:160px 35px 40px;
+    padding:
 
-    align-items:start;
+        170px
+
+        35px
+
+        40px;
 
 }
 
-/*=====================================
+/*==================================================
 Left Panel
-=====================================*/
+==================================================*/
 
 #infoPanel{
 
@@ -905,13 +245,13 @@ Left Panel
 
     flex-direction:column;
 
-    gap:20px;
+    gap:24px;
 
 }
 
-/*=====================================
+/*==================================================
 Center Panel
-=====================================*/
+==================================================*/
 
 #centerPanel{
 
@@ -925,13 +265,11 @@ Center Panel
 
     gap:40px;
 
-    min-height:780px;
-
 }
 
-/*=====================================
+/*==================================================
 Hero Area
-=====================================*/
+==================================================*/
 
 #heroArea{
 
@@ -945,21 +283,21 @@ Hero Area
 
     justify-content:center;
 
-    gap:25px;
+    gap:30px;
 
 }
 
-/*=====================================
-Welcome
-=====================================*/
+/*==================================================
+Welcome Area
+==================================================*/
 
 #welcomeArea{
+
+    text-align:center;
 
     display:flex;
 
     flex-direction:column;
-
-    align-items:center;
 
     gap:10px;
 
@@ -973,23 +311,31 @@ Welcome
 
     letter-spacing:8px;
 
+    color:white;
+
 }
 
 #animusLogo{
 
     font-size:20px;
 
-    letter-spacing:5px;
+    letter-spacing:6px;
 
     color:#7fdfff;
 
+    text-transform:uppercase;
+
 }
 
-/*=====================================
+/*==================================================
 Character Area
-=====================================*/
+==================================================*/
 
 #characterArea{
+
+    width:100%;
+
+    min-height:650px;
 
     display:flex;
 
@@ -997,27 +343,25 @@ Character Area
 
     align-items:flex-end;
 
-    width:100%;
-
-    min-height:620px;
-
 }
 
 #characterImage{
 
-    max-height:620px;
-
     max-width:100%;
 
+    max-height:650px;
+
     object-fit:contain;
+
+    user-select:none;
 
     pointer-events:none;
 
 }
 
-/*=====================================
+/*==================================================
 Right Panel
-=====================================*/
+==================================================*/
 
 #monitorPanel{
 
@@ -1025,13 +369,13 @@ Right Panel
 
     flex-direction:column;
 
-    gap:20px;
+    gap:24px;
 
 }
 
-/*=====================================
-Animus Cards
-=====================================*/
+/*==================================================
+Animus Card
+==================================================*/
 
 .animus-card{
 
@@ -1039,25 +383,31 @@ Animus Cards
 
     overflow:hidden;
 
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    padding:22px;
+
+    border-radius:22px;
+
     background:rgba(8,18,35,.72);
+
+    border:1px solid rgba(120,220,255,.18);
 
     backdrop-filter:blur(18px);
 
     -webkit-backdrop-filter:blur(18px);
 
-    border:1px solid rgba(120,220,255,.18);
-
-    border-radius:22px;
-
-    padding:22px;
-
     box-shadow:
 
-        0 0 24px rgba(0,180,255,.12),
+        0 0 25px rgba(0,180,255,.10),
 
-        inset 0 0 12px rgba(255,255,255,.03);
+        inset 0 0 15px rgba(255,255,255,.03);
 
-    transition:.3s;
+    transition:.25s;
 
 }
 
@@ -1065,21 +415,21 @@ Animus Cards
 
     transform:translateY(-4px);
 
-    border-color:#79ddff;
+    border-color:#7fdfff;
 
     box-shadow:
 
-        0 0 35px rgba(0,180,255,.25);
+        0 0 35px rgba(0,180,255,.22);
 
 }
 
-/*=====================================
+/*==================================================
 Animus Title
-=====================================*/
+==================================================*/
 
 .animus-title{
 
-    font-size:20px;
+    font-size:18px;
 
     font-weight:700;
 
@@ -1087,15 +437,13 @@ Animus Title
 
     color:#7fdfff;
 
-    margin-bottom:18px;
-
     text-transform:uppercase;
 
 }
 
-/*=====================================
-Animus Border Light
-=====================================*/
+/*==================================================
+Top Line
+==================================================*/
 
 .animus-card::before{
 
@@ -1117,7 +465,7 @@ Animus Border Light
 
         transparent,
 
-        rgba(120,220,255,.85),
+        rgba(120,220,255,.8),
 
         transparent
 
@@ -1125,13 +473,15 @@ Animus Border Light
 
 }
 
-/*=====================================
-List
-=====================================*/
+/*==================================================
+Monitor
+==================================================*/
 
-.animus-card ul{
+.monitorStatus,
 
-    list-style:none;
+.baseStatus,
+
+.saviorList{
 
     display:flex;
 
@@ -1141,25 +491,57 @@ List
 
 }
 
-.animus-card li{
+.statusRow,
 
-    transition:.25s;
+.baseItem,
 
-    cursor:pointer;
+.saviorItem{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
 
 }
 
-.animus-card li:hover{
+/*==================================================
+Status Color
+==================================================*/
 
-    color:#8ddcff;
+.online{
 
-    transform:translateX(8px);
+    color:#66ffb2;
+
+    font-weight:bold;
 
 }
 
-/*=====================================
-Character Carousel
-=====================================*/
+.safe{
+
+    color:#8fdfff;
+
+}
+
+.warning{
+
+    color:#ffd966;
+
+}
+
+.danger{
+
+    color:#ff8080;
+
+}
+
+/*==================================================
+Character Selector
+==================================================*/
 
 #carouselArea{
 
@@ -1167,7 +549,7 @@ Character Carousel
 
     margin-top:auto;
 
-    padding-top:20px;
+    padding-top:25px;
 
 }
 
@@ -1193,13 +575,13 @@ Character Carousel
 
 }
 
-/*=====================================
+/*==================================================
 Character Card
-=====================================*/
+==================================================*/
 
 .characterCard{
 
-    width:140px;
+    width:145px;
 
     flex-shrink:0;
 
@@ -1209,19 +591,19 @@ Character Card
 
     align-items:center;
 
-    gap:10px;
+    gap:12px;
 
     padding:18px;
 
     border-radius:20px;
 
-    cursor:pointer;
-
-    transition:.3s;
-
     background:rgba(255,255,255,.03);
 
     border:1px solid rgba(120,220,255,.15);
+
+    cursor:pointer;
+
+    transition:.25s;
 
 }
 
@@ -1231,21 +613,23 @@ Character Card
 
     border-color:#7fdfff;
 
+    background:rgba(0,180,255,.08);
+
     box-shadow:
 
-        0 0 28px rgba(0,180,255,.28);
+        0 0 30px rgba(0,180,255,.22);
 
 }
 
 .characterCard.active{
 
-    border-color:#4fdfff;
+    border-color:#58dfff;
 
-    background:rgba(0,180,255,.12);
+    background:rgba(0,180,255,.15);
 
     box-shadow:
 
-        0 0 32px rgba(0,180,255,.35);
+        0 0 35px rgba(0,180,255,.35);
 
 }
 
@@ -1255,9 +639,9 @@ Character Card
 
     height:78px;
 
-    border-radius:50%;
-
     object-fit:cover;
+
+    border-radius:50%;
 
     border:2px solid rgba(120,220,255,.35);
 
@@ -1270,5 +654,194 @@ Character Card
     font-size:15px;
 
     letter-spacing:1px;
+
+}
+
+/*==================================================
+Screenshot Button
+==================================================*/
+
+#screenShotButton{
+
+    position:fixed;
+
+    right:30px;
+
+    bottom:30px;
+
+    width:64px;
+
+    height:64px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#00b7ff;
+
+    color:white;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    box-shadow:
+
+        0 0 30px rgba(0,180,255,.40);
+
+    transition:.25s;
+
+    z-index:999;
+
+}
+
+#screenShotButton:hover{
+
+    transform:scale(1.08);
+
+}
+
+/*==================================================
+List
+==================================================*/
+
+ul{
+
+    list-style:none;
+
+}
+
+li{
+
+    transition:.25s;
+
+}
+
+li:hover{
+
+    color:#8ddcff;
+
+    transform:translateX(8px);
+
+}
+
+/*==================================================
+Link
+==================================================*/
+
+a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+/*==================================================
+Selection
+==================================================*/
+
+::selection{
+
+    background:#00b7ff;
+
+    color:white;
+
+}
+
+/*==================================================
+Scrollbar
+==================================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#081320;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#1d6fa8;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#37b7ff;
+
+}
+
+/*==================================================
+Responsive
+※スマホ版は後日作り直す
+==================================================*/
+
+@media screen and (max-width:1100px){
+
+    #mainContainer{
+
+        grid-template-columns:1fr;
+
+        gap:25px;
+
+    }
+
+    #infoPanel{
+
+        order:2;
+
+    }
+
+    #centerPanel{
+
+        order:1;
+
+    }
+
+    #monitorPanel{
+
+        order:3;
+
+    }
+
+}
+
+@media screen and (max-width:768px){
+
+    #topBar{
+
+        flex-direction:column;
+
+        justify-content:center;
+
+        gap:10px;
+
+        height:auto;
+
+        padding:15px;
+
+    }
+
+    nav{
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+    }
+
+    #statusBar{
+
+        display:none;
+
+    }
 
 }
