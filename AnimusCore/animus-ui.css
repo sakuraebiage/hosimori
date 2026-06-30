@@ -354,3 +354,87 @@
     text-align:right;
 
 }
+
+/*=====================================
+ガラスパネル
+=====================================*/
+
+.glass{
+    
+    position:relative;
+
+    overflow:hidden;
+
+    background:rgba(8,18,35,.72);
+
+    backdrop-filter:blur(16px);
+
+    -webkit-backdrop-filter:blur(16px);
+
+    border:1px solid rgba(120,220,255,.18);
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-shadow:
+
+        0 0 20px rgba(0,180,255,.12),
+
+        inset 0 0 10px rgba(255,255,255,.03);
+
+    transition:.25s;
+
+}
+
+.glass:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+        0 0 28px rgba(0,180,255,.22);
+
+}
+
+.glass h2{
+
+    color:#7fdfff;
+
+    font-size:18px;
+
+    margin-bottom:12px;
+
+    letter-spacing:2px;
+
+}
+
+.glass::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:2px;
+
+    background:linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        rgba(120,220,255,.75),
+
+        transparent
+
+    );
+
+}
+
+
