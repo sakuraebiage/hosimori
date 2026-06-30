@@ -449,3 +449,187 @@ Future Animation
     display:block;
 
 }
+
+/*=====================================
+Info Panel
+=====================================*/
+
+#infoPanel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+#infoPanel ul{
+
+    list-style:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+#infoPanel li{
+
+    font-size:18px;
+
+    letter-spacing:1px;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+}
+
+#infoPanel li:hover{
+
+    color:#8ddcff;
+
+    transform:translateX(8px);
+
+}
+
+/*=====================================
+Monitor Panel
+=====================================*/
+
+#monitorPanel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+.monitorStatus,
+.baseStatus,
+.saviorList{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+/*=====================================
+Rows
+=====================================*/
+
+.statusRow,
+.baseItem,
+.saviorItem{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:8px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.statusRow:last-child,
+.baseItem:last-child,
+.saviorItem:last-child{
+
+    border-bottom:none;
+
+}
+
+/*=====================================
+Status Colors
+=====================================*/
+
+.online{
+
+    color:#68ffbe;
+
+}
+
+.safe{
+
+    color:#7ddcff;
+
+}
+
+.warning{
+
+    color:#ffd866;
+
+}
+
+.danger{
+
+    color:#ff7f7f;
+
+}
+
+/*=====================================
+Floating HUD
+=====================================*/
+
+#screenShotButton{
+
+    position:fixed;
+
+    right:30px;
+
+    bottom:30px;
+
+    width:72px;
+
+    height:72px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+
+        180deg,
+
+        #27d4ff,
+
+        #0ca4ff
+
+    );
+
+    color:white;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+    box-shadow:
+
+        0 0 35px rgba(0,180,255,.45);
+
+    transition:.3s;
+
+    z-index:999;
+
+}
+
+#screenShotButton:hover{
+
+    transform:scale(1.08);
+
+    box-shadow:
+
+        0 0 50px rgba(0,180,255,.7);
+
+}
