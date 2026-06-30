@@ -633,3 +633,241 @@ Floating HUD
         0 0 50px rgba(0,180,255,.7);
 
 }
+
+/*=====================================
+Responsive Layout
+=====================================*/
+
+@media screen and (max-width:1200px){
+
+    #mainContainer{
+
+        grid-template-columns:260px 1fr;
+
+    }
+
+    #monitorPanel{
+
+        grid-column:1 / 3;
+
+        flex-direction:row;
+
+        flex-wrap:wrap;
+
+    }
+
+    #monitorPanel .animus-card{
+
+        flex:1;
+
+        min-width:280px;
+
+    }
+
+}
+
+/*=====================================
+Tablet
+=====================================*/
+
+@media screen and (max-width:900px){
+
+    #mainContainer{
+
+        display:flex;
+
+        flex-direction:column;
+
+        padding:150px 20px 40px;
+
+        gap:24px;
+
+    }
+
+    #topBar{
+
+        flex-direction:column;
+
+        height:auto;
+
+        padding:16px;
+
+        gap:14px;
+
+    }
+
+    #statusBar{
+
+        position:relative;
+
+        top:0;
+
+        flex-wrap:wrap;
+
+        height:auto;
+
+        padding:12px;
+
+    }
+
+    nav{
+
+        width:100%;
+
+        overflow-x:auto;
+
+        justify-content:flex-start;
+
+        padding-bottom:6px;
+
+        scrollbar-width:none;
+
+    }
+
+    nav::-webkit-scrollbar{
+
+        display:none;
+
+    }
+
+}
+
+/*=====================================
+Mobile
+=====================================*/
+
+@media screen and (max-width:768px){
+
+    #mainContainer{
+
+        display:flex;
+
+        flex-direction:column;
+
+        padding:180px 16px 30px;
+
+        gap:24px;
+
+    }
+
+    #infoPanel{
+
+        order:1;
+
+    }
+
+    #centerPanel{
+
+        order:2;
+
+        min-height:auto;
+
+    }
+
+    #monitorPanel{
+
+        order:3;
+
+    }
+
+    #welcomeText{
+
+        font-size:30px;
+
+    }
+
+    #animusLogo{
+
+        font-size:18px;
+
+        letter-spacing:3px;
+
+    }
+
+    #carouselArea{
+
+        padding-top:30px;
+
+    }
+
+    #characterList{
+
+        justify-content:flex-start;
+
+        gap:16px;
+
+        padding-bottom:10px;
+
+    }
+
+    .characterCard{
+
+        flex:0 0 150px;
+
+        min-height:220px;
+
+    }
+
+    .characterCard img{
+
+        width:90px;
+
+        height:90px;
+
+    }
+
+    #screenShotButton{
+
+        right:20px;
+
+        bottom:20px;
+
+        width:64px;
+
+        height:64px;
+
+    }
+
+}
+
+/*=====================================
+Small Mobile
+=====================================*/
+
+@media screen and (max-width:480px){
+
+    #gameTitle{
+
+        font-size:28px;
+
+    }
+
+    nav button{
+
+        min-width:82px;
+
+        font-size:14px;
+
+    }
+
+    .statusItem{
+
+        font-size:14px;
+
+        padding:8px 14px;
+
+    }
+
+    #welcomeText{
+
+        font-size:24px;
+
+    }
+
+    #animusLogo{
+
+        font-size:16px;
+
+    }
+
+}
