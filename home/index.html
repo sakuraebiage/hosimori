@@ -3,366 +3,174 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>星守戦線</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<!-- AnimusCore -->
-<link rel="stylesheet" href="../AnimusCore/base.css">
-<link rel="stylesheet" href="../AnimusCore/theme.css">
-<link rel="stylesheet" href="../AnimusCore/animus-ui.css">
-<link rel="stylesheet" href="../AnimusCore/animation.css">
+    <title>星守戦線</title>
 
-<link rel="stylesheet" href="css/home_v2.css">
+    <!--=====================================
+    Animus Core
+    ======================================-->
+
+    <link rel="stylesheet" href="../AnimusCore/base.css">
+    <link rel="stylesheet" href="../AnimusCore/theme.css">
+    <link rel="stylesheet" href="../AnimusCore/animus-ui.css">
+    <link rel="stylesheet" href="../AnimusCore/animation.css">
+
+    <!--=====================================
+    Home
+    ======================================-->
+
+    <link rel="stylesheet" href="css/home.css">
 
 </head>
 
 <body>
 
 <!--=====================================
-背景
+Background
+ゲーム全体の背景
 ======================================-->
 
 <div id="backgroundArea">
 
     <img
-        id="backgroundImage"
-        src=""
-        alt="背景">
 
-    <!--
-    <img
-        id="characterImage"
-        src="images/characters/sample.png"
-        alt="立ち絵">
-    -->
+        id="backgroundImage"
+
+        src="images/background/sample.webp"
+
+        alt="背景">
 
 </div>
 
 <!--=====================================
-ヘッダー
+Header
+ゲーム共通ヘッダー
 ======================================-->
 
 <header id="topBar">
 
-    <div id="gameTitle">
+    <h1 id="gameTitle">
 
         星守戦線
 
-    </div>
+    </h1>
 
     <nav>
 
-        <button>ホーム</button>
-        <button>防衛</button>
-        <button>探索</button>
-        <button>戦闘</button>
-        <button>工房</button>
-        <button>図鑑</button>
-        <button>チャット</button>
-        <button>設定</button>
+        <button class="animus-button">ホーム</button>
+
+        <button class="animus-button">防衛</button>
+
+        <button class="animus-button">探索</button>
+
+        <button class="animus-button">戦闘</button>
+
+        <button class="animus-button">工房</button>
+
+        <button class="animus-button">図鑑</button>
+
+        <button class="animus-button">チャット</button>
+
+        <button class="animus-button">設定</button>
 
     </nav>
 
 </header>
+
 <!--=====================================
-HUD
+Status Bar
+プレイヤー情報
 ======================================-->
 
-<div id="statusBar">
+<section id="statusBar">
 
     <div class="statusItem">
-        <span>💰</span>
-        <strong>2,450,000 Cr</strong>
+
+        💰
+
+        <strong>
+
+            2,450,000 Cr
+
+        </strong>
+
     </div>
 
     <div class="statusItem">
-        <span>⚡ AP</span>
-        <strong>120 /120</strong>
+
+        ⚡
+
+        <strong>
+
+            AP 120 /120
+
+        </strong>
+
     </div>
 
     <div class="statusItem">
-        <span>🔥 BP</span>
-        <strong>5 /5</strong>
+
+        🔥
+
+        <strong>
+
+            BP 5 /5
+
+        </strong>
+
     </div>
 
     <div class="statusItem">
-        <span>◇ CP</span>
-        <strong>8 /10</strong>
+
+        ◇
+
+        <strong>
+
+            CP 8 /10
+
+        </strong>
+
     </div>
 
-</div>
+</section>
 
 <!--=====================================
-メイン
+Main Layout
 ======================================-->
 
 <div id="mainContainer">
 
     <!--=====================================
-    左
+    Information Area
+    左サイド情報
     ======================================-->
 
     <aside id="infoPanel">
 
-        <div class="animus-title">
+        <div class="animus-card">
 
-INFO
+            <div class="animus-title">
 
-</div>
+                INFO
 
-<ul>
+            </div>
 
-<li>お知らせ</li>
+            <ul>
 
-<li>イベント</li>
+                <li>📢 お知らせ</li>
 
-<li>Animus通信</li>
+                <li>🎉 イベント</li>
 
-<li>現在地</li>
+                <li>📡 Animus通信</li>
 
-</ul>
+                <li>📍 現在地</li>
+
+            </ul>
 
         </div>
 
     </aside>
-
-    <!--=====================================
-    中央
-    ======================================-->
-
-<main id="centerPanel">
-
-    <div id="welcomeArea">
-
-        <div id="welcomeText">
-
-            Welcome.
-
-        </div>
-
-        <div id="animusLogo">
-
-            System of ANIMUS
-
-        </div>
-
-    </div>
-    
-
-
-
-        <!--=====================================
-        自PCカルーセル
-        ======================================-->
-
-        <section id="carouselArea">
-
-            <div id="characterList">
-
-                <div class="characterCard active">
-
-                    <img
-                        src="images/ui/player.png"
-                        alt="静海">
-
-                    <div>静海</div>
-
-                </div>
-
-                <div class="characterCard">
-
-                    <img
-                        src="images/ui/player.png"
-                        alt="恵佳">
-
-                    <div>恵佳</div>
-
-                </div>
-
-                <div class="characterCard">
-
-                    <img
-                        src="images/ui/player.png"
-                        alt="瑚白">
-
-                    <div>瑚白</div>
-
-                </div>
-
-                <div class="characterCard">
-
-                    <img
-                        src="images/ui/player.png"
-                        alt="宝楽">
-
-                    <div>宝楽</div>
-
-                </div>
-
-                <div class="characterCard">
-
-                    <img
-                        src="images/ui/player.png"
-                        alt="月詠">
-
-                    <div>月詠</div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-   <!--=====================================
-右（Animus Monitor）
-======================================-->
-
-<aside id="monitorPanel">
-
-    <!--=========================
-    Animus Monitor
-    ==========================-->
-
-    <div class="animus-card">
-
-        <h2>Animus Monitor</h2>
-
-        <div class="monitorStatus">
-
-            <div class="statusRow">
-                <span>接続状態</span>
-                <span class="online">● ONLINE</span>
-            </div>
-
-            <div class="statusRow">
-                <span>侵食率</span>
-                <span>12%</span>
-            </div>
-
-            <div class="statusRow">
-                <span>ゲート反応</span>
-                <span class="safe">正常</span>
-            </div>
-
-            <div class="statusRow">
-                <span>世界安定度</span>
-                <span>98.4%</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!--=========================
-    拠点状況
-    ==========================-->
-
-    <div class="animus-card">
-
-        <h2>拠点状況</h2>
-
-        <div class="baseStatus">
-
-            <div class="baseItem">
-                <span>🏛 本部</span>
-                <span class="safe">正常</span>
-            </div>
-
-            <div class="baseItem">
-                <span>🌲 北部拠点</span>
-                <span>防衛中</span>
-            </div>
-
-            <div class="baseItem">
-                <span>🌊 東部拠点</span>
-                <span class="safe">安定</span>
-            </div>
-
-            <div class="baseItem">
-                <span>🏜 西部拠点</span>
-                <span class="warning">警戒</span>
-            </div>
-
-            <div class="baseItem">
-                <span>⛰ 南部拠点</span>
-                <span class="danger">侵食</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!--=========================
-    救世者配置
-    ==========================-->
-
-    <div class="animus-card">
-
-        <h2>救世者配置</h2>
-
-        <div class="saviorList">
-
-            <div class="saviorItem">
-
-                <span>👑 萩月 要</span>
-
-                <span>本部</span>
-
-            </div>
-
-            <div class="saviorItem">
-
-                <span>⚔ 十束静海</span>
-
-                <span>北部</span>
-
-            </div>
-
-            <div class="saviorItem">
-
-                <span>🎨 九条瑚白</span>
-
-                <span>東部</span>
-
-            </div>
-
-            <div class="saviorItem">
-
-                <span>🗡 萩月宝楽</span>
-
-                <span>西部</span>
-
-            </div>
-
-            <div class="saviorItem">
-
-                <span>🌙 月詠</span>
-
-                <span>本部</span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</aside>
-<!--=====================================
-スクショ
-======================================-->
-
-<button id="screenShotButton">
-
-    📷
-
-</button>
-
-<script src="js/home.js"></script>
-
-</body>
-
-</html>
