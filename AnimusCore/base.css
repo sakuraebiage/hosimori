@@ -1,1 +1,215 @@
+/*==================================================
+    System of ANIMUS
+    Base Style Sheet
+==================================================*/
 
+/*==================================================
+    Reset
+==================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+}
+
+/*==================================================
+    Root Color
+==================================================*/
+
+:root{
+
+    --animus-main:#00c8ff;
+    --animus-sub:#7fdfff;
+    --animus-accent:#2fe4ff;
+
+    --bg-main:#05070c;
+    --bg-panel:rgba(8,18,35,.72);
+
+    --text-main:#ffffff;
+    --text-sub:#9fb6d1;
+
+    --border:rgba(120,220,255,.18);
+
+    --shadow:
+        0 0 25px rgba(0,180,255,.18);
+
+    --glass-blur:16px;
+
+    --transition:.25s ease;
+
+}
+
+/*==================================================
+    Body
+==================================================*/
+
+body{
+
+    background:var(--bg-main);
+
+    color:var(--text-main);
+
+    font-family:
+        "Segoe UI",
+        "Yu Gothic UI",
+        sans-serif;
+
+    overflow-x:hidden;
+
+}
+
+/*==================================================
+    Link
+==================================================*/
+
+a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+/*==================================================
+    List
+==================================================*/
+
+ul,
+ol{
+
+    list-style:none;
+
+}
+
+/*==================================================
+    Image
+==================================================*/
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+    user-select:none;
+
+    -webkit-user-drag:none;
+
+}
+
+/*==================================================
+    Button
+==================================================*/
+
+button{
+
+    font-family:inherit;
+
+    border:none;
+
+    outline:none;
+
+    cursor:pointer;
+
+    background:none;
+
+}
+
+/*==================================================
+    Input
+==================================================*/
+
+input,
+select,
+textarea{
+
+    font-family:inherit;
+
+    outline:none;
+
+}
+
+/*==================================================
+    Scroll Bar
+==================================================*/
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+    height:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:rgba(0,200,255,.35);
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:rgba(0,200,255,.6);
+
+}
+
+/*==================================================
+    Selection
+==================================================*/
+
+::selection{
+
+    background:rgba(0,200,255,.35);
+
+    color:#fff;
+
+}
+
+/*==================================================
+    Utility
+==================================================*/
+
+.hidden{
+
+    display:none !important;
+
+}
+
+.flex{
+
+    display:flex;
+
+}
+
+.grid{
+
+    display:grid;
+
+}
+
+.center{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
