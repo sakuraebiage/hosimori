@@ -871,3 +871,404 @@ Small Mobile
     }
 
 }
+
+/*=====================================
+Layout
+ホーム画面全体
+=====================================*/
+
+#mainContainer{
+
+    display:grid;
+
+    grid-template-columns:300px 1fr 360px;
+
+    gap:30px;
+
+    width:100%;
+
+    min-height:calc(100vh - 140px);
+
+    padding:160px 35px 40px;
+
+    align-items:start;
+
+}
+
+/*=====================================
+Left Panel
+=====================================*/
+
+#infoPanel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+/*=====================================
+Center Panel
+=====================================*/
+
+#centerPanel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:40px;
+
+    min-height:780px;
+
+}
+
+/*=====================================
+Hero Area
+=====================================*/
+
+#heroArea{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:25px;
+
+}
+
+/*=====================================
+Welcome
+=====================================*/
+
+#welcomeArea{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+#welcomeText{
+
+    font-size:48px;
+
+    font-weight:300;
+
+    letter-spacing:8px;
+
+}
+
+#animusLogo{
+
+    font-size:20px;
+
+    letter-spacing:5px;
+
+    color:#7fdfff;
+
+}
+
+/*=====================================
+Character Area
+=====================================*/
+
+#characterArea{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    width:100%;
+
+    min-height:620px;
+
+}
+
+#characterImage{
+
+    max-height:620px;
+
+    max-width:100%;
+
+    object-fit:contain;
+
+    pointer-events:none;
+
+}
+
+/*=====================================
+Right Panel
+=====================================*/
+
+#monitorPanel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+/*=====================================
+Animus Cards
+=====================================*/
+
+.animus-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:rgba(8,18,35,.72);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(120,220,255,.18);
+
+    border-radius:22px;
+
+    padding:22px;
+
+    box-shadow:
+
+        0 0 24px rgba(0,180,255,.12),
+
+        inset 0 0 12px rgba(255,255,255,.03);
+
+    transition:.3s;
+
+}
+
+.animus-card:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#79ddff;
+
+    box-shadow:
+
+        0 0 35px rgba(0,180,255,.25);
+
+}
+
+/*=====================================
+Animus Title
+=====================================*/
+
+.animus-title{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    letter-spacing:3px;
+
+    color:#7fdfff;
+
+    margin-bottom:18px;
+
+    text-transform:uppercase;
+
+}
+
+/*=====================================
+Animus Border Light
+=====================================*/
+
+.animus-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:2px;
+
+    background:linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        rgba(120,220,255,.85),
+
+        transparent
+
+    );
+
+}
+
+/*=====================================
+List
+=====================================*/
+
+.animus-card ul{
+
+    list-style:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.animus-card li{
+
+    transition:.25s;
+
+    cursor:pointer;
+
+}
+
+.animus-card li:hover{
+
+    color:#8ddcff;
+
+    transform:translateX(8px);
+
+}
+
+/*=====================================
+Character Carousel
+=====================================*/
+
+#carouselArea{
+
+    width:100%;
+
+    margin-top:auto;
+
+    padding-top:20px;
+
+}
+
+#characterList{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    overflow-x:auto;
+
+    padding:10px;
+
+    scrollbar-width:none;
+
+}
+
+#characterList::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+/*=====================================
+Character Card
+=====================================*/
+
+.characterCard{
+
+    width:140px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(120,220,255,.15);
+
+}
+
+.characterCard:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#7fdfff;
+
+    box-shadow:
+
+        0 0 28px rgba(0,180,255,.28);
+
+}
+
+.characterCard.active{
+
+    border-color:#4fdfff;
+
+    background:rgba(0,180,255,.12);
+
+    box-shadow:
+
+        0 0 32px rgba(0,180,255,.35);
+
+}
+
+.characterCard img{
+
+    width:78px;
+
+    height:78px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid rgba(120,220,255,.35);
+
+}
+
+.characterCard div{
+
+    text-align:center;
+
+    font-size:15px;
+
+    letter-spacing:1px;
+
+}
