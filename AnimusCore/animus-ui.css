@@ -1,0 +1,356 @@
+/*==================================================
+    System of ANIMUS
+    UI Kit
+==================================================*/
+
+/*==================================================
+    ANIMUS CARD
+==================================================*/
+
+.animus-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:var(--bg-panel);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    backdrop-filter:blur(var(--glass-blur));
+
+    -webkit-backdrop-filter:blur(var(--glass-blur));
+
+    box-shadow:
+
+        var(--shadow),
+
+        inset 0 0 12px rgba(255,255,255,.03);
+
+    transition:var(--transition);
+
+    padding:20px;
+
+}
+
+.animus-card:hover{
+
+    transform:translateY(-4px);
+
+    border-color:var(--animus-sub);
+
+    box-shadow:
+
+        0 0 35px rgba(0,200,255,.25);
+
+}
+
+.animus-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:100%;
+
+    height:2px;
+
+    background:
+
+    linear-gradient(
+
+        90deg,
+
+        transparent,
+
+        var(--animus-sub),
+
+        transparent
+
+    );
+
+}
+
+/*==================================================
+    TITLE
+==================================================*/
+
+.animus-title{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    letter-spacing:2px;
+
+    color:var(--animus-sub);
+
+    margin-bottom:15px;
+
+    text-transform:uppercase;
+
+}
+
+/*==================================================
+    BUTTON
+==================================================*/
+
+.animus-button{
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:12px 22px;
+
+    background:
+
+        rgba(255,255,255,.05);
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    color:white;
+
+    transition:var(--transition);
+
+}
+
+.animus-button:hover{
+
+    background:
+
+        rgba(0,200,255,.18);
+
+    border-color:var(--animus-sub);
+
+    box-shadow:
+
+        0 0 18px rgba(0,200,255,.25);
+
+}
+
+/*==================================================
+    STATUS BAR
+==================================================*/
+
+.animus-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px 15px;
+
+    border-radius:14px;
+
+    background:
+
+        rgba(255,255,255,.04);
+
+    border:
+
+        1px solid var(--border);
+
+}
+
+/*==================================================
+    PROGRESS
+==================================================*/
+
+.animus-progress{
+
+    width:100%;
+
+    height:10px;
+
+    background:
+
+        rgba(255,255,255,.08);
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+}
+
+.animus-progress-bar{
+
+    height:100%;
+
+    width:50%;
+
+    border-radius:999px;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            var(--animus-main),
+
+            var(--animus-accent)
+
+        );
+
+}
+
+/*==================================================
+    TAG
+==================================================*/
+
+.animus-tag{
+
+    display:inline-block;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    background:
+
+        rgba(0,200,255,.15);
+
+    color:var(--animus-sub);
+
+    font-size:12px;
+
+    letter-spacing:1px;
+
+}
+
+/*==================================================
+    WINDOW
+==================================================*/
+
+.animus-window{
+
+    position:relative;
+
+    background:var(--bg-panel);
+
+    border:1px solid var(--border);
+
+    border-radius:26px;
+
+    padding:25px;
+
+    backdrop-filter:blur(var(--glass-blur));
+
+}
+
+/*==================================================
+    POPUP
+==================================================*/
+
+.animus-popup{
+
+    position:fixed;
+
+    left:50%;
+
+    top:50%;
+
+    transform:
+
+        translate(-50%,-50%);
+
+    min-width:420px;
+
+    max-width:900px;
+
+    z-index:9999;
+
+}
+
+/*==================================================
+    ICON BUTTON
+==================================================*/
+
+.animus-icon{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:50%;
+
+    border:1px solid var(--border);
+
+    background:
+
+        rgba(255,255,255,.05);
+
+    transition:var(--transition);
+
+}
+
+.animus-icon:hover{
+
+    background:
+
+        rgba(0,200,255,.18);
+
+}
+
+/*==================================================
+    DIVIDER
+==================================================*/
+
+.animus-divider{
+
+    width:100%;
+
+    height:1px;
+
+    margin:15px 0;
+
+    background:
+
+        rgba(120,220,255,.15);
+
+}
+
+/*==================================================
+    TEXT
+==================================================*/
+
+.animus-small{
+
+    font-size:12px;
+
+    color:var(--text-sub);
+
+}
+
+.animus-center{
+
+    text-align:center;
+
+}
+
+.animus-right{
+
+    text-align:right;
+
+}
