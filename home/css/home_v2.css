@@ -259,11 +259,11 @@ Center Panel
 
     flex-direction:column;
 
-    justify-content:space-between;
+    justify-content:flex-start;
 
     align-items:center;
 
-    gap:40px;
+    gap:30px;
 
 }
 
@@ -349,7 +349,7 @@ Character Area
 
     max-width:100%;
 
-    max-height:650px;
+    max-height:420px;
 
     object-fit:contain;
 
