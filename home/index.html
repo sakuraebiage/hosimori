@@ -1,375 +1,576 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!--==================================================
+HEADER
 
-<head>
+ホーム画面最上部。
 
-    <meta charset="UTF-8">
+ゲームタイトルとANIMUS HUDを表示します。
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+スマホではメニューを置かず、
+HUDをタップしてANIMUS TERMINALを開きます。
 
-    <title>星守戦線</title>
-
-    <!--=====================================
-    Animus Core
-    ======================================-->
-
-    <link rel="stylesheet" href="../AnimusCore/base.css">
-    <link rel="stylesheet" href="../AnimusCore/theme.css">
-    <link rel="stylesheet" href="../AnimusCore/animus-ui.css">
-    <link rel="stylesheet" href="../AnimusCore/animation.css">
-
-    <!--=====================================
-    Home
-    ======================================-->
-
-    <link rel="stylesheet" href="css/home_v2.css">
-    <link
-
-    rel="stylesheet"
-
-    href="css/home_mobile.css"
-
-    media="screen and (max-width:768px)">
-
-</head>
-
-<body>
-
-<!--=====================================
-Background
-======================================-->
-
-<div id="backgroundArea">
-
-    <img
-
-        id="backgroundImage"
-
-        src="images/backgrounds/ChatGPT Image 2026年6月28日 17_53_03.png"
-
-        alt="背景">
-
-</div>
-
-<!--=====================================
-Header
-======================================-->
+===================================================-->
 
 <header id="topBar">
 
-    <h1 id="gameTitle">
+    <!--==============================
+    Game Logo
+    ==============================-->
+
+    <div id="gameTitle">
 
         星守戦線
 
-    </h1>
-
-    <nav>
-
-        <button class="animus-button">ホーム</button>
-        <button class="animus-button">防衛</button>
-        <button class="animus-button">探索</button>
-        <button class="animus-button">戦闘</button>
-        <button class="animus-button">工房</button>
-        <button class="animus-button">図鑑</button>
-        <button class="animus-button">チャット</button>
-        <button class="animus-button">設定</button>
-
-    </nav>
+    </div>
 
 </header>
 
-<!--=====================================
-Status Bar
-======================================-->
 
-<section id="mobileTerminal">
 
-    <div id="terminalHeader">
+<!--==================================================
+ANIMUS HUD
 
-        <span>ANIMUS TERMINAL</span>
+スマホ版では
+このHUD全体をタップすると
+ANIMUS TERMINALを開きます。
 
-        <span id="terminalArrow">▶</span>
+表示内容
+
+・所持金
+・AP
+・BP
+・CP
+
+今後追加予定
+
+・通知
+・メール
+・イベント
+
+===================================================-->
+
+<section id="statusBar">
+
+    <div class="statusItem">
+
+        💰
+        <strong id="moneyValue">
+
+            2,450,000 Cr
+
+        </strong>
 
     </div>
 
-    <div id="mobileMenu">
+    <div class="statusItem">
 
-        <button>🏠 ホーム</button>
+        ⚡
+        <strong id="apValue">
 
-        <button>🛡 防衛</button>
+            AP 120 / 120
 
-        <button>🧭 探索</button>
+        </strong>
 
-        <button>⚔ 戦闘</button>
+    </div>
 
-        <button>🔨 工房</button>
+    <div class="statusItem">
 
-        <button>📖 図鑑</button>
+        🔥
+        <strong id="bpValue">
 
-        <button>💬 チャット</button>
+            BP 5 / 5
 
-        <button>⚙ 設定</button>
+        </strong>
+
+    </div>
+
+    <div class="statusItem">
+
+        ◇
+        <strong id="cpValue">
+
+            CP 8 / 10
+
+        </strong>
 
     </div>
 
 </section>
 
-<!-- ★★★★★ここ★★★★★ -->
 
-<div id="mobileMenu">
 
-    <button>🏠 ホーム</button>
+<!--==================================================
+ANIMUS TERMINAL
 
-    <button>🛡 防衛</button>
+通常は閉じています。
 
-    <button>🧭 探索</button>
+HUDをタップすると
+右からスライド表示。
 
-    <button>⚔ 戦闘</button>
+ホーム画面のメニューと
+各種情報をまとめます。
 
-    <button>🔨 工房</button>
+===================================================-->
 
-    <button>📖 図鑑</button>
+<aside id="mobileTerminal">
 
-    <button>💬 チャット</button>
+    <!--==============================
+    Terminal Header
+    ==============================-->
 
-    <button>⚙ 設定</button>
+    <div id="terminalHeader">
 
-</div>
+        <h2>
 
-<!-- ★★★★★ここまで★★★★★ -->
+            ANIMUS TERMINAL
 
-<div id="mainContainer">
-<!--=====================================
-Main Layout
-======================================-->
+        </h2>
 
-<div id="mainContainer">
+        <span id="terminalClose">
 
-    <!--=====================================
-    Left Panel
-    ======================================-->
+            ✕
 
-    <aside id="infoPanel">
+        </span>
 
-        <section class="animus-card">
+    </div>
 
-            <div class="animus-title">
 
-                INFO
 
-            </div>
+    <!--==============================
+    Navigation
+    ==============================-->
 
-            <ul>
+    <nav id="terminalNav">
 
-                <li>📢 お知らせ</li>
+        <button>
 
-                <li>🎉 イベント</li>
+            🏠
+            ホーム
 
-                <li>📡 Animus通信</li>
+        </button>
 
-                <li>📍 現在地</li>
+        <button>
 
-            </ul>
+            🧭
+            探索
 
-        </section>
+        </button>
 
-    </aside>
+        <button>
 
-        <!--=====================================
-    Center Panel
-    ======================================-->
+            ⚔
+            戦闘
 
-    <main id="centerPanel">
+        </button>
 
-        <!--=====================================
-        Hero Area
-        ======================================-->
+        <button>
 
-        <section id="heroArea">
+            🛡
+            防衛
 
-            <div id="welcomeArea">
+        </button>
 
-                <div id="welcomeText">
+        <button>
 
-                    Welcome.
+            🔨
+            工房
 
-                </div>
+        </button>
 
-                <div id="animusLogo">
+        <button>
 
-                    System of ANIMUS
+            📖
+            図鑑
 
-                </div>
+        </button>
 
-            </div>
+        <button>
 
-            <!--=====================================
-            Character Display
-            ======================================-->
+            💬
+            チャット
 
-            <div id="characterArea">
+        </button>
+
+        <button>
+
+            ⚙
+            設定
+
+        </button>
+
+    </nav>
+
+
+
+    <!--==============================
+    Terminal Status
+    ==============================-->
+
+    <section id="terminalStatus">
+
+        <div class="terminalItem">
+
+            接続状態
+
+            <span class="online">
+
+                ONLINE
+
+            </span>
+
+        </div>
+
+        <div class="terminalItem">
+
+            世界安定度
+
+            <span>
+
+                98.4%
+
+            </span>
+
+        </div>
+
+        <div class="terminalItem">
+
+            侵食率
+
+            <span class="warning">
+
+                12%
+
+            </span>
+
+        </div>
+
+        <div class="terminalItem">
+
+            現在地
+
+            <span>
+
+                煌萊都市・耀月
+
+            </span>
+
+        </div>
+
+    </section>
+
+</aside>
+
+<!--==================================================
+Hero Area
+
+ホーム画面の主役。
+
+プレイヤーがホームを開いた瞬間に
+最初に目へ入るエリアです。
+
+表示順
+
+Welcome
+↓
+
+System of ANIMUS
+↓
+
+立ち絵
+↓
+
+キャラクターカルーセル
+
+===================================================-->
+
+<section id="heroArea">
+
+    <!--==========================================
+    Welcome
+    ===========================================-->
+
+    <div id="welcomeArea">
+
+        <h1 id="welcomeText">
+
+            Welcome.
+
+        </h1>
+
+        <p id="animusLogo">
+
+            System of ANIMUS
+
+        </p>
+
+    </div>
+
+
+
+    <!--==========================================
+    Character Area
+
+    表示キャラクター
+
+    JavaScriptで画像切り替え予定
+
+    ===========================================-->
+
+    <div id="characterArea">
+
+        <img
+
+            id="characterImage"
+
+            src="images/character/shizumi.webp"
+
+            alt="静海"
+
+        >
+
+    </div>
+
+
+
+    <!--==========================================
+    Character Carousel
+
+    救世者一覧
+
+    後でJavaScriptから
+    自動生成予定。
+
+    ===========================================-->
+
+    <section id="carouselArea">
+
+        <div id="characterList">
+
+            <button class="characterCard active">
 
                 <img
+                    src="images/icon/shizumi.webp"
+                    alt="静海">
 
-                    id="characterImage"
+                <span>
 
-                    src="images/character/shizumi.webp"
+                    静海
 
-                    alt="立ち絵">
+                </span>
 
-            </div>
+            </button>
 
-        </section>
 
-        <!--=====================================
-        Character Selector
-        ======================================-->
+
+            <button class="characterCard">
+
+                <img
+                    src="images/icon/keika.webp"
+                    alt="恵佳">
+
+                <span>
+
+                    恵佳
+
+                </span>
+
+            </button>
+
+
+
+            <button class="characterCard">
+
+                <img
+                    src="images/icon/kohaku.webp"
+                    alt="瑚白">
+
+                <span>
+
+                    瑚白
+
+                </span>
+
+            </button>
+
+
+
+            <button class="characterCard">
+
+                <img
+                    src="images/icon/houraku.webp"
+                    alt="宝楽">
+
+                <span>
+
+                    宝楽
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+</section>
+
+<!--==================================================
+Main Container
+
+ホーム画面本体。
+
+スマホ版では
+
+Hero Area
+
+のみ表示。
+
+右パネルの情報は
+
+ANIMUS TERMINALへ集約します。
+
+===================================================-->
+
+<main id="mainContainer">
+
+    <!--==========================================
+    Hero Area
+
+    ホーム画面の主人公。
+
+    Welcome
+
+        ↓
+
+    Character
+
+        ↓
+
+    Carousel
+
+    ===========================================-->
+
+    <section id="heroArea">
+
+        <!--==============================
+        Welcome
+        ==============================-->
+
+        <div id="welcomeArea">
+
+            <h1 id="welcomeText">
+
+                Welcome.
+
+            </h1>
+
+            <p id="animusLogo">
+
+                System of ANIMUS
+
+            </p>
+
+        </div>
+
+
+
+        <!--==============================
+        Character
+        ==============================-->
+
+        <div id="characterArea">
+
+            <img
+
+                id="characterImage"
+
+                src="images/character/shizumi.webp"
+
+                alt="静海"
+
+            >
+
+        </div>
+
+
+
+        <!--==============================
+        Character Carousel
+        ==============================-->
 
         <section id="carouselArea">
 
             <div id="characterList">
 
-                <div class="characterCard active">
+                <!-- 静海 -->
+
+                <button class="characterCard active">
 
                     <img
-                        src="images/ui/player.png"
-                        alt="静海">
+                        src="images/icon/shizumi.webp">
 
-                    <div>
+                    <span>
 
-                        十束 静海
+                        静海
 
-                    </div>
+                    </span>
 
-                </div>
+                </button>
 
-                <div class="characterCard">
 
-                    <img
-                        src="images/ui/player.png"
-                        alt="恵佳">
 
-                    <div>
+                <!-- 恵佳 -->
 
-                        萩月 恵佳
-
-                    </div>
-
-                </div>
-
-                <div class="characterCard">
+                <button class="characterCard">
 
                     <img
-                        src="images/ui/player.png"
-                        alt="瑚白">
+                        src="images/icon/keika.webp">
 
-                    <div>
+                    <span>
 
-                        九条 瑚白
+                        恵佳
 
-                    </div>
+                    </span>
 
-                </div>
+                </button>
 
-                <div class="characterCard">
 
-                    <img
-                        src="images/ui/player.png"
-                        alt="宝楽">
 
-                    <div>
+                <!-- 瑚白 -->
 
-                        萩月 宝楽
-
-                    </div>
-
-                </div>
-
-                <div class="characterCard">
+                <button class="characterCard">
 
                     <img
-                        src="images/ui/player.png"
-                        alt="月詠">
+                        src="images/icon/kohaku.webp">
 
-                    <div>
+                    <span>
 
-                        月詠
+                        瑚白
 
-                    </div>
+                    </span>
 
-                </div>
+                </button>
+
+
+
+                <!-- 宝楽 -->
+
+                <button class="characterCard">
+
+                    <img
+                        src="images/icon/houraku.webp">
+
+                    <span>
+
+                        宝楽
+
+                    </span>
+
+                </button>
 
             </div>
 
         </section>
 
-    </main>
+    </section>
 
-    <!--=====================================
-    Right Panel
-    ======================================-->
-
-    <aside id="monitorPanel">
-
-        <section class="animus-card">
-
-            <div class="animus-title">
-
-                ANIMUS MONITOR
-
-            </div>
-
-            <div class="monitorStatus">
-
-                <div class="statusRow">
-
-                    <span>接続状態</span>
-
-                    <span class="online">
-
-                        ● ONLINE
-
-                    </span>
-
-                </div>
-
-                <div class="statusRow">
-
-                    <span>侵食率</span>
-
-                    <span>
-
-                        12%
-
-                    </span>
-
-                </div>
-
-                <div class="statusRow">
-
-                    <span>ゲート反応</span>
-
-                    <span class="safe">
-
-                        正常
-
-                    </span>
-
-                </div>
-
-                <div class="statusRow">
-
-                    <span>世界安定度</span>
-
-                    <span>
-
-                        98.4%
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
+</main>
