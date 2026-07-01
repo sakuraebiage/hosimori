@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+    <!--==================================================
+
+    星守戦線
+
+    Home Version2
+
+    正式版ホーム画面
+
+    Player：司令官
+
+    救世者：NPC
+
+    制作
+
+    桜海老 × 先生
+
+    アホムス監修（却下）
+
+    ==================================================-->
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        星守戦線
+
+    </title>
+
+    <!--==================================================
+
+    Font
+
+    ==================================================-->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!--==================================================
+
+    Base CSS
+
+    共通デザイン
+
+    ==================================================-->
+
+    <link
+        rel="stylesheet"
+        href="../AnimusCore/base.css">
+
+    <link
+        rel="stylesheet"
+        href="../AnimusCore/theme.css">
+
+    <link
+        rel="stylesheet"
+        href="../AnimusCore/animus-ui.css">
+
+    <link
+        rel="stylesheet"
+        href="../AnimusCore/animation.css">
+
+    <!--==================================================
+
+    Home CSS
+
+    ==================================================-->
+
+    <link
+        rel="stylesheet"
+        href="css/home_v2.css">
+
+    <link
+        rel="stylesheet"
+        href="css/home_mobile.css">
+
+</head>
+
+<body>
+
+<!--==================================================
+
+Header
+
+ホーム画面最上部。
+
+スマホではゲームタイトルのみ表示。
+
+PC版ではCSSでメニューを追加予定。
+
+==================================================-->
+
+<header id="topBar">
+
+    <div id="gameTitle">
+
+        星守戦線
+
+    </div>
+
+</header>
+
+
+
+<!--==================================================
+
+ANIMUS HUD
+
+司令官専用HUD。
+
+ここをタップすると
+
+ANIMUS TERMINALが開きます。
+
+現在表示
+
+・所持金
+
+・AP
+
+・BP
+
+・CP
+
+今後追加予定
+
+・通知
+
+・メール
+
+・イベント
+
+==================================================-->
+
+<section id="statusBar">
+
+    <div class="statusItem">
+
+        💰
+
+        <strong id="moneyValue">
+
+            2,450,000 Cr
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="statusItem">
+
+        ⚡
+
+        <strong id="apValue">
+
+            AP 120 / 120
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="statusItem">
+
+        🔥
+
+        <strong id="bpValue">
+
+            BP 5 / 5
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="statusItem">
+
+        ◇
+
+        <strong id="cpValue">
+
+            CP 8 / 10
+
+        </strong>
+
+    </div>
+
+</section>
+
+<!--==================================================
+
+Main Container
+
+ホーム画面本体。
+
+PC版では
+
+・INFO
+
+・Hero
+
+・Monitor
+
+スマホ版では
+
+Heroのみ表示。
+
+==================================================-->
+
+<main id="mainContainer">
+
+
+
+    <!--==================================================
+
+    Hero Area
+
+    ホーム画面中央。
+
+    プレイヤーが一番最初に見る場所。
+
+    表示順
+
+    Welcome
+
+        ↓
+
+    PC立ち絵
+
+        ↓
+
+    PCカルーセル
+
+    ==================================================-->
+
+    <section id="heroArea">
+
+
+
+        <!--==========================================
+
+        Welcome
+
+        ==========================================-->
+
+        <div id="welcomeArea">
+
+            <h1 id="welcomeText">
+
+                Welcome.
+
+            </h1>
+
+            <p id="animusLogo">
+
+                System of ANIMUS
+
+            </p>
+
+        </div>
+
+
+
+        <!--==========================================
+
+        Current Player Character
+
+        現在選択中のPC。
+
+        救世者ではありません。
+
+        =================================================-->
+
+        <div id="characterArea">
+
+            <img
+
+                id="characterImage"
+
+                src="images/player/default.webp"
+
+                alt="Player Character"
+
+            >
+
+        </div>
+
+
+
+        <!--==========================================
+
+        PC Carousel
+
+        登録したPC一覧。
+
+        タップすると
+
+        表示中のPCへ切り替わります。
+
+        =================================================-->
+
+        <section id="carouselArea">
+
+            <div id="characterList">
+            
+                            <button class="characterCard active">
+
+                    <img
+                        src="images/player/icon/default.webp">
+
+                    <span>
+
+                        メインPC
+
+                    </span>
+
+                </button>
+
+
+
+                <button class="characterCard">
+
+                    <img
+                        src="images/player/icon/default.webp">
+
+                    <span>
+
+                        PC②
+
+                    </span>
+
+                </button>
+
+
+
+                <button class="characterCard">
+
+                    <img
+                        src="images/player/icon/default.webp">
+
+                    <span>
+
+                        PC③
+
+                    </span>
+
+                </button>
+
+
+
+                <button class="characterCard">
+
+                    <img
+                        src="images/player/icon/default.webp">
+
+                    <span>
+
+                        ＋ 新規作成
+
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+
+<!--==================================================
+
+ANIMUS TERMINAL
+
+司令官専用端末。
+
+救世者はNPCです。
+
+ここでは
+
+・通信
+・任務
+・世界情報
+・工房
+・設定
+
+などを管理します。
+
+初期状態では閉じています。
+
+==================================================-->
+
+<div id="terminalOverlay">
+
+    <!--==========================================
+
+    Background
+
+    画面を暗くする。
+
+    ==========================================-->
+
+    <div id="terminalBackdrop"></div>
+
+
+
+    <!--==========================================
+
+    Terminal
+
+    ==========================================-->
+
+    <aside id="mobileTerminal">
+    
+            <!--==========================================
+
+        Header
+
+        ==========================================-->
+
+        <header id="terminalHeader">
+
+            <div>
+
+                <h2>
+
+                    ANIMUS TERMINAL
+
+                </h2>
+
+                <small>
+
+                    Commander Interface
+
+                </small>
+
+            </div>
+
+
+
+            <button id="terminalClose">
+
+                ✕
+
+            </button>
+
+        </header>
+        
+                <!--==========================================
+
+        Current Player
+
+        現在使用中のPC。
+
+        ==========================================-->
+
+        <section id="currentPlayer">
+
+            <img
+
+                id="terminalPlayerImage"
+
+                src="images/player/icon/default.webp"
+
+                alt="Player"
+
+            >
+
+            <div>
+
+                <h3>
+
+                    メインPC
+
+                </h3>
+
+                <p>
+
+                    ONLINE
+
+                </p>
+
+            </div>
+
+        </section>
+        
+                <!--==========================================
+
+        Navigation
+
+        ==========================================-->
+
+        <nav id="terminalNav">
+
+            <button>📡 通信</button>
+
+            <button>📜 任務</button>
+
+            <button>🌍 世界情報</button>
+
+            <button>🛡 防衛</button>
+
+            <button>📖 図鑑</button>
+
+            <button>🔨 工房</button>
+
+            <button>⚙ 設定</button>
+
+        </nav>
+        
+                <!--==========================================
+
+        System Status
+
+        ==========================================-->
+
+        <section id="terminalStatus">
+
+            <div class="terminalItem">
+
+                接続状態
+
+                <span class="online">
+
+                    ONLINE
+
+                </span>
+
+            </div>
+
+            <div class="terminalItem">
+
+                世界安定度
+
+                <span>
+
+                    98.4%
+
+                </span>
+
+            </div>
+
+            <div class="terminalItem">
+
+                Gate反応
+
+                <span>
+
+                    正常
+
+                </span>
+
+            </div>
+
+            <div class="terminalItem">
+
+                侵食率
+
+                <span class="warning">
+
+                    12%
+
+                </span>
+
+            </div>
+
+        </section>
+
+    </aside>
+
+</div>
+
+<!--==================================================
+
+Notification Area
+
+今後実装予定
+
+・運営通知
+
+・イベント開始
+
+・フレンド申請
+
+・ANIMUS通信
+
+現在は空です。
+
+==================================================-->
+
+<div id="notificationArea">
+
+</div>
+
+
+
+<!--==================================================
+
+Loading
+
+将来
+
+ANIMUS起動演出
+
+Welcome Animation
+
+をここへ追加予定。
+
+==================================================-->
+
+<div id="loadingScreen">
+
+</div>
+
+
+
+<!--==================================================
+
+JavaScript
+
+ホーム画面制御
+
+・PC切替
+
+・ANIMUS開閉
+
+・カルーセル
+
+・通知
+
+==================================================-->
+
+<script src="js/home.js"></script>
+
+</body>
+
+</html>
+
