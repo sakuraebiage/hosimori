@@ -1,723 +1,301 @@
 /*==================================================
+星守戦線
 
-            星守戦線
-        Home Mobile Version 1.0
+Home Mobile CSS
 
-====================================================
+Version 2.0
 
-制作　：桜海老
-設計　：先生
-監修　：くぅーん様
-暴走　：アホムス（5%）
+スマホ専用レイアウト
 
-----------------------------------------------------
+救世者はNPC
 
-📱 Mobile Override
+プレイヤーは司令官
 
-ここはPC版を書き換える場所ではありません。
+==================================================*/
 
-「スマホではこう表示したい」
 
-だけを書きます。
 
-未来の自分へ。
+/*==================================================
+Chapter1
 
-PC版を直したくなったら
-home_v2.cssへ。
+Reset
+
+==================================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+
+html{
+
+    width:100%;
+
+    height:100%;
+
+}
+
+
+
+body{
+
+    width:100%;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+}
+
+
+
+/*==================================================
+Chapter2
+
+Main Layout
 
 ==================================================*/
 
 @media screen and (max-width:768px){
 
+    body{
+
+        font-family:
+
+            "Noto Sans JP",
+
+            sans-serif;
+
+    }
+
+    #mainContainer{
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        width:100%;
+
+        min-height:100vh;
+
+        padding:
+
+            135px
+            15px
+            25px;
+
+        gap:18px;
+
+    }
+
+}
+
 /*==================================================
+Chapter3
+
 Header
+
 ==================================================*/
 
-#topBar{
+@media screen and (max-width:768px){
 
-    height:auto;
+    #topBar{
 
-    padding:15px;
+        position:fixed;
 
-    flex-direction:column;
+        top:0;
 
-    gap:12px;
+        left:0;
 
-}
+        width:100%;
 
-#gameTitle{
+        height:62px;
 
-    font-size:28px;
+        display:flex;
 
-    letter-spacing:3px;
+        justify-content:center;
 
-}
+        align-items:center;
 
-nav{
+        background:
 
-    width:100%;
+            rgba(5,15,28,.82);
 
-    justify-content:center;
+        backdrop-filter:blur(18px);
 
-    flex-wrap:wrap;
+        z-index:1000;
 
-    gap:8px;
+    }
 
-}
+    #gameTitle{
 
-nav button{
+        font-size:20px;
 
-    flex:1 1 40%;
+        letter-spacing:4px;
 
-    min-width:110px;
+        color:white;
+
+    }
 
 }
 
 /*==================================================
+Chapter4
+
 ANIMUS HUD
 
-スマホ版では
-このHUD全体がボタンになります。
-
-タップすると
-ANIMUS TERMINALが開きます。
-
 ==================================================*/
 
-#statusBar{
+@media screen and (max-width:768px){
 
-    position:fixed;
+    #statusBar{
 
-    top:68px;
+        position:fixed;
 
-    left:0;
+        top:62px;
 
-    width:100%;
+        left:0;
 
-    height:56px;
+        width:100%;
 
-    display:flex;
+        display:flex;
 
-    justify-content:center;
+        gap:8px;
 
-    align-items:center;
+        padding:8px;
 
-    gap:8px;
+        background:
 
-    padding:0 12px;
+            rgba(8,18,35,.82);
 
-    background:rgba(5,12,22,.78);
+        backdrop-filter:blur(18px);
 
-    backdrop-filter:blur(16px);
+        border-bottom:
 
-    -webkit-backdrop-filter:blur(16px);
+            1px solid
 
-    border-bottom:1px solid rgba(120,220,255,.15);
+            rgba(120,220,255,.15);
 
-    cursor:pointer;
+        z-index:999;
 
-    transition:.25s;
+    }
 
-    z-index:990;
+    .statusItem{
 
-}
+        flex:1;
 
-#statusBar:active{
+        display:flex;
 
-    transform:scale(.98);
+        justify-content:center;
 
+        align-items:center;
+
+        gap:5px;
+
+        height:42px;
+
+        border-radius:14px;
+
+        background:
+
+            rgba(255,255,255,.05);
+
+        color:white;
+
+        font-size:12px;
+
+        transition:.2s;
+
+    }
+
+    .statusItem:active{
+
+        transform:scale(.96);
+
+        background:
+
+            rgba(0,180,255,.15);
+
+    }
 
 }
 
 /*==================================================
-Main Layout
+Chapter5
 
-PCのGridを解除。
-
-スマホでは縦一列。
-
-==================================================*/
-
-#mainContainer{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
-    padding:
-
-        145px
-        15px
-        30px;
-
-}
-
-/*==================================================
-Info / Monitor
-
-後でANIMUSスライドへ変更予定。
-
-一旦そのまま表示。
-
-==================================================*/
-
-#infoPanel{
-
-    order:2;
-
-}
-
-#centerPanel{
-
-    order:1;
-
-}
-
-#monitorPanel{
-
-    order:3;
-
-}
-
-/*==================================================
-Hero
-==================================================*/
-
-#heroArea{
-
-    gap:15px;
-
-}
-
-/*==================================================
-Welcome
-==================================================*/
-
-#welcomeText{
-
-    font-size:34px;
-
-    letter-spacing:5px;
-
-}
-
-#animusLogo{
-
-    font-size:15px;
-
-    letter-spacing:3px;
-
-}
-
-/*==================================================
-Character
+Hero Area
 
 ホーム画面の主人公。
 
-==================================================*/
+救世者はNPCです。
 
-#characterArea{
+司令官が通信する相手を
 
-    min-height:340px;
-
-    justify-content:center;
-
-    align-items:flex-end;
-
-}
-
-#characterImage{
-
-    max-height:65vh;
-
-    width:auto;
-
-}
-
-/*==================================================
-Carousel
-
-立ち絵のすぐ下。
+表示します。
 
 ==================================================*/
 
-#carouselArea{
+@media screen and (max-width:768px){
 
-    margin-top:0;
+    #heroArea{
 
-    padding-top:5px;
+        width:100%;
 
-}
+        display:flex;
 
-#characterList{
+        flex-direction:column;
 
-    justify-content:flex-start;
+        align-items:center;
 
-    gap:12px;
+        gap:10px;
 
-    padding:5px;
+    }
 
-}
+    #welcomeArea{
 
-/*==================================================
-Character Card
-==================================================*/
+        margin-top:8px;
 
-.characterCard{
+        display:flex;
 
-    width:105px;
+        flex-direction:column;
 
-    padding:14px;
+        align-items:center;
 
-}
+        gap:4px;
 
-.characterCard img{
+    }
 
-    width:58px;
+    #welcomeText{
 
-    height:58px;
+        font-size:24px;
 
-}
+        font-weight:300;
 
-.characterCard div{
+        letter-spacing:4px;
 
-    font-size:13px;
+        color:white;
 
-}
+    }
 
-/*==================================================
-Animus Card
+    #animusLogo{
 
-カードを少しコンパクトに。
+        font-size:12px;
 
-==================================================*/
+        letter-spacing:3px;
 
-.animus-card{
+        color:#7fdfff;
 
-    padding:16px;
+        opacity:.8;
 
-    gap:14px;
-
-}
-
-.animus-title{
-
-    font-size:16px;
-
-}
-
-.statusRow,
-
-.baseItem,
-
-.saviorItem{
-
-    font-size:14px;
-
-}
-
-/*==================================================
-Screenshot
-
-親指で押しやすい位置。
-
-==================================================*/
-
-#screenShotButton{
-
-    width:56px;
-
-    height:56px;
-
-    right:18px;
-
-    bottom:18px;
-
-    font-size:22px;
-
-}
-
-/*==================================================
-
-アホムスメンテナンス記録
-
-2026/07/01
-
-修理内容
-
-☑ display:none病
-
-☑ Grid依存症
-
-☑ 650px固定病
-
-現在の修理率
-
-95%
-
-あと少し。
-
-==================================================*/
-
-}
-
-/*==================================================
-Hero Area
-
-ホーム画面の主役。
-
-Welcome
-
-↓
-
-救世者
-
-↓
-
-カルーセル
-
-==================================================*/
-
-#heroArea{
-
-    width:100%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:flex-start;
-
-    gap:12px;
-
-}
-
-/*==================================================
-Welcome
-==================================================*/
-
-#welcomeArea{
-
-    margin-top:10px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    gap:4px;
-
-}
-
-#welcomeText{
-
-    font-size:26px;
-
-    font-weight:300;
-
-    letter-spacing:4px;
-
-    color:white;
-
-}
-
-#animusLogo{
-
-    font-size:13px;
-
-    letter-spacing:3px;
-
-    color:#7fdfff;
-
-    opacity:.8;
-
-}
-
-/*==================================================
-Character Area
-==================================================*/
-
-#characterArea{
-
-    width:100%;
-
-    height:48vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:flex-end;
-
-    overflow:hidden;
-
-}
-
-#characterImage{
-
-    width:auto;
-
-    height:100%;
-
-    object-fit:contain;
-
-    object-position:center bottom;
-
-}
-/*==================================================
-Character Carousel
-==================================================*/
-
-#carouselArea{
-
-    width:100%;
-
-    margin-top:-15px;
-
-}
-
-#characterList{
-
-    display:flex;
-
-    gap:10px;
-
-    overflow-x:auto;
-
-    padding:10px;
-
-    justify-content:flex-start;
-
-    scroll-snap-type:x mandatory;
-
-    scrollbar-width:none;
-
-}
-
-#characterList::-webkit-scrollbar{
-
-    display:none;
-
-}
-/*==================================================
-Character Card
-==================================================*/
-
-.characterCard{
-
-    min-width:90px;
-
-    padding:12px;
-
-    border-radius:18px;
-
-    background:rgba(255,255,255,.04);
-
-    border:1px solid rgba(120,220,255,.15);
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    gap:8px;
-
-    flex-shrink:0;
-
-    scroll-snap-align:center;
-
-}
-
-.characterCard img{
-
-    width:52px;
-
-    height:52px;
-
-    border-radius:50%;
-
-}
-
-.characterCard span{
-
-    font-size:12px;
-
-}
-/*==================================================
-ANIMUS TERMINAL
-==================================================*/
-
-#mobileMenu{
-
-    position:fixed;
-
-    top:150px;
-
-    left:50%;
-
-    transform:translateX(-50%) translateY(-20px);
-
-    width:90%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:10px;
-
-    padding:18px;
-
-    border-radius:22px;
-
-    background:rgba(8,18,35,.92);
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    border:1px solid rgba(120,220,255,.18);
-
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:all .25s ease;
-
-    z-index:9999;
-
-}
-
-#mobileMenu.open{
-
-    opacity:1;
-
-    transform:translateX(-50%) translateY(0);
-
-    pointer-events:auto;
-
-}
-
-#mobileMenu button{
-
-    width:100%;
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.05);
-
-    color:white;
-
-    font-size:16px;
-
-    text-align:left;
-
-    transition:.2s;
-
-}
-
-#mobileMenu button:active{
-
-    background:rgba(0,180,255,.18);
-
-}
-
-/*==================================================
-ANIMUS TERMINAL
-==================================================*/
-
-#mobileTerminal{
-
-    width:100%;
-
-    margin-top:15px;
-
-    border-radius:22px;
-
-    overflow:hidden;
-
-    background:rgba(8,18,35,.78);
-
-    backdrop-filter:blur(18px);
-
-    border:1px solid rgba(120,220,255,.18);
-
-}
-
-#terminalHeader{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:18px 22px;
-
-    color:#7fdfff;
-
-    font-size:18px;
-
-    letter-spacing:3px;
-
-    cursor:pointer;
-
-}
-
-#terminalArrow{
-
-    transition:.25s;
-
-}
-
-#terminalMenu{
-
-    display:none;
-
-    flex-direction:column;
-
-    padding:0 18px 18px;
-
-    gap:10px;
-
-}
-
-#terminalMenu button{
-
-    padding:14px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.04);
-
-    color:white;
-
-    text-align:left;
-
-    font-size:16px;
-
-}
-
-#mobileTerminal.open #terminalMenu{
-
-    display:flex;
-
-}
-
-#mobileTerminal.open #terminalArrow{
-
-    transform:rotate(90deg);
+    }
 
 }
