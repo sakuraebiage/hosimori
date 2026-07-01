@@ -287,3 +287,19 @@ Menu Button
     z-index:300;
 
 }
+
+@media screen and (max-width:768px){
+
+    #infoPanel{
+
+        display:none;
+
+    }
+
+    #monitorPanel{
+
+        display:none;
+
+    }
+
+}
