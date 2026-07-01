@@ -74,29 +74,58 @@ nav button{
 }
 
 /*==================================================
-Status
+ANIMUS HUD
+
+スマホ版では
+このHUD全体がボタンになります。
+
+タップすると
+ANIMUS TERMINALが開きます。
+
 ==================================================*/
-@media screen and (max-width:768px){
 
-    #statusBar{
+#statusBar{
 
-        cursor:pointer;
+    position:fixed;
 
-        transition:.25s;
+    top:68px;
 
-        border-radius:18px;
+    left:0;
 
-        margin:0 10px;
+    width:100%;
 
-    }
+    height:56px;
 
-    #statusBar:active{
+    display:flex;
 
-        transform:scale(.98);
+    justify-content:center;
 
-        background:rgba(0,180,255,.12);
+    align-items:center;
 
-    }
+    gap:8px;
+
+    padding:0 12px;
+
+    background:rgba(5,12,22,.78);
+
+    backdrop-filter:blur(16px);
+
+    -webkit-backdrop-filter:blur(16px);
+
+    border-bottom:1px solid rgba(120,220,255,.15);
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    z-index:990;
+
+}
+
+#statusBar:active{
+
+    transform:scale(.98);
+
 
 }
 
@@ -340,15 +369,14 @@ Hero Area
 ホーム画面の主役。
 
 Welcome
+
 ↓
 
-立ち絵
+救世者
 
 ↓
 
 カルーセル
-
-ここでプレイヤーの視線を止める。
 
 ==================================================*/
 
@@ -362,68 +390,63 @@ Welcome
 
     align-items:center;
 
-    justify-content:center;
+    justify-content:flex-start;
 
-    gap:10px;
+    gap:12px;
 
 }
 
 /*==================================================
 Welcome
-
-起動演出が入る予定。
-
-現在は静止表示。
-
 ==================================================*/
 
 #welcomeArea{
 
-    text-align:center;
+    margin-top:10px;
 
     display:flex;
 
     flex-direction:column;
 
-    gap:6px;
+    align-items:center;
+
+    gap:4px;
 
 }
 
 #welcomeText{
 
-    font-size:30px;
+    font-size:26px;
+
+    font-weight:300;
 
     letter-spacing:4px;
+
+    color:white;
 
 }
 
 #animusLogo{
 
-    font-size:14px;
+    font-size:13px;
 
-    letter-spacing:2px;
+    letter-spacing:3px;
 
-    opacity:.85;
+    color:#7fdfff;
+
+    opacity:.8;
 
 }
 
 /*==================================================
 Character Area
-
-ホーム画面の主人公。
-
-全身画像を登録してください。
-
-CSS側で腰から上くらいを
-いい感じに表示します。
-
 ==================================================*/
 
 #characterArea{
 
     width:100%;
 
-    min-height:380px;
+    height:48vh;
 
     display:flex;
 
@@ -439,9 +462,7 @@ CSS側で腰から上くらいを
 
     width:auto;
 
-    height:70vh;
-
-    max-height:520px;
+    height:100%;
 
     object-fit:contain;
 
@@ -449,21 +470,14 @@ CSS側で腰から上くらいを
 
 }
 /*==================================================
-Carousel
-
-ホーム画面の相棒。
-
-キャラ切り替え専用。
-
+Character Carousel
 ==================================================*/
 
 #carouselArea{
 
     width:100%;
 
-    margin-top:-20px;
-
-    padding:0;
+    margin-top:-15px;
 
 }
 
@@ -471,34 +485,70 @@ Carousel
 
     display:flex;
 
-    gap:12px;
+    gap:10px;
 
     overflow-x:auto;
 
+    padding:10px;
+
     justify-content:flex-start;
 
-    padding:5px;
+    scroll-snap-type:x mandatory;
 
     scrollbar-width:none;
 
 }
+
+#characterList::-webkit-scrollbar{
+
+    display:none;
+
+}
+/*==================================================
+Character Card
+==================================================*/
+
 .characterCard{
 
-    width:96px;
+    min-width:90px;
 
     padding:12px;
 
     border-radius:18px;
 
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(120,220,255,.15);
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-shrink:0;
+
+    scroll-snap-align:center;
+
 }
+
 .characterCard img{
 
-    width:54px;
+    width:52px;
 
-    height:54px;
+    height:52px;
+
+    border-radius:50%;
 
 }
 
+.characterCard span{
+
+    font-size:12px;
+
+}
 /*==================================================
 ANIMUS TERMINAL
 ==================================================*/
