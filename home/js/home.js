@@ -7,3 +7,17 @@ console.log("背景ランダム成功");
 
 document.getElementById("backgroundImage").src =
 backgrounds[0];
+
+/*=====================================
+ANIMUS TERMINAL
+=====================================*/
+
+const terminal=document.getElementById("mobileTerminal");
+
+const header=document.getElementById("terminalHeader");
+
+header.addEventListener("click",()=>{
+
+    terminal.classList.toggle("open");
+
+});
