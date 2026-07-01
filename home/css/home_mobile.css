@@ -76,10 +76,27 @@ nav button{
 /*==================================================
 Status
 ==================================================*/
+@media screen and (max-width:768px){
 
-#statusBar{
+    #statusBar{
 
-    display:none;
+        cursor:pointer;
+
+        transition:.25s;
+
+        border-radius:18px;
+
+        margin:0 10px;
+
+    }
+
+    #statusBar:active{
+
+        transform:scale(.98);
+
+        background:rgba(0,180,255,.12);
+
+    }
 
 }
 
