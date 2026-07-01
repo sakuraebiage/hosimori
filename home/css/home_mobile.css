@@ -1,1 +1,289 @@
+/*==================================================
+星守戦線
+Home Mobile Version 1.0
+==================================================*/
 
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+}
+
+body{
+
+    background:#05070c;
+    color:#fff;
+    font-family:"Segoe UI",sans-serif;
+    overflow:hidden;
+
+}
+
+/*==================================================
+Background
+==================================================*/
+
+#backgroundArea{
+
+    position:fixed;
+    inset:0;
+    z-index:-100;
+
+}
+
+#backgroundImage{
+
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:brightness(.85);
+
+}
+
+/*==================================================
+Main
+==================================================*/
+
+#mainContainer{
+
+    width:100%;
+    height:100vh;
+
+    display:flex;
+    flex-direction:column;
+
+    position:relative;
+
+}
+
+/*==================================================
+HUD
+==================================================*/
+
+#statusBar{
+
+    position:absolute;
+
+    top:15px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:95%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 18px;
+
+    border-radius:20px;
+
+    background:rgba(8,18,35,.45);
+
+    backdrop-filter:blur(18px);
+
+    z-index:100;
+
+}
+
+.statusItem{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    font-size:14px;
+
+}
+
+/*==================================================
+Hero Area
+==================================================*/
+
+#heroArea{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding-top:70px;
+
+}
+
+/* Welcome */
+
+#welcomeArea{
+
+    text-align:center;
+
+    margin-bottom:10px;
+
+}
+
+#welcomeText{
+
+    font-size:32px;
+
+    letter-spacing:6px;
+
+}
+
+#animusLogo{
+
+    margin-top:8px;
+
+    font-size:16px;
+
+    color:#8ddcff;
+
+    letter-spacing:4px;
+
+}
+
+/*==================================================
+Character
+==================================================*/
+
+#characterArea{
+
+    flex:1;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    overflow:hidden;
+
+}
+
+#characterImage{
+
+    width:auto;
+
+    height:72vh;
+
+    object-fit:contain;
+
+    object-position:center bottom;
+
+}
+
+/*==================================================
+Character Selector
+==================================================*/
+
+#carouselArea{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:-40px;
+
+    z-index:20;
+
+}
+
+#characterList{
+
+    display:flex;
+
+    gap:15px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+
+}
+
+#characterList::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.characterCard{
+
+    min-width:95px;
+
+    padding:12px;
+
+    border-radius:18px;
+
+    background:rgba(8,18,35,.65);
+
+    backdrop-filter:blur(16px);
+
+    text-align:center;
+
+    flex-shrink:0;
+
+}
+
+.characterCard img{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+} 
+
+/*==================================================
+Menu Button
+==================================================*/
+
+#menuButton{
+
+    position:absolute;
+
+    right:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:48px;
+
+    height:90px;
+
+    border-radius:20px 0 0 20px;
+
+    background:rgba(8,18,35,.75);
+
+    backdrop-filter:blur(18px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    z-index:300;
+
+}
