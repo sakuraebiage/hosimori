@@ -545,3 +545,31 @@ PC Carousel
     text-align:center;
 
 }
+
+/*==================================================
+Chapter8
+
+Terminal Overlay
+
+==================================================*/
+
+@media screen and (max-width:768px){
+
+    #terminalOverlay{
+
+        position:fixed;
+        inset:0;
+
+        display:none;
+
+        z-index:5000;
+
+    }
+
+    #terminalOverlay.active{
+
+        display:flex;
+
+    }
+
+}
