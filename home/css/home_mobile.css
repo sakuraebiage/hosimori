@@ -581,3 +581,93 @@ ANIMUS TERMINAL
     background:rgba(0,180,255,.18);
 
 }
+
+/*==================================================
+ANIMUS TERMINAL
+==================================================*/
+
+#mobileTerminal{
+
+    width:100%;
+
+    margin-top:15px;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    background:rgba(8,18,35,.78);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(120,220,255,.18);
+
+}
+
+#terminalHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 22px;
+
+    color:#7fdfff;
+
+    font-size:18px;
+
+    letter-spacing:3px;
+
+    cursor:pointer;
+
+}
+
+#terminalArrow{
+
+    transition:.25s;
+
+}
+
+#terminalMenu{
+
+    display:none;
+
+    flex-direction:column;
+
+    padding:0 18px 18px;
+
+    gap:10px;
+
+}
+
+#terminalMenu button{
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.04);
+
+    color:white;
+
+    text-align:left;
+
+    font-size:16px;
+
+}
+
+#mobileTerminal.open #terminalMenu{
+
+    display:flex;
+
+}
+
+#mobileTerminal.open #terminalArrow{
+
+    transform:rotate(90deg);
+
+}
