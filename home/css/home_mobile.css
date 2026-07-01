@@ -498,3 +498,86 @@ Carousel
     height:54px;
 
 }
+
+/*==================================================
+ANIMUS TERMINAL
+==================================================*/
+
+#mobileMenu{
+
+    position:fixed;
+
+    top:150px;
+
+    left:50%;
+
+    transform:translateX(-50%) translateY(-20px);
+
+    width:90%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    background:rgba(8,18,35,.92);
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    border:1px solid rgba(120,220,255,.18);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:all .25s ease;
+
+    z-index:9999;
+
+}
+
+#mobileMenu.open{
+
+    opacity:1;
+
+    transform:translateX(-50%) translateY(0);
+
+    pointer-events:auto;
+
+}
+
+#mobileMenu button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.05);
+
+    color:white;
+
+    font-size:16px;
+
+    text-align:left;
+
+    transition:.2s;
+
+}
+
+#mobileMenu button:active{
+
+    background:rgba(0,180,255,.18);
+
+}
