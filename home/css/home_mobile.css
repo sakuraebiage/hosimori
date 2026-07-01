@@ -289,6 +289,7 @@ Menu Button
 }
 
 @media screen and (max-width:768px){
+    /*
 
     #infoPanel{
 
@@ -301,5 +302,7 @@ Menu Button
         display:none;
 
     }
+    
+    */
 
 }
