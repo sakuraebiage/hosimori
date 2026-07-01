@@ -213,6 +213,8 @@ Status Bar
 Main Layout
 ==================================================*/
 
+@media screen and (max-width:768px){
+
 #mainContainer{
 
     display:grid;
@@ -331,6 +333,8 @@ Welcome Area
 Character Area
 ==================================================*/
 
+@media screen and (max-width:768px){
+
 #characterArea{
 
     width:100%;
@@ -344,6 +348,8 @@ Character Area
     align-items:flex-end;
 
 }
+
+@media screen and (max-width:768px){
 
 #characterImage{
 
@@ -543,6 +549,9 @@ Status Color
 Character Selector
 ==================================================*/
 
+@media screen and (max-width:768px){
+
+
 #carouselArea{
 
     width:100%;
@@ -578,6 +587,8 @@ Character Selector
 /*==================================================
 Character Card
 ==================================================*/
+
+@media screen and (max-width:768px){
 
 .characterCard{
 
