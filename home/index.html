@@ -574,3 +574,174 @@ ANIMUS TERMINALへ集約します。
     </section>
 
 </main>
+
+<!--==================================================
+ANIMUS Overlay
+
+司令官専用端末。
+
+HUDをタップすると表示。
+
+救世者はNPCなので
+ここは「指示・情報確認」を行う画面。
+
+===================================================-->
+
+<div id="terminalOverlay">
+
+    <!-- 背景を暗くする -->
+    <div id="terminalBackdrop"></div>
+
+    <!--==============================
+    Terminal Window
+    ==============================-->
+
+    <aside id="mobileTerminal">
+
+        <!--======================================
+        Header
+        =======================================-->
+
+        <header id="terminalHeader">
+
+            <div>
+
+                <h2>
+
+                    ANIMUS TERMINAL
+
+                </h2>
+
+                <small>
+
+                    Commander Interface
+
+                </small>
+
+            </div>
+
+            <button id="terminalClose">
+
+                ✕
+
+            </button>
+
+        </header>
+        
+                <!--======================================
+        Current Savior
+        =======================================-->
+
+        <section id="currentSavior">
+
+            <img
+
+                id="terminalPortrait"
+
+                src="images/icon/shizumi.webp"
+
+                alt="静海"
+
+            >
+
+            <div>
+
+                <h3>
+
+                    十束 静海
+
+                </h3>
+
+                <p>
+
+                    通信中
+
+                </p>
+
+            </div>
+
+        </section>
+        
+                <!--======================================
+        Navigation
+        =======================================-->
+
+        <nav id="terminalNav">
+
+            <button>🏠 ホーム</button>
+
+            <button>📡 通信</button>
+
+            <button>🛡 防衛状況</button>
+
+            <button>⚔ 任務</button>
+
+            <button>📖 データベース</button>
+
+            <button>🌍 世界状況</button>
+
+            <button>🔨 工房</button>
+
+            <button>⚙ 設定</button>
+
+        </nav>
+        
+                <!--======================================
+        System Status
+        =======================================-->
+
+        <section id="terminalStatus">
+
+            <div class="terminalItem">
+
+                接続状態
+
+                <span class="online">
+
+                    ONLINE
+
+                </span>
+
+            </div>
+
+            <div class="terminalItem">
+
+                世界安定度
+
+                <span>
+
+                    98.4%
+
+                </span>
+
+            </div>
+
+            <div class="terminalItem">
+
+                侵食率
+
+                <span class="warning">
+
+                    12%
+
+                </span>
+
+            </div>
+
+            <div class="terminalItem">
+
+                現在地
+
+                <span>
+
+                    煌萊都市・耀月
+
+                </span>
+
+            </div>
+
+        </section>
+
+    </aside>
+
+</div>
