@@ -251,19 +251,19 @@ Hero Area
 
 }
 
-    #welcomeArea{
+#welcomeArea{
 
-        margin-top:14px;
+    margin-top:45px;
 
-        display:flex;
+    display:flex;
 
-        flex-direction:column;
+    flex-direction:column;
 
-        align-items:center;
+    align-items:center;
 
-        gap:4px;
+    gap:6px;
 
-    }
+}
 
     #welcomeText{
 
@@ -318,15 +318,19 @@ Spine
 
     left:50%;
 
-    bottom:60px;
+    bottom:-30px;
 
     transform:translateX(-50%);
 
-    height:170%;
+    height:205%;
 
     width:auto;
 
     object-fit:contain;
+
+    pointer-events:none;
+
+    user-select:none;
 
 }
 
