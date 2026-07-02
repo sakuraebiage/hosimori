@@ -395,12 +395,12 @@ PC Carousel
 
 プレイヤーが作成したPCを
 切り替えるカルーセルです。
-
+てちてちてちてち
 ==================================================*/
 
 #carouselArea{
     width:100%;
-    margin-top:30px;
+    margin-top:50px;
     transform:translateY(-40px);
     z-index:20;
 }
