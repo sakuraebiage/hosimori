@@ -318,7 +318,16 @@ Spine
 
     height:70vh;
 
-    margin-top:20px;
+    margin-top:0px;
+    
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    overflow:hidden;
+    
 
     overflow:hidden;
 
