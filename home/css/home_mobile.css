@@ -329,23 +329,7 @@ Spine
     object-fit:contain;
 
 }
-#characterImage{
 
-    position:absolute;
-
-    left:50%;
-
-    bottom:60px;
-
-    transform:translateX(-50%);
-
-    height:170%;
-
-    width:auto;
-
-    object-fit:contain;
-
-}
 
 /*==================================================
 Character Shadow
