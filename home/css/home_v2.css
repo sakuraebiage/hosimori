@@ -349,22 +349,26 @@ Character Area
 
 }
 
-@media screen and (max-width:768px){
-
 #characterImage{
 
-    max-width:100%;
+    position:absolute;
+    left:50%;
+    bottom:90px;
 
-    max-height:420px;
+    transform:translateX(-50%);
+
+    height:205%;
+    width:auto;
+
+    max-width:none;
+    max-height:none;
 
     object-fit:contain;
 
+    pointer-events:none;
     user-select:none;
 
-    pointer-events:none;
-
 }
-
 /*==================================================
 Right Panel
 ==================================================*/
