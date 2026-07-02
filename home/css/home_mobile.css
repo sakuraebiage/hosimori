@@ -310,53 +310,31 @@ Spine
 
 ==================================================*/
 
-@media screen and (max-width:768px){
+#characterArea{
 
-    #characterArea{
+    position:relative;
 
-        position:relative;
+    width:100%;
 
-        width:100%;
+    height:70vh;
 
-        height:70vh;
+    margin-top:20px;
 
-        margin-top:10px;
+    overflow:hidden;
 
-        display:flex;
+}
 
-        justify-content:center;
+#characterImage{
 
-        align-items:flex-end;
+    position:absolute;
 
-        overflow:hidden;
+    left:50%;
 
-    }
+    bottom:0;
 
-    #characterImage{
+    transform:translateX(-50%);
 
-        position:absolute;
-
-        left:50%;
-
-        bottom:300;
-
-        transform:translateX(-50%);
-
-        height:160%;
-
-        width:auto;
-
-        max-width:none;
-
-        max-height:none;
-
-        object-fit:contain;
-
-        pointer-events:none;
-
-        user-select:none;
-
-    }
+    height:150%;
 
 }
 
