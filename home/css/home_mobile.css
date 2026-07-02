@@ -341,7 +341,7 @@ Spine
 
     bottom:0;
 
-    transform:translateX(-50%);
+    transform:translateX(-50%,120px);
 
     height:150%;
 
