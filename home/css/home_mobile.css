@@ -312,25 +312,47 @@ Spine
 
 @media screen and (max-width:768px){
 
-#characterImage{
+    #characterArea{
 
-    position:absolute;
+        position:relative;
 
-    left:50%;
+        width:100%;
 
-    bottom:-30px;
+        height:42vh;
 
-    transform:translateX(-50%);
+        margin-top:-90px;
 
-    height:205%;
+        display:flex;
 
-    width:auto;
+        justify-content:center;
 
-    object-fit:contain;
+        align-items:flex-end;
 
-    pointer-events:none;
+        overflow:hidden;
 
-    user-select:none;
+    }
+
+    #characterImage{
+
+        position:absolute;
+
+        left:50%;
+
+        bottom:-30px;
+
+        transform:translateX(-50%);
+
+        height:205%;
+
+        width:auto;
+
+        object-fit:contain;
+
+        pointer-events:none;
+
+        user-select:none;
+
+    }
 
 }
 
