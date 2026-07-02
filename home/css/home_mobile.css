@@ -339,6 +339,26 @@ Character Shadow
 ==================================================*/
 
 @media screen and (max-width:768px){
+    
+    #characterArea{
+
+    position:relative;
+
+    width:100%;
+
+    height:42vh;
+
+    margin-top:-90px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-end;
+
+    overflow:hidden;
+
+}
 
     #characterArea::after{
 
