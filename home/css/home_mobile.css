@@ -573,3 +573,32 @@ Terminal Overlay
     }
 
 }
+
+/*==================================================
+Background Layer
+
+==================================================*/
+
+#backgroundLayer{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:-100;
+
+    background-position:center;
+
+    background-size:cover;
+
+    background-repeat:no-repeat;
+
+    background-color:#06111d;
+
+    transition:
+
+        background-image .5s ease,
+
+        opacity .3s ease;
+
+}
