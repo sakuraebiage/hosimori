@@ -328,7 +328,7 @@ Spine
     position:absolute;
 
     left:50%;
-    bottom:-10px;
+    bottom:40px;
 
     transform:translateX(-50%);
 
