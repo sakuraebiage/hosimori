@@ -247,7 +247,7 @@ Hero Area
 
     align-items:stretch;
 
-    gap:10px;
+    gap:0px;
 
 }
 
@@ -320,7 +320,7 @@ Spine
 
         height:38vh;
         
-        margin-top:-40px;
+        margin-top:-140px;
 
         display:flex;
 
@@ -336,7 +336,7 @@ Spine
 
         width:auto;
 
-        height:70%;
+        height:92%;
 
         max-width:95%;
 
