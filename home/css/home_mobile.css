@@ -341,9 +341,9 @@ Spine
 
     bottom:0;
 
-    transform:translateX(-50%,120px);
+    transform:translateX(-50%);
 
-    height:150%;
+    height:120%;
 
 }
 
