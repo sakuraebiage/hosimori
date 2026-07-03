@@ -317,7 +317,7 @@ GitHub君はこれ以上泣かないでください。
 ==================================================*/
 
 /*==================================================
-Chapter6
+
 
 Character Area
 
@@ -334,7 +334,7 @@ Character Area
 
     width:100%;
 
-    height:55vh;
+    height:20vh;
 
     display:flex;
 
@@ -361,7 +361,7 @@ Character Image
 
 #characterImage{
 
-    height:100%;
+    height:10%;
 
     width:auto;
 
