@@ -295,7 +295,6 @@ Hero Area
 
 }
 
-8;
 
     }
 
@@ -306,37 +305,16 @@ Chapter6
 
 Character Area
 
-ホーム画面の主人公。
+現在通信中PC表示区域。
 
-現在通信中のPCを表示。
+静海さん、天井裏立入禁止。
 
-※静海さんはデバッグ出勤中。
-
-Live2D
-WebM
-Spine
-
-将来的に全部ここへ召喚予定。
+スーパーアルティメット監査珍獣Mk-II
+監視済み。
 
 ==================================================*/
-
 
 @media screen and (max-width:768px){
-
-
-/*==================================================
-Character Area
-
-立ち絵表示ステージ。
-
-ここは舞台。
-
-位置調整は静海本人ではなく
-ステージ側で行います。
-
-天井裏への逃走は禁止。
-
-==================================================*/
 
 
 #characterArea{
@@ -361,27 +339,25 @@ Character Area
 /*==================================================
 Character Image
 
-現在表示中PC。
+立ち絵本人。
 
-静海足だけ出演事件の反省により
-サイズ管理のみ担当。
+bottom固定。
+
+勝手に出勤しない。
+勝手に天井勤務しない。
 
 ==================================================*/
 
 
 #characterImage{
 
-    height:105%;
+    height:100%;
 
     width:auto;
 
     object-fit:contain;
 
-    transform:translateY(20px);
-
-    pointer-events:none;
-
-    user-select:none;
+    object-position:bottom center;
 
 }
 
@@ -389,9 +365,9 @@ Character Image
 /*==================================================
 Character Shadow
 
-足元演出。
+存在感演出。
 
-静海が浮遊してない証明。
+静海踏みつけ事件跡地。
 
 ==================================================*/
 
@@ -402,81 +378,24 @@ Character Shadow
 
     position:absolute;
 
-    bottom:20px;
+    bottom:5px;
 
-    left:50%;
+    width:55%;
 
-    transform:translateX(-50%);
-
-    width:60%;
-
-    height:30px;
+    height:25px;
 
     border-radius:50%;
 
-    background:rgba(0,0,0,.35);
+    background:rgba(0,0,0,.4);
 
     filter:blur(18px);
 
-}
-
-
-/*==================================================
-Character Fade
-
-下部を自然に背景へ。
-
-靴だけ主人公事件防止。
-
-==================================================*/
-
-
-#characterArea::before{
-
-    content:"";
-
-    position:absolute;
-
-    bottom:0;
-
-    left:0;
-
-    width:100%;
-
-    height:80px;
-
-    background:
-        linear-gradient(
-            transparent,
-            rgba(6,12,22,.95)
-        );
-
-    pointer-events:none;
+    z-index:-1;
 
 }
 
 
 }
-
-
-/*==================================================
-
-監査記録
-
-・静海 天井裏籠城事件
-　原因：土地問題（mainContainer）
-
-・静海 足だけ出演事件
-　原因：身長調整ミス
-
-・GitHub Pages連続監査
-　反省文提出済み
-
-・スーパーアルティメット監査珍獣Mk-II
-　本日も高速てちてち巡回中。
-
-==================================================*/
-
 
 /*==================================================
 Chapter7
@@ -495,7 +414,6 @@ PC Carousel
 #carouselArea{
     width:100%;
     margin-top:50px;
-    transform:translateY(-40px);
     z-index:20;
 }
 
