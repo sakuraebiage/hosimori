@@ -374,7 +374,7 @@ GitHub君はこれ以上泣かないでください。
 
         left:50%;
 
-        bottom:0;
+        bottom:-100;
 
         transform:translateX(-50%,30px);
 
