@@ -84,7 +84,7 @@ Main Layout
 
     width:100%;
 
-    min-height:calc(100dvh - 110px);
+    min-height:calc(50dvh - 110px);
 
     padding:110px 15px 20px;
 
