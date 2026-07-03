@@ -298,6 +298,197 @@ Hero Area
 
 }
 
+/*==================================================
+Chapter6
+
+Character Area
+
+ホーム画面の主人公。
+
+救世者はNPCです。
+
+※現在はレイアウト調整のため
+静海さんに休日返上で出演していただいています。
+
+本実装ではプレイヤーPCを表示します。
+
+GitHub君はこれ以上泣かないでください。
+
+==================================================*/
+
+@media screen and (max-width:768px){
+
+    /*==============================================
+    Character Area
+
+    立ち絵全体の表示領域。
+
+    この箱の中に
+
+    ・PNG
+    ・WebM
+    ・Live2D
+    ・Spine
+
+    を表示します。
+
+    位置調整はCharacterImage側で行います。
+    CharacterAreaは極力触らない。
+
+    ==============================================*/
+
+    #characterArea{
+
+        position:relative;
+
+        width:100%;
+
+        height:38vh;
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:flex-end;
+
+        overflow:hidden;
+
+    }
+
+    /*==============================================
+    Character Image
+
+    現在通信中のPC。
+
+    救世者ではありません。
+
+    司令官が選択したPCが表示されます。
+
+    ※静海はデバッグ要員です。
+
+    ==============================================*/
+
+    #characterImage{
+
+        position:absolute;
+
+        left:50%;
+
+        bottom:0;
+
+        transform:translateX(-50%);
+
+        height:110%;
+
+        width:auto;
+
+        max-width:none;
+
+        max-height:none;
+
+        object-fit:contain;
+
+        pointer-events:none;
+
+        user-select:none;
+
+        transition:.25s;
+
+    }
+
+    /*==============================================
+    Character Shadow
+
+    立ち絵が少し浮いて見えるように。
+
+    地味だけどあると結構違う。
+
+    ==============================================*/
+
+    #characterArea::after{
+
+        content:"";
+
+        position:absolute;
+
+        left:50%;
+
+        bottom:8px;
+
+        transform:translateX(-50%);
+
+        width:65%;
+
+        height:28px;
+
+        border-radius:50%;
+
+        background:rgba(0,0,0,.35);
+
+        filter:blur(18px);
+
+        z-index:-1;
+
+    }
+
+    /*==============================================
+    Character Fade
+
+    下側を背景へ自然に馴染ませます。
+
+    静海の足だけ映る事件防止...
+    の予定でした。
+
+    ==============================================*/
+
+    #characterArea::before{
+
+        content:"";
+
+        position:absolute;
+
+        left:0;
+
+        bottom:0;
+
+        width:100%;
+
+        height:100px;
+
+        background:
+
+            linear-gradient(
+
+                transparent,
+
+                rgba(6,12,22,.95)
+
+            );
+
+        pointer-events:none;
+
+    }
+
+}
+
+/*==================================================
+
+監査記録
+
+・静海に踏まれる事件
+　　解決済（予定）
+
+・静海の顔が異空間へ消える事件
+　　調査中
+
+・GitHub Pages
+　　現在反省文執筆中
+
+・スーパーアルティメット監査珍獣Mk-II
+　　本日も元気にてちてち監査中。
+
+==================================================*/
+
 
 /*==================================================
 Chapter7
