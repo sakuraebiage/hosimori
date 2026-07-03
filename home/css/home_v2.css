@@ -213,7 +213,6 @@ Status Bar
 Main Layout
 ==================================================*/
 
-@media screen and (max-width:768px){
 
 #mainContainer{
 
@@ -333,7 +332,6 @@ Welcome Area
 Character Area
 ==================================================*/
 
-@media screen and (max-width:768px){
 
 #characterArea{
 
@@ -553,7 +551,6 @@ Status Color
 Character Selector
 ==================================================*/
 
-@media screen and (max-width:768px){
 
 
 #carouselArea{
@@ -591,8 +588,6 @@ Character Selector
 /*==================================================
 Character Card
 ==================================================*/
-
-@media screen and (max-width:768px){
 
 .characterCard{
 
@@ -799,7 +794,6 @@ Responsive
 ※スマホ版は後日作り直す
 ==================================================*/
 
-@media screen and (max-width:1100px){
 
     #mainContainer{
 
@@ -829,7 +823,7 @@ Responsive
 
 }
 
-@media screen and (max-width:768px){
+
 
     #topBar{
 
