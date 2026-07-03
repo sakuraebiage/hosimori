@@ -374,11 +374,11 @@ GitHub君はこれ以上泣かないでください。
 
         left:50%;
 
-        bottom:-100;
+        bottom:100;
 
         transform:translateX(-50%,30px);
 
-        height:80%;
+        height:20%;
 
         width:auto;
 
