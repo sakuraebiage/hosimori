@@ -317,13 +317,27 @@ Character Area
 @media screen and (max-width:768px){
 
 
+/*==================================================
+Chapter6
+
+Character Area
+
+通信中PC表示。
+
+静海さん専用ステージ。
+
+巨大な部屋は禁止。
+立ち位置だけ調整。
+
+==================================================*/
+
 #characterArea{
 
     position:relative;
 
     width:100%;
 
-    height:58vh;
+    height:48vh;
 
     display:flex;
 
@@ -331,7 +345,7 @@ Character Area
 
     align-items:flex-end;
 
-    overflow:hidden;
+    overflow:visible;
 
 }
 
@@ -339,25 +353,22 @@ Character Area
 /*==================================================
 Character Image
 
-立ち絵本人。
+静海さん本人。
 
-bottom固定。
-
-勝手に出勤しない。
-勝手に天井勤務しない。
+もう天井裏勤務は禁止。
 
 ==================================================*/
 
-
 #characterImage{
 
-    height:100%;
+    height:115%;
 
     width:auto;
 
     object-fit:contain;
 
-    object-position:bottom center;
+    transform:
+        translateY(5%);
 
 }
 
