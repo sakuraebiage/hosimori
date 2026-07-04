@@ -343,8 +343,6 @@ Character Area
 
     justify-content:center;
 
-    align-items:flex-end;
-
     overflow:visible;
 
 }
@@ -368,7 +366,8 @@ Character Image
     object-fit:contain;
 
     transform:
-        translateY(50%);
+        translateY(50%)
+        translateY(80px);
 
 }
 
